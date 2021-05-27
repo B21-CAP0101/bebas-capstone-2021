@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">BeBaS</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="application_logo">Application Logo</string>
+    <string name="app_full_name">Bersama Basmi Kekerasan</string>
+    <string name="record_button">Record Button</string>
+    <string name="welcome">WELCOME</string>
+    <string name="back_button">Back Button</string>
+    <string name="bebas_member">BeBas Member</string>
+    <string name="username_or_email">username or email</string>
+    <string name="forgot_password">forgot password?</string>
+    <string name="password">Password</string>
+    <string name="let_s_create_an_account">Let\'s create an account</string>
+    <string name="username">Username</string>
+    <string name="e_mail_address">E-Mail Address</string>
+    <string name="bebas">BEBAS</string>
+    <string name="protect_yourself_protect_your_family_protect_the_world">protect yourself, protect your family protect the world</string>
+    <string name="login">login</string>
+    <string name="register">register</string>
+
+</resources>

@@ -1,0 +1,3 @@
+rootProject.name = "BeBaS"
+include ':app'
+include ':core'
