@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1004678225669",
+    "project_id": "angular-rhythm-313015",
+    "storage_bucket": "angular-rhythm-313015.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004678225669:android:7e6e3349f17fcc39dde16c",
+        "android_client_info": {
+          "package_name": "com.capstone101.core"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004678225669-533q7444k7qo07d77eaveune4m0asvhf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3UCovQudRxcG_nsPJ-jS-YOHZwzDSiDs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004678225669-533q7444k7qo07d77eaveune4m0asvhf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

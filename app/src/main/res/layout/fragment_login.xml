@@ -51,7 +51,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etUsername" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnLoginGo"
         style="@style/btn.primary"
         android:layout_marginTop="40dp"
         android:text="@string/login"
