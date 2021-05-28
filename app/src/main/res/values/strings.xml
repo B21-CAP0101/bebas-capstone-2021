@@ -12,8 +12,8 @@
     <string name="forgot_password">forgot password?</string>
     <string name="password">Password</string>
     <string name="let_s_create_an_account">Let\'s create an account</string>
-    <string name="username">Username</string>
-    <string name="e_mail_address">E-Mail Address</string>
+    <string name="username">username</string>
+    <string name="e_mail_address">email</string>
     <string name="bebas">BEBAS</string>
     <string name="protect_yourself_protect_your_family_protect_the_world">protect yourself, protect your family protect the world</string>
     <string name="login">login</string>
