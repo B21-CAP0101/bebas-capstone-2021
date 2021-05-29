@@ -8,10 +8,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentRegisterBinding
-import com.capstone101.bebas.util.Function.clearWelcomeActivityAndCreateMainActivity
 import com.capstone101.bebas.util.Function.createSnackBar
+import com.capstone101.bebas.util.Function.hideKeyboard
 import com.capstone101.bebas.util.Function.setOnPressEnter
 import com.capstone101.bebas.util.Function.showKeyboard
+import com.capstone101.core.utils.SessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -20,8 +21,8 @@ import org.koin.android.ext.android.inject
 class RegisterFragment : Fragment(R.layout.fragment_register) {
     private var binding: FragmentRegisterBinding? = null
     private val bind get() = binding!!
-
     private val viewModel: RegisViewModel by inject()
+    private val session: SessionManager by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,20 +30,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         startFocus()
         setupActionRegister()
+        subscribeToViewModel()
 
         bind.ibBackButton.setOnClickListener {
             findNavController().popBackStack()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.condition.observe(this) {
-            when (it) {
-                true -> handleSuccess()
-                null -> handleError("username already exist")
-                else -> handleError("something wrong occurred")
-            }
         }
     }
 
@@ -55,8 +46,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 val password = etPassword.text.toString()
 
                 if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
-                    layoutLoading.root.isVisible = true  // TODO: AKU COBA PINDAH, BETULKAH INI?
-                    it.isVisible = false
+                    handleLoading()
                     viewModel.insertToFs(username, password, email)
                 } else {
                     when {
@@ -76,10 +66,22 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
     }
 
+
+    private fun subscribeToViewModel() {
+        viewModel.condition.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                true -> handleSuccess()
+                null -> handleError("username already exist")
+                else -> handleError("something wrong occurred")
+            }
+        }
+    }
+
+
     private fun navigateToHome() {
         lifecycleScope.launch(Dispatchers.Main) {
             delay(500)
-            startActivity(clearWelcomeActivityAndCreateMainActivity(requireActivity()))
+            findNavController().navigate(R.id.action_registerFragment_to_mainActivity)
             requireActivity().finish()
         }
     }
@@ -87,10 +89,20 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private fun handleSuccess() {
         with(bind) {
+            session.createLogin()
+
             layoutLoading.tvStatusLogin.text = resources.getString(R.string.success)
             layoutLoading.MKLoader.isVisible = false
 
             navigateToHome()
+        }
+    }
+
+    private fun handleLoading() {
+        with(bind) {
+            requireView().hideKeyboard()
+            layoutLoading.root.isVisible = true
+            btnRegisterGo.isVisible = false
         }
     }
 
@@ -99,12 +111,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             etEmail.text.clear()
             etPassword.text.clear()
             etUsername.text.clear()
+            etUsername.requestFocus()
 
             bind.layoutLoading.root.isVisible = false
             btnRegisterGo.isVisible = true
-
-            etUsername.requestFocus()
-            etUsername.showKeyboard()
 
             requireView().createSnackBar(message, 1000)
         }

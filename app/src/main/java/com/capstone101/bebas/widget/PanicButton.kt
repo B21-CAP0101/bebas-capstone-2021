@@ -11,6 +11,7 @@ import android.widget.RemoteViews
 import android.widget.Toast
 import com.capstone101.bebas.R
 import com.capstone101.bebas.main.MainActivity
+import com.google.android.material.snackbar.Snackbar
 
 class PanicButton : AppWidgetProvider() {
 
@@ -29,7 +30,6 @@ class PanicButton : AppWidgetProvider() {
             when (count) {
                 3 -> {
                     Toast.makeText(context, "Berhasil", Toast.LENGTH_SHORT).show()
-
                     val manager = AppWidgetManager.getInstance(context)
                     val views = RemoteViews(context.packageName, R.layout.panic_button)
                     views.setImageViewResource(R.id.recordButton, R.drawable.recording)

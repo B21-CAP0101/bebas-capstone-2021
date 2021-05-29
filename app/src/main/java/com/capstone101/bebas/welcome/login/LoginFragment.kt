@@ -8,7 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentLoginBinding
-import com.capstone101.bebas.util.Function.clearWelcomeActivityAndCreateMainActivity
 import com.capstone101.bebas.util.Function.createSnackBar
 import com.capstone101.bebas.util.Function.hideKeyboard
 import com.capstone101.bebas.util.Function.setOnPressEnter
@@ -25,6 +24,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private var binding: FragmentLoginBinding? = null
     private val bind get() = binding!!
     private val viewModel: LoginViewModel by inject()
+    private val session: SessionManager by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,7 +37,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
-    private val session: SessionManager by inject()
+
     private fun setupActionLogin() {
         with(bind) {
             btnLoginGo.setOnClickListener {
@@ -70,7 +70,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 when (result) {
                     is Status.Success -> handleSuccess()
                     is Status.Error -> handleError(result.error.toString())
-                    is Status.Loading -> { /* NO-OP */ }
+                    is Status.Loading -> {
+                        /* NO-OP */
+                    }
                 }
             }
         }
@@ -101,14 +103,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         with(bind) {
             etPassword.text.clear()
             etUsername.text.clear()
+            etUsername.requestFocus()
 
             bind.layoutLoading.root.isVisible = false
             btnLoginGo.isVisible = true
 
-            etUsername.requestFocus()
-            etUsername.showKeyboard()
 
-            requireView().createSnackBar(message, 500)
+            requireView().createSnackBar(message, 1000)
         }
     }
 
@@ -122,7 +123,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun setupNavigateToHome() {
         lifecycleScope.launch(Dispatchers.Main) {
             delay(500)
-            startActivity(clearWelcomeActivityAndCreateMainActivity(requireActivity()))
+            findNavController().navigate(R.id.action_loginFragment_to_mainActivity)
             requireActivity().finish()
         }
     }

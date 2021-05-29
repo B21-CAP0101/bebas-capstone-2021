@@ -21,6 +21,7 @@ object Function {
             .show()
     }
 
+
     fun View.hideKeyboard(): Boolean =
         (context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager)
             .hideSoftInputFromWindow(windowToken, 0)
