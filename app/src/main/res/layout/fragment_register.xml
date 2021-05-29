@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/img_register"
-    android:padding="20dp">
+
+    android:background="@drawable/img_register">
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/ibBackButton"
         style="@style/backButton"
         android:contentDescription="@string/back_button"
         app:layout_constraintStart_toStartOf="parent"
@@ -15,11 +15,10 @@
 
     <TextView
         style="@style/shadowColor.title"
-        android:layout_marginTop="20dp"
         android:text="@string/let_s_create_an_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+        app:layout_constraintTop_toTopOf="@+id/glTitle" />
 
     <EditText
         android:id="@+id/etUsername"
@@ -28,7 +27,10 @@
         android:importantForAutofill="no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+        app:layout_constraintTop_toTopOf="@+id/glInputText">
+
+        <requestFocus />
+    </EditText>
 
     <EditText
         android:id="@+id/etEmail"
@@ -58,10 +60,26 @@
         app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline5"
+        android:id="@+id/glInputText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="270dp" />
+        app:layout_constraintGuide_begin="278dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/glTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="100dp" />
+
+    <include
+        android:id="@+id/layoutLoading"
+        layout="@layout/layout_loading_welcome"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

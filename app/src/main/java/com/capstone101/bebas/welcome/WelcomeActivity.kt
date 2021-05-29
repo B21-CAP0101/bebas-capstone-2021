@@ -12,10 +12,6 @@ class WelcomeActivity : AppCompatActivity() {
         setTheme(R.style.Theme_BeBaS)
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
-//        window.setFlags(
-//            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//            WindowManager.LayoutParams.FLAG_FULLSCREEN
-//        )
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }

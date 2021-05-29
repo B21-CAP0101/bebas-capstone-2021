@@ -1,4 +1,4 @@
-package com.capstone101.bebas.register
+package com.capstone101.bebas.welcome.register
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

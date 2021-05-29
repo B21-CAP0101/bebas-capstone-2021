@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/img_welcome"
-    android:padding="20dp">
+    >
 
     <TextView
         android:id="@+id/tvTitle"
@@ -13,7 +13,7 @@
         android:text="@string/bebas"
         app:drawableEndCompat="@drawable/ic_guard"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+        app:layout_constraintTop_toTopOf="@+id/glTitle" />
 
     <TextView
         android:id="@+id/textView5"
@@ -28,7 +28,7 @@
         android:text="@string/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline4" />
+        app:layout_constraintTop_toTopOf="@+id/glBtn" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegister"
@@ -40,17 +40,17 @@
         app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
+        android:id="@+id/glTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="123dp" />
+        app:layout_constraintGuide_begin="100dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
+        android:id="@+id/glBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="428dp" />
+        app:layout_constraintGuide_begin="450dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,7 +14,7 @@ abstract class NetworkBoundRes<Req, Res> {
                     emitAll(loadDB().map { Status.Success(it) })
                 }
                 is NetworkStatus.Empty ->
-                    emitAll(loadDB().map { Status.Error(it, "Username atau Password salah") })
+                    emitAll(loadDB().map { Status.Error(it, "username or password wrong") })
                 is NetworkStatus.Failed ->
                     emitAll(loadDB().map { Status.Error(it, response.error) })
             }

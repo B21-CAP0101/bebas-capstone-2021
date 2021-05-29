@@ -39,7 +39,4 @@ apply from: "../shared_dependencies.gradle"
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation project(":core")
-
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
 }
