@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 
 class Repositories(private val db: DBGetData, private val network: NetworkGetData) : IRepositories {
     override fun login(user: User): Flow<Status<User>> =
-        object : NetworkBoundRes<UserFire, User>() {
+        object : AccountBoundRes<UserFire, User>() {
             override fun loadDB(): Flow<User> =
                 db.getUser().map { MapVal.userEntToDom(it) ?: User("", "", "", null, 2, listOf()) }
 
