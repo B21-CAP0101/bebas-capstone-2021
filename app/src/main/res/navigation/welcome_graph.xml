@@ -21,11 +21,11 @@
         android:id="@+id/loginFragment"
         android:name="com.capstone101.bebas.welcome.login.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login"/>
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.capstone101.bebas.welcome.register.RegisterFragment"
         android:label="fragment_register"
-        tools:layout="@layout/fragment_register" />
+        tools:layout="@layout/fragment_register"/>
 
 </navigation>

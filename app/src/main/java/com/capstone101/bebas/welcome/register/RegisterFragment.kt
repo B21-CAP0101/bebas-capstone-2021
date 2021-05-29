@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentRegisterBinding
 import com.capstone101.bebas.util.Function
+import com.capstone101.bebas.util.Function.clearWelcomeActivityAndCreateMainActivity
 import com.capstone101.bebas.util.Function.createSnackBar
 import com.capstone101.bebas.util.Function.showKeyboard
 import kotlinx.coroutines.Dispatchers
@@ -93,8 +94,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             bind.layoutLoading.MKLoader.isVisible = false
 
             delay(500)
-            // TODO : Create Main Activity
-
+            startActivity(clearWelcomeActivityAndCreateMainActivity(requireActivity()))
         }
     }
 

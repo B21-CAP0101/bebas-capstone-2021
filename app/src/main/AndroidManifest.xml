@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.capstone101.bebas.splashscreen.SplashScreenActivity" />
+        <activity android:name="com.capstone101.bebas.main.MainActivity" />
 
         <receiver android:name="com.capstone101.bebas.widget.PanicButton">
             <intent-filter>

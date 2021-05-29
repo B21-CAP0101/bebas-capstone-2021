@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentLoginBinding
+import com.capstone101.bebas.util.Function.clearWelcomeActivityAndCreateMainActivity
 import com.capstone101.bebas.util.Function.createSnackBar
 import com.capstone101.bebas.util.Function.hideKeyboard
 import com.capstone101.bebas.util.Function.setOnPressEnter
@@ -85,8 +86,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun setupNavigateToHome() {
         lifecycleScope.launch(Dispatchers.Main) {
             delay(500)
-            // TODO : Create Main Activity
-
+            startActivity(clearWelcomeActivityAndCreateMainActivity(requireActivity()))
         }
     }
 
