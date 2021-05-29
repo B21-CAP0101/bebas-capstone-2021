@@ -11,6 +11,7 @@ import android.widget.RemoteViews
 import android.widget.Toast
 import com.capstone101.bebas.R
 import com.capstone101.bebas.main.MainActivity
+import com.capstone101.bebas.main.home.HomeFragment.Companion.ACTION_RECORD
 import com.capstone101.core.utils.SessionManager
 
 class PanicButton : AppWidgetProvider() {
@@ -44,13 +45,13 @@ class PanicButton : AppWidgetProvider() {
 
                         context.startActivity(Intent(context, MainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                            action = MainActivity.ACTION_RECORD
+                            action = ACTION_RECORD
                         })
-                    } else Toast.makeText(context, "Login terlebih dahulu", Toast.LENGTH_SHORT)
+                    } else Toast.makeText(context, "make sure you've login", Toast.LENGTH_SHORT)
                         .show()
                 }
-                2 -> Toast.makeText(context, "Tekan sekali lagi", Toast.LENGTH_SHORT).show()
-                1 -> Toast.makeText(context, "Tekan dua kali lagi", Toast.LENGTH_SHORT).show()
+                2 -> Toast.makeText(context, "press 1 more time", Toast.LENGTH_SHORT).show()
+                1 -> Toast.makeText(context, "press 2 more time", Toast.LENGTH_SHORT).show()
             }
         }
         super.onReceive(context, intent)
