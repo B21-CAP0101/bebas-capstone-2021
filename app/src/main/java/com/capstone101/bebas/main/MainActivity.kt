@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.ActivityMainBinding
+import com.capstone101.core.utils.MapVal
 import org.koin.android.ext.android.inject
 import java.io.File
 import java.text.SimpleDateFormat
@@ -60,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         if (intent.action == ACTION_RECORD) recording()
 
         viewModel.getUser.observe(this) {
+            MapVal.user = it
             // TODO: BUAT USER PROFILE
         }
     }
@@ -123,10 +125,11 @@ class MainActivity : AppCompatActivity() {
                 stop()
                 release()
             }
+            isRecording = false
             bind.recordMain.isEnabled = true
             count = 0
             bind.recordMain.setImageResource(R.drawable.record)
-        }, 10000)
+        }, 11000)
     }
 
     override fun onRequestPermissionsResult(
