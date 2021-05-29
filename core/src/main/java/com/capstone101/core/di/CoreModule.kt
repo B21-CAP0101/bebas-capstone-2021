@@ -36,5 +36,5 @@ val repositoriesModule = module {
 }
 
 val sessionModule = module {
-    single { SessionManager(androidContext()) }
+    factory { SessionManager(androidContext()) }
 }
