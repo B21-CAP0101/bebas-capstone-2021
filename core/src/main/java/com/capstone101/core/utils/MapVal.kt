@@ -5,6 +5,9 @@ import com.capstone101.core.data.network.firebase.UserFire
 import com.capstone101.core.domain.model.User
 
 object MapVal {
+    @Volatile
+    var user: User? = null
+
     fun userEntToDom(data: UserEntity?): User? {
         if (data == null) return null
         val key = data.key.split(", ")

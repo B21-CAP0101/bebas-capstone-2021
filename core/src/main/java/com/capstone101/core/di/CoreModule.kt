@@ -6,6 +6,7 @@ import com.capstone101.core.data.db.DBGetData
 import com.capstone101.core.data.db.room.UserDB
 import com.capstone101.core.data.network.NetworkGetData
 import com.capstone101.core.domain.repositories.IRepositories
+import com.capstone101.core.utils.SessionManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import net.sqlcipher.database.SQLiteDatabase
@@ -32,4 +33,8 @@ val repositoriesModule = module {
     single { DBGetData(get()) }
     single { NetworkGetData(get()) }
     single<IRepositories> { Repositories(get(), get()) }
+}
+
+val sessionModule = module {
+    single { SessionManager(androidContext()) }
 }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class Repositories(private val db: DBGetData, private val network: NetworkGetData) : IRepositories {
-    override fun getUser(user: User): Flow<Status<User>> =
+    override fun login(user: User): Flow<Status<User>> =
         object : NetworkBoundRes<UserFire, User>() {
             override fun loadDB(): Flow<User> =
                 db.getUser().map { MapVal.userEntToDom(it) ?: User("", "", "", null, 2, listOf()) }
@@ -25,6 +25,8 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
                 db.insert(MapVal.userFireToEnt(data))
             }
         }.asFlow()
+
+    override fun getUser(): Flow<User?> = db.getUser().map { MapVal.userEntToDom(it) }
 
     override suspend fun insertToFs(user: User) = network.insertToFs(MapVal.userDomToFire(user))
 }
