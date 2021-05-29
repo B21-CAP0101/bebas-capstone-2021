@@ -1,6 +1,5 @@
 package com.capstone101.core.data.network
 
-import com.capstone101.core.data.network.firebase.RelativesFire
 import com.capstone101.core.data.network.firebase.UserFire
 import com.capstone101.core.utils.Security
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,9 +20,10 @@ class NetworkGetData(private val fs: FirebaseFirestore) {
         } else emit(NetworkStatus.Empty)
     }.flowOn(Dispatchers.IO)
 
-    suspend fun getRelatives(): Flow<NetworkStatus<RelativesFire>> = flow {
-
-    }.flowOn(Dispatchers.IO)
+    // TODO : INI EMANG KOSONG ?
+//    suspend fun getRelatives(): Flow<NetworkStatus<RelativesFire>> = flow {
+//
+//    }.flowOn(Dispatchers.IO)
 
     suspend fun insertToFs(user: UserFire): Boolean? {
         return try {

@@ -8,7 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="black_40off">#99000000</color>
     <color name="black_60off">#66000000</color>
-    <color name="white">#EDFFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="white_50off">#80FFFFFF</color>
     <color name="white_20off">#CCFFFFFF</color>
     <color name="secondary_white">#C3FFFFFF</color>
