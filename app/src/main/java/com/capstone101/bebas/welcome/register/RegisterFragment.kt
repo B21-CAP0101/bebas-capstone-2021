@@ -8,7 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentRegisterBinding
-import com.capstone101.bebas.util.Function
 import com.capstone101.bebas.util.Function.clearWelcomeActivityAndCreateMainActivity
 import com.capstone101.bebas.util.Function.createSnackBar
 import com.capstone101.bebas.util.Function.setOnPressEnter
@@ -40,15 +39,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onResume()
         viewModel.condition.observe(this) {
             when (it) {
-                true -> navigateToHome()
-                null -> {
-                    handleError()
-                    requireView().createSnackBar("username already exist", 1000)
-                }
-                else -> {
-                    handleError()
-                    requireView().createSnackBar("something wrong occurred", 1000)
-                }
+                true -> handleSuccess()
+                null -> handleError("username already exist")
+                else -> handleError("something wrong occurred")
             }
         }
     }
@@ -85,17 +78,23 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private fun navigateToHome() {
         lifecycleScope.launch(Dispatchers.Main) {
-            bind.layoutLoading.tvStatusLogin.text =
-                resources.getString(R.string.success)
-            bind.layoutLoading.MKLoader.isVisible = false
-
             delay(500)
             startActivity(clearWelcomeActivityAndCreateMainActivity(requireActivity()))
             requireActivity().finish()
         }
     }
 
-    private fun handleError() {
+
+    private fun handleSuccess() {
+        with(bind) {
+            layoutLoading.tvStatusLogin.text = resources.getString(R.string.success)
+            layoutLoading.MKLoader.isVisible = false
+
+            navigateToHome()
+        }
+    }
+
+    private fun handleError(message: String) {
         with(bind) {
             etEmail.text.clear()
             etPassword.text.clear()
@@ -106,6 +105,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
             etUsername.requestFocus()
             etUsername.showKeyboard()
+
+            requireView().createSnackBar(message, 1000)
         }
     }
 
