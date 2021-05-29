@@ -10,7 +10,7 @@ import android.os.Looper
 import android.widget.RemoteViews
 import android.widget.Toast
 import com.capstone101.bebas.R
-import com.capstone101.bebas.home.HomeActivity
+import com.capstone101.bebas.main.MainActivity
 
 class PanicButton : AppWidgetProvider() {
 
@@ -41,9 +41,9 @@ class PanicButton : AppWidgetProvider() {
                         manager.updateAppWidget(id, views)
                     }, 10000)
 
-                    context.startActivity(Intent(context, HomeActivity::class.java).apply {
+                    context.startActivity(Intent(context, MainActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        action = HomeActivity.ACTION_RECORD
+                        action = MainActivity.ACTION_RECORD
                     })
                     // TODO: RECORD ACTIVITY MASUKKAN KE DATA
                 }

@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.ActivityWelcomeBinding
-import com.capstone101.bebas.home.HomeActivity
+import com.capstone101.bebas.main.MainActivity
 import com.capstone101.core.utils.SessionManager
 import org.koin.android.ext.android.inject
 
@@ -18,10 +18,9 @@ class WelcomeActivity : AppCompatActivity() {
         setTheme(R.style.Theme_BeBaS)
         super.onCreate(savedInstanceState)
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
-        println(session.isLogin.toString() + " TEST")
         if (!session.isLogin) setContentView(binding.root)
         else {
-            startActivity(Intent(this, HomeActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
     }
