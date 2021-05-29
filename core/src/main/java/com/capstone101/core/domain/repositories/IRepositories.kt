@@ -5,7 +5,8 @@ import com.capstone101.core.domain.model.User
 import kotlinx.coroutines.flow.Flow
 
 interface IRepositories {
-    fun getUser(user: User): Flow<Status<User>>
+    fun login(user: User): Flow<Status<User>>
+    fun getUser(): Flow<User?>
 
     suspend fun insertToFs(user: User): Boolean?
 }

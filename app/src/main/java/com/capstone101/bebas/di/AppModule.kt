@@ -1,5 +1,6 @@
 package com.capstone101.bebas.di
 
+import com.capstone101.bebas.home.HomeViewModel
 import com.capstone101.bebas.login.LoginViewModel
 import com.capstone101.bebas.register.RegisViewModel
 import com.capstone101.core.domain.usecase.IUseCase
@@ -12,6 +13,7 @@ val useCaseModule = module {
 }
 
 val viewModelModule = module {
+    viewModel { HomeViewModel(get()) }
     viewModel { RegisViewModel(get()) }
     viewModel { LoginViewModel(get()) }
 }

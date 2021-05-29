@@ -6,7 +6,8 @@ import com.capstone101.core.domain.repositories.IRepositories
 import kotlinx.coroutines.flow.Flow
 
 class UseCase(private val repositories: IRepositories) : IUseCase {
-    override fun getUser(user: User): Flow<Status<User>> = repositories.getUser(user)
+    override fun login(user: User): Flow<Status<User>> = repositories.login(user)
+    override fun getUser(): Flow<User?> = repositories.getUser()
 
     override suspend fun insertToFs(user: User): Boolean? = repositories.insertToFs(user)
 }
