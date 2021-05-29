@@ -11,6 +11,7 @@ import com.capstone101.bebas.databinding.FragmentRegisterBinding
 import com.capstone101.bebas.util.Function
 import com.capstone101.bebas.util.Function.clearWelcomeActivityAndCreateMainActivity
 import com.capstone101.bebas.util.Function.createSnackBar
+import com.capstone101.bebas.util.Function.setOnPressEnter
 import com.capstone101.bebas.util.Function.showKeyboard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -41,13 +42,11 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             when (it) {
                 true -> navigateToHome()
                 null -> {
-                    // TODO: BEDA SAMA DI LOGIN INI, AKU NDA BISA BAIKI AWOKWKOWKO
-                    clearAllText()
+                    handleError()
                     requireView().createSnackBar("username already exist", 1000)
                 }
                 else -> {
-                    // TODO: BEDA SAMA DI LOGIN INI, AKU NDA BISA BAIKI AWOKWKOWKO
-                    clearAllText()
+                    handleError()
                     requireView().createSnackBar("something wrong occurred", 1000)
                 }
             }
@@ -96,11 +95,17 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
     }
 
-    private fun clearAllText() {
+    private fun handleError() {
         with(bind) {
-            etUsername.text.clear()
             etEmail.text.clear()
             etPassword.text.clear()
+            etUsername.text.clear()
+
+            bind.layoutLoading.root.isVisible = false
+            btnRegisterGo.isVisible = true
+
+            etUsername.requestFocus()
+            etUsername.showKeyboard()
         }
     }
 
@@ -108,7 +113,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun startFocus() {
         with(bind) {
             etUsername.showKeyboard()
-            Function.setOnPressEnter(etPassword, btnRegisterGo)
+            setOnPressEnter(etPassword, btnRegisterGo)
         }
     }
 
