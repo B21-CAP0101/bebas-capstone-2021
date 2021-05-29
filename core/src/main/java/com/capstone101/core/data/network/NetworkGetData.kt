@@ -20,9 +20,9 @@ class NetworkGetData(private val fs: FirebaseFirestore) {
         } else emit(NetworkStatus.Empty)
     }.flowOn(Dispatchers.IO)
 
-    // TODO : INI EMANG KOSONG ?
 //    suspend fun getRelatives(): Flow<NetworkStatus<RelativesFire>> = flow {
-//
+//        val user = MapVal.user!!
+//        val relatives = fs.collection(UserFire.COLLECTION).document(user.username).collection(RelativesFire.COLLECTION)
 //    }.flowOn(Dispatchers.IO)
 
     suspend fun insertToFs(user: UserFire): Boolean? {

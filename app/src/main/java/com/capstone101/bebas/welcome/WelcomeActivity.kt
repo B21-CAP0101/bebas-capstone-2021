@@ -18,6 +18,7 @@ class WelcomeActivity : AppCompatActivity() {
         setTheme(R.style.Theme_BeBaS)
         super.onCreate(savedInstanceState)
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
+        println("${session.isLogin} TEST")
         if (!session.isLogin) setContentView(binding.root)
         else {
             startActivity(Intent(this, MainActivity::class.java))
