@@ -41,10 +41,12 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             when (it) {
                 true -> navigateToHome()
                 null -> {
+                    // TODO: BEDA SAMA DI LOGIN INI, AKU NDA BISA BAIKI AWOKWKOWKO
                     clearAllText()
                     requireView().createSnackBar("username already exist", 1000)
                 }
                 else -> {
+                    // TODO: BEDA SAMA DI LOGIN INI, AKU NDA BISA BAIKI AWOKWKOWKO
                     clearAllText()
                     requireView().createSnackBar("something wrong occurred", 1000)
                 }
@@ -56,19 +58,14 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun setupActionRegister() {
         with(bind) {
             btnRegisterGo.setOnClickListener {
-                layoutLoading.root.isVisible = true
-                it.isVisible = false
-
                 val username = etUsername.text.toString()
                 val email = etEmail.text.toString()
                 val password = etPassword.text.toString()
 
                 if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
-                    viewModel.insertToFs(
-                        username,
-                        password,
-                        email
-                    )
+                    layoutLoading.root.isVisible = true  // TODO: AKU COBA PINDAH, BETULKAH INI?
+                    it.isVisible = false
+                    viewModel.insertToFs(username, password, email)
                 } else {
                     when {
                         username.isEmpty() -> {
@@ -95,6 +92,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
             delay(500)
             startActivity(clearWelcomeActivityAndCreateMainActivity(requireActivity()))
+            requireActivity().finish()
         }
     }
 

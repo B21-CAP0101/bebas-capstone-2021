@@ -14,6 +14,7 @@ import com.capstone101.bebas.util.Function.hideKeyboard
 import com.capstone101.bebas.util.Function.setOnPressEnter
 import com.capstone101.bebas.util.Function.showKeyboard
 import com.capstone101.core.data.Status
+import com.capstone101.core.utils.SessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -35,19 +36,21 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
+    private val session: SessionManager by inject()
     private fun setupActionLogin() {
         with(bind) {
             btnLoginGo.setOnClickListener {
                 if (etPassword.text.toString().isNotEmpty() && etUsername.text.toString()
                         .isNotEmpty()
                 ) {
-                    viewModel.getUser(etUsername.text.toString(), etPassword.text.toString())
+                    viewModel.login(etUsername.text.toString(), etPassword.text.toString())
                         .observe(viewLifecycleOwner) {
                             when (it) {
                                 is Status.Success -> {
                                     layoutLoading.MKLoader.isVisible = false
                                     layoutLoading.tvStatusLogin.text =
                                         resources.getString(R.string.success)
+                                    session.createLogin()
                                     setupNavigateToHome()
                                 }
                                 is Status.Loading -> {
@@ -87,6 +90,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         lifecycleScope.launch(Dispatchers.Main) {
             delay(500)
             startActivity(clearWelcomeActivityAndCreateMainActivity(requireActivity()))
+            requireActivity().finish()
         }
     }
 

@@ -10,6 +10,7 @@ import android.os.Looper
 import android.widget.RemoteViews
 import android.widget.Toast
 import com.capstone101.bebas.R
+import com.capstone101.bebas.main.MainActivity
 
 class PanicButton : AppWidgetProvider() {
 
@@ -22,12 +23,9 @@ class PanicButton : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
         if (intent.action == KEY_ACTION) {
             count++
-            Handler(Looper.getMainLooper()).postDelayed({
-                count = 0
-            }, 3000)
+            Handler(Looper.getMainLooper()).postDelayed({ count = 0 }, 3000)
             when (count) {
                 3 -> {
                     Toast.makeText(context, "Berhasil", Toast.LENGTH_SHORT).show()
@@ -41,22 +39,19 @@ class PanicButton : AppWidgetProvider() {
                     Handler(Looper.getMainLooper()).postDelayed({
                         views.setImageViewResource(R.id.recordButton, R.drawable.record)
                         manager.updateAppWidget(id, views)
-                    }, 3000)
+                    }, 10000)
 
-//                    context.startActivity(
-//                        Intent(
-//                            Intent.ACTION_VIEW,
-//                            Uri.parse("testapp://record${RecordActivity.HELP}"),
-//                        ).apply {
-//                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-//                        }
-//                    )
+                    context.startActivity(Intent(context, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        action = MainActivity.ACTION_RECORD
+                    })
                     // TODO: RECORD ACTIVITY MASUKKAN KE DATA
                 }
                 2 -> Toast.makeText(context, "Tekan sekali lagi", Toast.LENGTH_SHORT).show()
                 1 -> Toast.makeText(context, "Tekan dua kali lagi", Toast.LENGTH_SHORT).show()
             }
         }
+        super.onReceive(context, intent)
     }
 
     override fun onUpdate(
