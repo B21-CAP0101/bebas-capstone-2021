@@ -8,12 +8,18 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentHomeBinding
 import com.capstone101.bebas.main.MainViewModel
 import com.capstone101.bebas.util.Function.createSnackBar
+import com.capstone101.bebas.util.Function.glide
 import com.capstone101.core.utils.MapVal
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import java.io.File
 import java.text.SimpleDateFormat
@@ -52,9 +58,35 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
 
     private fun subscribeToViewModel() {
-        viewModel.getUser.observe(viewLifecycleOwner) {
-            MapVal.user = it
-            // TODO: BUAT USER PROFILE
+        viewModel.getUser.observe(viewLifecycleOwner) { user -> MapVal.user = user; setupUI() }
+    }
+
+    private fun setupUI() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            handleLoading()
+            delay(1000)
+            handleSuccess()
+        }
+    }
+
+    private fun handleLoading() {
+        MapVal.user?.apply {
+            with(bind) {
+                cardUser.pbUser.isVisible = true
+                cardUser.ivUsername.isVisible = false
+                cardUser.spProfile.isVisible = false
+                cardUser.ivUsername.text = username
+
+                requireView().glide("", cardUser.spProfile)
+            }
+        }
+    }
+
+    private fun handleSuccess() {
+        with(bind) {
+            cardUser.pbUser.isVisible = false
+            cardUser.ivUsername.isVisible = true
+            cardUser.spProfile.isVisible = true
         }
     }
 
@@ -175,22 +207,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var runnable = object : Runnable {
         override fun run() {
 
-          with(bind){
-              ivAnim1.animate().scaleX(2f).scaleY(2f).alpha(0f).setDuration(1000)
-                  .withEndAction {
-                      ivAnim1.scaleX = 1f
-                      ivAnim1.scaleY = 1f
-                      ivAnim1.alpha = 1f
-                  }
+            with(bind) {
+                ivAnim1.animate().scaleX(2f).scaleY(2f).alpha(0f).setDuration(1000)
+                    .withEndAction {
+                        ivAnim1.scaleX = 1f
+                        ivAnim1.scaleY = 1f
+                        ivAnim1.alpha = 1f
+                    }
 
-              ivAnim2.animate().scaleX(2f).scaleY(2f).alpha(0f).setDuration(700)
-                  .withEndAction {
-                      ivAnim2.scaleX = 1f
-                      ivAnim2.scaleY = 1f
-                      ivAnim2.alpha = 1f
-                  }
+                ivAnim2.animate().scaleX(2f).scaleY(2f).alpha(0f).setDuration(700)
+                    .withEndAction {
+                        ivAnim2.scaleX = 1f
+                        ivAnim2.scaleY = 1f
+                        ivAnim2.alpha = 1f
+                    }
 
-          }
+            }
 
             handlerAnimation.postDelayed(this, 1500)
         }

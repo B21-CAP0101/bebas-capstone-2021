@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:background="@drawable/bg_rounded_bottom_blue"
+    android:padding="20dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/spProfile"
+        style="@style/photoProfile.user"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/ibEditProfile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ripple_for_image_btn_50dp"
+        android:src="@drawable/ic_edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/ivUsername"
+        style="@style/mediumText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/spProfile"
+        app:layout_constraintStart_toEndOf="@+id/spProfile"
+        app:layout_constraintTop_toTopOf="@+id/spProfile"
+        tools:text="@tools:sample/first_names" />
+
+    <ProgressBar
+        android:id="@+id/pbUser"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

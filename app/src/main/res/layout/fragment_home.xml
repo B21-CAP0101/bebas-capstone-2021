@@ -1,15 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
+
+    <include
+        android:id="@+id/cardUser"
+        layout="@layout/layout_card_user"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        style="@style/mediumText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:text="relative"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardUser" />
+
+    <TextView
+        style="@style/normalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="see all"
+        android:textColor="@color/btn_blue"
+        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRelative"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:paddingHorizontal="20dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:listitem="@layout/model_realative" />
 
     <ImageView
         android:id="@+id/ivAnim2"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginEnd="25dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginBottom="50dp"
         android:src="@drawable/effect_circle"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,18 +63,19 @@
         android:id="@+id/ivAnim1"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginEnd="25dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginBottom="50dp"
         android:src="@drawable/effect_circle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 
     <Button
         android:id="@+id/btnPanic"
         style="@style/AppTheme.ButtonStyle"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginEnd="25dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginBottom="50dp"
         android:text="danger"
         app:layout_constraintBottom_toBottomOf="parent"

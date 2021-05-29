@@ -7,8 +7,12 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.fragment.app.FragmentActivity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 import com.capstone101.bebas.R
 import com.capstone101.bebas.main.MainActivity
 import com.google.android.material.snackbar.Snackbar
@@ -41,6 +45,17 @@ object Function {
             }
             return@setOnEditorActionListener false
         }
+    }
+
+    fun View.glide(url: String, imgView: ImageView) {
+        Glide.with(this).setDefaultRequestOptions(
+            RequestOptions()
+                .placeholder(R.drawable.ic_guard)
+                .error(R.drawable.ic_guard)
+                .centerCrop()
+        ).load(url)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .into(imgView)
     }
 
     fun clearWelcomeActivityAndCreateMainActivity(activity: FragmentActivity): Intent {

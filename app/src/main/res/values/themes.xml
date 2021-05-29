@@ -153,4 +153,28 @@
         <item name="backgroundTint">@color/bgBlue</item>
         <item name="android:background">@drawable/round_button_blue</item>
     </style>
+
+    <style name="photoProfile">
+        <item name="android:scaleType">centerCrop</item>
+        <item name="shapeAppearanceOverlay">@style/circle</item>
+        <item name="android:padding">5dp</item>
+        <item name="strokeColor">@color/white</item>
+    </style>
+
+    <style name="photoProfile.user">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="strokeWidth">4dp</item>
+    </style>
+
+    <style name="photoProfile.relative">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="strokeColor">@color/black</item>
+    </style>
+
+    <style name="circle">
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>
