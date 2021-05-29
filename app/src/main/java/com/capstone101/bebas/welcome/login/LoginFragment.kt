@@ -77,46 +77,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     }
 
-
-//    private fun subscribeToViewModel1() {
-//        with(bind) {
-//            viewModel.login(etUsername.text.toString(), etPassword.text.toString())
-//                .observe(viewLifecycleOwner) { status ->
-//                    when (status) {
-//                        is Status.Success -> {
-//                            layoutLoading.MKLoader.isVisible = false
-//                            layoutLoading.tvStatusLogin.text =
-//                                resources.getString(R.string.success)
-//                            session.createLogin()
-//                            Log.e("status", "success")
-//                            setupNavigateToHome()
-//
-//
-//                        }
-//                        is Status.Loading -> {
-//                            btnLoginGo.isVisible = false
-//                            requireView().hideKeyboard()
-//                            layoutLoading.root.isVisible = true
-//
-//                            Log.e("status", "loading")
-//                        }
-//                        is Status.Error -> {
-//                            etUsername.text.clear()
-//                            etPassword.text.clear()
-//                            startFocus()
-//                            btnLoginGo.isVisible = true
-//                            layoutLoading.root.isVisible = false
-////                            requireView().createSnackBar(it.error.toString(), 500)
-//
-//                            Log.e("status", "error")
-//                        }
-//                    }
-//
-//                }
-//        }
-//    }
-
-
     private fun handleSuccess() {
         with(bind) {
             session.createLogin()
