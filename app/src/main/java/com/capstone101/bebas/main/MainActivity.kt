@@ -95,7 +95,11 @@ class MainActivity : AppCompatActivity() {
         if (ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.RECORD_AUDIO
             ) != PackageManager.PERMISSION_GRANTED
-        ) return
+        ) {
+            Toast.makeText(applicationContext, "Harap accept permission", Toast.LENGTH_LONG).show()
+            permissionCheck()
+            return
+        }
 
         isRecording = true
         bind.recordMain.isEnabled = false

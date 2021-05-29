@@ -3,7 +3,7 @@ package com.capstone101.core.data
 import com.capstone101.core.data.network.NetworkStatus
 import kotlinx.coroutines.flow.*
 
-abstract class NetworkBoundRes<Req, Res> {
+abstract class AccountBoundRes<Req, Res> {
     private val result: Flow<Status<Res>> = flow {
         val db = loadDB().firstOrNull()
         if (shouldFetch(db)) {
@@ -11,12 +11,13 @@ abstract class NetworkBoundRes<Req, Res> {
             when (val response = netCall().first()) {
                 is NetworkStatus.Success -> {
                     saveCallResult(response.data, db)
-                    emitAll(loadDB().map { Status.Success(it) })
+                    emit(loadDB().map { Status.Success(it) }.first())
                 }
                 is NetworkStatus.Empty ->
-                    emitAll(loadDB().map { Status.Error(it, "username or password wrong") })
+                    emit(loadDB().map { Status.Error(null, "Username atau Password salah") }
+                        .first())
                 is NetworkStatus.Failed ->
-                    emitAll(loadDB().map { Status.Error(it, response.error) })
+                    emit(loadDB().map { Status.Error(null, response.error) }.first())
             }
         } else emitAll(loadDB().map { Status.Success(it) })
     }

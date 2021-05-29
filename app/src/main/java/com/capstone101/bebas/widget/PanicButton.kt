@@ -11,6 +11,7 @@ import android.widget.RemoteViews
 import android.widget.Toast
 import com.capstone101.bebas.R
 import com.capstone101.bebas.main.MainActivity
+import com.capstone101.core.utils.SessionManager
 
 class PanicButton : AppWidgetProvider() {
 
@@ -23,29 +24,30 @@ class PanicButton : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
+        val session = SessionManager(context)
         if (intent.action == KEY_ACTION) {
             count++
             Handler(Looper.getMainLooper()).postDelayed({ count = 0 }, 3000)
             when (count) {
                 3 -> {
-                    Toast.makeText(context, "Berhasil", Toast.LENGTH_SHORT).show()
-
-                    val manager = AppWidgetManager.getInstance(context)
-                    val views = RemoteViews(context.packageName, R.layout.panic_button)
-                    views.setImageViewResource(R.id.recordButton, R.drawable.recording)
-                    val id = intent.getIntExtra(KEY_ID, -1)
-                    manager.updateAppWidget(id, views)
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        views.setImageViewResource(R.id.recordButton, R.drawable.record)
+                    if (session.isLogin) {
+                        val manager = AppWidgetManager.getInstance(context)
+                        val views = RemoteViews(context.packageName, R.layout.panic_button)
+                        views.setImageViewResource(R.id.recordButton, R.drawable.recording)
+                        val id = intent.getIntExtra(KEY_ID, -1)
                         manager.updateAppWidget(id, views)
-                    }, 10000)
 
-                    context.startActivity(Intent(context, MainActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        action = MainActivity.ACTION_RECORD
-                    })
-                    // TODO: RECORD ACTIVITY MASUKKAN KE DATA
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            views.setImageViewResource(R.id.recordButton, R.drawable.record)
+                            manager.updateAppWidget(id, views)
+                        }, 10000)
+
+                        context.startActivity(Intent(context, MainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            action = MainActivity.ACTION_RECORD
+                        })
+                    } else Toast.makeText(context, "Login terlebih dahulu", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 2 -> Toast.makeText(context, "Tekan sekali lagi", Toast.LENGTH_SHORT).show()
                 1 -> Toast.makeText(context, "Tekan dua kali lagi", Toast.LENGTH_SHORT).show()

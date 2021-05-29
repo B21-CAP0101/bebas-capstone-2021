@@ -44,9 +44,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         .isNotEmpty()
                 ) {
                     viewModel.login(etUsername.text.toString(), etPassword.text.toString())
-                        .observe(viewLifecycleOwner) {
-                            when (it) {
+                        .observe(viewLifecycleOwner) { data ->
+                            when (data) {
                                 is Status.Success -> {
+                                    println("SUCCESS TOOL")
                                     layoutLoading.MKLoader.isVisible = false
                                     layoutLoading.tvStatusLogin.text =
                                         resources.getString(R.string.success)
@@ -59,14 +60,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                     layoutLoading.root.isVisible = true
                                 }
                                 is Status.Error -> {
+                                    println("ERROR TOOL")
                                     etUsername.text.clear()
                                     etPassword.text.clear()
                                     btnLoginGo.isVisible = true
                                     layoutLoading.root.isVisible = false
-                                    requireView().createSnackBar(it.error.toString(), 500)
+                                    requireView().createSnackBar(data.error.toString(), 500)
                                 }
                             }
-
                         }
                 } else {
                     if (etUsername.text.toString().isEmpty()) {
