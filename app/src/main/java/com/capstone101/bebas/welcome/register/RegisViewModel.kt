@@ -1,9 +1,6 @@
 package com.capstone101.bebas.welcome.register
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.capstone101.core.domain.model.User
 import com.capstone101.core.domain.usecase.IUseCase
 import com.capstone101.core.utils.Security
@@ -28,4 +25,7 @@ class RegisViewModel(private val useCase: IUseCase) : ViewModel() {
             data.value = condition
         }
     }
+
+    fun login(username: String, password: String) =
+        useCase.login(User(username, password, "", null, 2, listOf())).asLiveData()
 }

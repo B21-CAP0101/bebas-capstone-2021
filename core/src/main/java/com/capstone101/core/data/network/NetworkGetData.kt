@@ -1,6 +1,9 @@
 package com.capstone101.core.data.network
 
+import com.capstone101.core.data.network.firebase.DangerFire
+import com.capstone101.core.data.network.firebase.RelativesFire
 import com.capstone101.core.data.network.firebase.UserFire
+import com.capstone101.core.utils.MapVal
 import com.capstone101.core.utils.Security
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
@@ -20,25 +23,46 @@ class NetworkGetData(private val fs: FirebaseFirestore) {
         } else emit(NetworkStatus.Empty)
     }.flowOn(Dispatchers.IO)
 
-//    suspend fun getRelatives(): Flow<NetworkStatus<RelativesFire>> = flow {
-//        val user = MapVal.user!!
-//        val relatives = fs.collection(UserFire.COLLECTION).document(user.username).collection(RelativesFire.COLLECTION)
-//    }.flowOn(Dispatchers.IO)
+    suspend fun getRelatives(): Flow<NetworkStatus<RelativesFire>> = flow {
+        val user = MapVal.user!!
+        val relatives =
+            fs.collection(RelativesFire.COLLECTION).document(user.username).get().await()
+                .toObject(RelativesFire::class.java)
+        if (relatives == null) emit(NetworkStatus.Empty)
+        else emit(NetworkStatus.Success(relatives))
+    }.flowOn(Dispatchers.IO)
 
-    suspend fun insertToFs(user: UserFire): Boolean? {
-        return try {
-            if (check(user.username!!)) null
-            else {
-                val password = Security.encrypt(user.password!!)
-                val input =
-                    UserFire(user.username, password, user.email, user.address, user.type, user.key)
-                fs.collection(UserFire.COLLECTION).document(input.username!!).set(user)
-                true
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
+    suspend fun insertToFs(user: UserFire): Boolean? = try {
+        if (check(user.username!!)) null
+        else {
+            val password = Security.encrypt(user.password!!)
+            val input =
+                UserFire(user.username, password, user.email, user.address, user.type, user.key)
+            fs.collection(UserFire.COLLECTION).document(input.username!!).set(input)
+            true
         }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
+    }
+
+    fun updateUserFS(): UserFire {
+        val user = MapVal.userDomToFire(MapVal.user!!)
+        fs.collection(UserFire.COLLECTION).document(user.username!!).set(user)
+        return user
+    }
+
+    fun insertDanger(danger: DangerFire): Boolean = try {
+        val user = updateUserFS()
+        println(user)
+        val userID = hashMapOf("user_id" to user.username)
+        fs.collection(DangerFire.COLLECTION).document(user.username!!).set(userID)
+        fs.collection(DangerFire.COLLECTION).document(user.username)
+            .collection(DangerFire.SUB_COLLECTION).document(danger.id!!).set(danger)
+        true
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
     }
 
     private suspend fun check(username: String): Boolean =

@@ -7,7 +7,7 @@ data class UserFire(
     val address: String? = null,
     val type: Int? = null,
     val key: List<String>? = null,
-    val inDanger: Boolean = false
+    var inDanger: Boolean = false
 ) {
     companion object {
         const val COLLECTION = "users"

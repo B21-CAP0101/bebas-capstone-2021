@@ -11,5 +11,5 @@ data class UserEntity(
     val address: String? = null,
     val type: Int,
     val key: String,
-    val inDanger: Boolean = false
+    var inDanger: Boolean = false
 )

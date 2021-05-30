@@ -1,5 +1,5 @@
 dependencies {
-    implementation "com.github.bumptech.glide:glide:4.12.0"  // glide
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"  // lifeCycle
 
     // Koin
     implementation "io.insert-koin:koin-core:3.0.1"
