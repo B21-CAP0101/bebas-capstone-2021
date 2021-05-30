@@ -1,7 +1,11 @@
 package com.capstone101.bebas.main
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
@@ -11,18 +15,30 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.ActivityMainBinding
+import com.capstone101.core.domain.model.Danger
 import com.capstone101.core.utils.MapVal
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.GeoPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.android.inject
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CoroutineScope {
     private var binding: ActivityMainBinding? = null
     private val bind get() = binding!!
 
     private var granted: Int = 0
     private lateinit var permissions: Array<String>
+    private lateinit var manager: LocationManager
+    private lateinit var listener: LocationListener
+    private val danger = Danger()
+    private val viewModel: MainViewModel by inject()
+    private lateinit var data: String
+    private var isRecording = false
 
     companion object {
         const val PERMISSION_CODE = 123456
@@ -31,10 +47,6 @@ class MainActivity : AppCompatActivity() {
         @Volatile
         var count = 0
     }
-
-    private val viewModel: MainViewModel by inject()
-    private lateinit var data: String
-    private var isRecording = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +60,7 @@ class MainActivity : AppCompatActivity() {
             when (count) {
                 3 -> {
                     Toast.makeText(applicationContext, "Berhasil", Toast.LENGTH_SHORT).show()
+                    location()
                     recording()
                 }
                 2 -> Toast.makeText(applicationContext, "Tekan sekali lagi", Toast.LENGTH_SHORT)
@@ -61,8 +74,42 @@ class MainActivity : AppCompatActivity() {
         if (intent.action == ACTION_RECORD) recording()
 
         viewModel.getUser.observe(this) {
-            MapVal.user = it
-            // TODO: BUAT USER PROFILE
+            if (it != null) {
+                MapVal.user = it.apply { it.inDanger = false }
+                viewModel.updateUserStatus()
+                // TODO: BUAT USER PROFILE
+                bind.profileGo.text =
+                    "Username: ${it?.username}\nEmail: ${it?.email}\nInDanger: ${it?.inDanger}"
+
+                viewModel.getRelative.observe(this) { relative ->
+                    bind.relativeGo.text = "Invited: ${relative.invited.size}\n" +
+                            "Inviting: ${relative.inviting.size}\n" +
+                            "Confirmed: ${relative.pure.size}\n"
+                }
+                viewModel.getUser.removeObservers(this)
+            }
+        }
+
+        manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        listener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                println("Latitude: ${location.latitude}\nLongitude: ${location.longitude}")
+                viewModel.setCondition.value =
+                    viewModel.setCondition.value?.apply { this[1] = true }
+                danger.place = GeoPoint(location.latitude, location.longitude)
+            }
+
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) = Unit
+
+            override fun onProviderEnabled(provider: String) = Unit
+
+            override fun onProviderDisabled(provider: String) = Unit
+        }
+        viewModel.condition.observe(this) {
+            if (it[0] && it[1]) {
+                viewModel.insertDanger(danger)
+                viewModel.setCondition.value = mutableListOf(false, false)
+            }
         }
     }
 
@@ -86,11 +133,30 @@ class MainActivity : AppCompatActivity() {
         val folder = File(externalCacheDir?.absolutePath!!)
         val date = Date()
         val formatter = SimpleDateFormat("dd-MM-yyyy-HH-mm", Locale.getDefault())
-        val fileName = "${formatter.format(date)}.mp3"
+        val fileName = formatter.format(date)
 
-        data = "$folder/$fileName"
+        data = "$folder/$fileName.mp3"
+
+        danger.id = fileName
+        danger.time = Timestamp(date)
+        danger.record = "${MapVal.user!!.username}/$fileName.mp3"
 
         if (!folder.exists()) folder.mkdir()
+    }
+
+    private fun location() {
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Toast.makeText(applicationContext, "Harap accept permission", Toast.LENGTH_LONG).show()
+            permissionCheck()
+            return
+        }
+        manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 5F, listener)
+        Handler(Looper.getMainLooper()).postDelayed({
+            manager.removeUpdates(listener)
+        }, 60000)
     }
 
     private fun recording() {
@@ -129,6 +195,7 @@ class MainActivity : AppCompatActivity() {
             bind.recordMain.isEnabled = true
             count = 0
             bind.recordMain.setImageResource(R.drawable.record)
+            viewModel.setCondition.value = viewModel.setCondition.value?.apply { this[0] = true }
         }, 11000)
     }
 
@@ -162,4 +229,7 @@ class MainActivity : AppCompatActivity() {
         binding = null
         super.onDestroy()
     }
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main
 }

@@ -12,6 +12,8 @@ import com.capstone101.bebas.util.Function
 import com.capstone101.bebas.util.Function.clearWelcomeActivityAndCreateMainActivity
 import com.capstone101.bebas.util.Function.createSnackBar
 import com.capstone101.bebas.util.Function.showKeyboard
+import com.capstone101.core.data.Status
+import com.capstone101.core.utils.SessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -39,7 +41,22 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onResume()
         viewModel.condition.observe(this) {
             when (it) {
-                true -> navigateToHome()
+                true -> {
+                    viewModel.login(
+                        bind.etUsername.text.toString(), bind.etPassword.text.toString()
+                    ).observe(this) { status ->
+                        val session: SessionManager by inject()
+                        when (status) {
+                            is Status.Success -> {
+                                session.createLogin()
+                                navigateToHome()
+                            }
+                            is Status.Error -> findNavController().navigateUp()
+                            is Status.Loading -> {
+                            }
+                        }
+                    }
+                }
                 null -> {
                     // TODO: BEDA SAMA DI LOGIN INI, AKU NDA BISA BAIKI AWOKWKOWKO
                     clearAllText()

@@ -8,4 +8,6 @@ class DBGetData(private val dao: UserDao) {
     fun getUser(): Flow<UserEntity?> = dao.getUser()
 
     suspend fun insert(user: UserEntity) = dao.insert(user)
+
+    suspend fun update(user: UserEntity) = dao.update(user)
 }

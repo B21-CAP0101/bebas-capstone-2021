@@ -47,7 +47,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         .observe(viewLifecycleOwner) { data ->
                             when (data) {
                                 is Status.Success -> {
-                                    println("SUCCESS TOOL")
                                     layoutLoading.MKLoader.isVisible = false
                                     layoutLoading.tvStatusLogin.text =
                                         resources.getString(R.string.success)
@@ -60,7 +59,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                     layoutLoading.root.isVisible = true
                                 }
                                 is Status.Error -> {
-                                    println("ERROR TOOL")
                                     etUsername.text.clear()
                                     etPassword.text.clear()
                                     btnLoginGo.isVisible = true

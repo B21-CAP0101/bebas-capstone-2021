@@ -4,10 +4,14 @@ import com.capstone101.core.data.db.DBGetData
 import com.capstone101.core.data.network.NetworkGetData
 import com.capstone101.core.data.network.NetworkStatus
 import com.capstone101.core.data.network.firebase.UserFire
+import com.capstone101.core.domain.model.Danger
+import com.capstone101.core.domain.model.Relatives
 import com.capstone101.core.domain.model.User
 import com.capstone101.core.domain.repositories.IRepositories
 import com.capstone101.core.utils.MapVal
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class Repositories(private val db: DBGetData, private val network: NetworkGetData) : IRepositories {
@@ -28,5 +32,21 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
 
     override fun getUser(): Flow<User?> = db.getUser().map { MapVal.userEntToDom(it) }
 
+    override fun getRelative(): Flow<Relatives> = flow {
+        when (val result = network.getRelatives().first()) {
+            is NetworkStatus.Success -> emit(MapVal.relativesFireToDom(result.data))
+            else -> emit(Relatives(listOf(), listOf(), listOf()))
+        }
+    }
+
     override suspend fun insertToFs(user: User) = network.insertToFs(MapVal.userDomToFire(user))
+
+    override fun updateUserFS() {
+        network.updateUserFS()
+    }
+
+    override fun insertDanger(danger: Danger): Boolean =
+        network.insertDanger(MapVal.dangerDomToFire(danger))
+
+    override suspend fun updateUser(user: User) = db.update(MapVal.userDomToEnt(user))
 }
