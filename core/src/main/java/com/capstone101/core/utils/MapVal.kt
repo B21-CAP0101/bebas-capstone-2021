@@ -29,6 +29,12 @@ object MapVal {
         )
     }
 
+    fun userFireToDom(data: UserFire): User =
+        User(
+            data.username!!, data.password!!, data.email!!, data.address, data.type ?: 2,
+            data.key!!, data.inDanger
+        )
+
     fun userDomToFire(data: User): UserFire =
         UserFire(
             data.username, data.password, data.email, data.address, data.type,

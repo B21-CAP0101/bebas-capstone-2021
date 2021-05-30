@@ -2,6 +2,7 @@ package com.capstone101.bebas.main
 
 import androidx.lifecycle.*
 import com.capstone101.core.domain.model.Danger
+import com.capstone101.core.domain.model.User
 import com.capstone101.core.domain.usecase.IUseCase
 import com.capstone101.core.utils.MapVal
 import kotlinx.coroutines.Dispatchers
@@ -26,4 +27,8 @@ class MainViewModel(private val useCase: IUseCase) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) { useCase.updateUser(MapVal.user!!) }
         useCase.updateUserFS()
     }
+
+    val checkInDanger = useCase.checkInDanger().asLiveData()
+    val setUsers = MutableLiveData<List<User>>().apply { this.value = listOf() }
+    val users: LiveData<List<User>> = setUsers
 }

@@ -7,7 +7,10 @@ import com.capstone101.core.utils.MapVal
 import com.capstone101.core.utils.Security
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
@@ -30,6 +33,23 @@ class NetworkGetData(private val fs: FirebaseFirestore) {
                 .toObject(RelativesFire::class.java)
         if (relatives == null) emit(NetworkStatus.Empty)
         else emit(NetworkStatus.Success(relatives))
+    }.flowOn(Dispatchers.IO)
+
+    @ExperimentalCoroutinesApi
+    fun checkInDanger(): Flow<NetworkStatus<List<UserFire>>> = callbackFlow {
+        val check = fs.collection(UserFire.COLLECTION).whereEqualTo(UserFire.DANGER, true)
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    trySend(NetworkStatus.Failed("Error occurred"))
+                    return@addSnapshotListener
+                }
+                if (value == null || value.isEmpty) trySend(NetworkStatus.Empty)
+                else {
+                    val users = value.map { it.toObject(UserFire::class.java) }
+                    trySend(NetworkStatus.Success(users))
+                }
+            }
+        awaitClose { check.remove() }
     }.flowOn(Dispatchers.IO)
 
     suspend fun insertToFs(user: UserFire): Boolean? = try {

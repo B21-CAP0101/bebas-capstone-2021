@@ -11,6 +11,7 @@ class UseCase(private val repositories: IRepositories) : IUseCase {
     override fun login(user: User): Flow<Status<User>> = repositories.login(user)
     override fun getUser(): Flow<User?> = repositories.getUser()
     override fun getRelative(): Flow<Relatives> = repositories.getRelative()
+    override fun checkInDanger(): Flow<Status<List<User>>> = repositories.checkInDanger()
 
     override suspend fun insertToFs(user: User): Boolean? = repositories.insertToFs(user)
 

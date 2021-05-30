@@ -23,7 +23,9 @@ import com.capstone101.bebas.main.MainActivity
 import com.capstone101.bebas.main.MainViewModel
 import com.capstone101.bebas.util.Function.createSnackBar
 import com.capstone101.bebas.util.Function.glide
+import com.capstone101.core.data.Status
 import com.capstone101.core.domain.model.Danger
+import com.capstone101.core.domain.model.Relatives
 import com.capstone101.core.utils.MapVal
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
@@ -100,6 +102,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    private var relative: Relatives? = null
 
     private fun subscribeToViewModel() {
         viewModel.getUser.observe(viewLifecycleOwner) { user ->
@@ -107,11 +110,27 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 MapVal.user = user.apply { user.inDanger = false }
                 viewModel.updateUserStatus()
                 setupUI()
-                viewModel.getRelative.observe(viewLifecycleOwner) { relative ->
+                viewModel.getRelative.observe(viewLifecycleOwner) { relatives ->
+                    relative = relatives
                     // TODO: BUAT RELATIVE
+
+                    viewModel.checkInDanger.observe(viewLifecycleOwner) {
+                        when (it) {
+                            is Status.Success ->
+                                viewModel.setUsers.value =
+                                    it.data?.filter { user -> user.username in relative!!.pure }
+                            is Status.Error -> requireView().createSnackBar(it.error!!, 1000)
+                            is Status.Loading -> {
+                            }
+                        }
+                    }
                 }
                 viewModel.getUser.removeObservers(viewLifecycleOwner)
             }
+        }
+        viewModel.users.observe(viewLifecycleOwner) { users ->
+            bind.textView2.text = "USER DALAM BAHAYA: ${users.size}"
+            users?.forEach { user -> bind.textView2.append("\n${user.username}") }
         }
     }
 

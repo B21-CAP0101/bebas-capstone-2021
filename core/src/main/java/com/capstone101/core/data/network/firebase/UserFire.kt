@@ -11,5 +11,6 @@ data class UserFire(
 ) {
     companion object {
         const val COLLECTION = "users"
+        const val DANGER = "inDanger"
     }
 }

@@ -9,6 +9,7 @@ import com.capstone101.core.domain.model.Relatives
 import com.capstone101.core.domain.model.User
 import com.capstone101.core.domain.repositories.IRepositories
 import com.capstone101.core.utils.MapVal
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -36,6 +37,19 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
         when (val result = network.getRelatives().first()) {
             is NetworkStatus.Success -> emit(MapVal.relativesFireToDom(result.data))
             else -> emit(Relatives(listOf(), listOf(), listOf()))
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    override fun checkInDanger(): Flow<Status<List<User>>> = flow {
+        when (val result = network.checkInDanger().first()) {
+            is NetworkStatus.Success -> emit(Status.Success(result.data.map {
+                MapVal.userFireToDom(
+                    it
+                )
+            }))
+            is NetworkStatus.Empty -> emit(Status.Success(listOf<User>()))
+            is NetworkStatus.Failed -> emit(Status.Error(null, result.error))
         }
     }
 

@@ -14,6 +14,7 @@ import com.capstone101.bebas.R
 import com.capstone101.bebas.main.MainViewModel
 import com.capstone101.bebas.welcome.WelcomeActivity
 import com.capstone101.core.data.network.firebase.RelativesFire
+import com.capstone101.core.data.network.firebase.UserFire
 import com.capstone101.core.utils.MapVal
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -35,29 +36,31 @@ class AutoService : LifecycleService() {
     private val mainViewModel: MainViewModel by inject()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val db = Firebase.firestore
+        val fs = Firebase.firestore
 
-        db.collection("users").whereEqualTo("inDanger", true)
+        fs.collection(UserFire.COLLECTION).whereEqualTo(UserFire.DANGER, true)
             .addSnapshotListener { value, e ->
                 if (e != null) {
-                    Toast.makeText(applicationContext, "Terjadi error\n$e", Toast.LENGTH_SHORT)
+                    Toast.makeText(applicationContext, "Error occurred\n$e", Toast.LENGTH_SHORT)
                         .show()
                     return@addSnapshotListener
                 }
                 mainViewModel.getUser.observe(this) {
                     if (it != null) {
-                        db.collection(RelativesFire.COLLECTION).document(it.username).get()
+                        fs.collection(RelativesFire.COLLECTION).document(it.username).get()
                             .addOnSuccessListener { relDoc ->
                                 val relatives =
                                     MapVal.relativesFireToDom(
                                         relDoc.toObject(RelativesFire::class.java)
                                             ?: RelativesFire()
                                     )
-                                for (i in value!!) {
-                                    if (i["username"] in relatives.pure)
+                                val users =
+                                    value!!.map { user -> user.toObject(UserFire::class.java) }
+                                for (user in users) {
+                                    if (user.username in relatives.pure)
                                         Toast.makeText(
                                             applicationContext,
-                                            "${i["username"]} dalam bahaya",
+                                            "${user.username} dalam bahaya",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                 }
@@ -65,7 +68,6 @@ class AutoService : LifecycleService() {
                         mainViewModel.getUser.removeObservers(this)
                     }
                 }
-
             }
         startForeground()
 
