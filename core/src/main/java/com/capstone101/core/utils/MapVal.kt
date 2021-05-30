@@ -41,12 +41,6 @@ object MapVal {
             data.key, data.inDanger
         )
 
-    fun relativesFireToDom(data: RelativesFire): Relatives =
-        Relatives(data.invited ?: listOf(), data.inviting ?: listOf(), data.pure ?: listOf())
-
-    fun dangerDomToFire(data: Danger): DangerFire =
-        DangerFire(data.id, data.place, data.record, data.time)
-
     fun userDomToEnt(data: User): UserEntity {
         val key = data.key.toList().toString().replace("[", "").replace("]", "")
         return UserEntity(
@@ -54,4 +48,10 @@ object MapVal {
             data.type, key, data.inDanger
         )
     }
+
+    fun relativesFireToDom(data: RelativesFire): Relatives =
+        Relatives(data.invited ?: listOf(), data.inviting ?: listOf(), data.pure ?: listOf())
+
+    fun dangerDomToFire(data: Danger): DangerFire =
+        DangerFire(data.id, data.place, data.record, data.time, data.type)
 }

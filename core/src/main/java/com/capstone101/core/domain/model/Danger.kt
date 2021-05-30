@@ -7,5 +7,6 @@ data class Danger(
     var id: String? = null,
     var place: GeoPoint? = null,
     var record: String? = null,
-    var time: Timestamp? = null
+    var time: Timestamp? = null,
+    var type: Int? = null
 )

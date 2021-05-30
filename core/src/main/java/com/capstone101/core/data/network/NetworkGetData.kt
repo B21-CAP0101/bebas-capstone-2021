@@ -36,11 +36,11 @@ class NetworkGetData(private val fs: FirebaseFirestore) {
     }.flowOn(Dispatchers.IO)
 
     @ExperimentalCoroutinesApi
-    fun checkInDanger(): Flow<NetworkStatus<List<UserFire>>> = callbackFlow {
+    suspend fun checkInDanger(): Flow<NetworkStatus<List<UserFire>>> = callbackFlow {
         val check = fs.collection(UserFire.COLLECTION).whereEqualTo(UserFire.DANGER, true)
             .addSnapshotListener { value, e ->
                 if (e != null) {
-                    trySend(NetworkStatus.Failed("Error occurred"))
+                    trySend(NetworkStatus.Failed("Error occurred\n${e.code}"))
                     return@addSnapshotListener
                 }
                 if (value == null || value.isEmpty) trySend(NetworkStatus.Empty)

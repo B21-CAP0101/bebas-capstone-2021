@@ -44,9 +44,7 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
     override fun checkInDanger(): Flow<Status<List<User>>> = flow {
         when (val result = network.checkInDanger().first()) {
             is NetworkStatus.Success -> emit(Status.Success(result.data.map {
-                MapVal.userFireToDom(
-                    it
-                )
+                MapVal.userFireToDom(it)
             }))
             is NetworkStatus.Empty -> emit(Status.Success(listOf<User>()))
             is NetworkStatus.Failed -> emit(Status.Error(null, result.error))
