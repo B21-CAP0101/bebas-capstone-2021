@@ -7,7 +7,7 @@ import com.capstone101.core.utils.MapVal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainViewModel(useCase: IUseCase) : ViewModel() {
+class MainViewModel(private val useCase: IUseCase) : ViewModel() {
     val getUser = useCase.getUser().asLiveData()
 
     val getRelative = useCase.getRelative().asLiveData()
