@@ -10,7 +10,9 @@ import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -34,8 +36,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
-    private var binding: FragmentHomeBinding? = null
-    private val bind get() = binding!!
+    private lateinit var bind: FragmentHomeBinding
 
     private var granted: Int = 0
     private lateinit var permissions: Array<String>
@@ -55,10 +56,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         var count = 0
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        bind = FragmentHomeBinding.inflate(inflater, container, false)
+        return bind.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentHomeBinding.bind(view)
 
         permissionCheck()
         subscribeToViewModel()
@@ -277,10 +285,5 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun stopPulse() {
         handlerAnimation.removeCallbacks(runnable)
-    }
-
-    override fun onDestroy() {
-        binding = null
-        super.onDestroy()
     }
 }
