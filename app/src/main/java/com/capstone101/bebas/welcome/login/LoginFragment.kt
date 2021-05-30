@@ -23,8 +23,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
-    private var binding: FragmentLoginBinding? = null
-    private val bind get() = binding!!
+    private lateinit var bind: FragmentLoginBinding
     private val viewModel: LoginViewModel by inject()
     private val session: SessionManager by inject()
 
@@ -33,7 +32,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
+        bind = FragmentLoginBinding.inflate(inflater, container, false)
         return bind.root
     }
 
@@ -136,11 +135,5 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             findNavController().navigate(R.id.action_loginFragment_to_mainActivity)
             requireActivity().finish()
         }
-    }
-
-
-    override fun onDestroyView() {
-        binding = null
-        super.onDestroyView()
     }
 }

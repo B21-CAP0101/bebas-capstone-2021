@@ -19,14 +19,13 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
-    private var binding: FragmentRegisterBinding? = null
-    private val bind get() = binding!!
+    private lateinit var bind: FragmentRegisterBinding
     private val viewModel: RegisViewModel by inject()
     private val session: SessionManager by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentRegisterBinding.bind(view)
+        bind = FragmentRegisterBinding.bind(view)
 
         startFocus()
         setupActionRegister()
@@ -131,10 +130,5 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     override fun onStop() {
         viewModel.condition.removeObservers(this)
         super.onStop()
-    }
-
-    override fun onDestroyView() {
-        binding = null
-        super.onDestroyView()
     }
 }
