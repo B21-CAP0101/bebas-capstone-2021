@@ -1,7 +1,11 @@
 package com.capstone101.bebas.main.home
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
@@ -13,10 +17,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentHomeBinding
+import com.capstone101.bebas.main.MainActivity
 import com.capstone101.bebas.main.MainViewModel
 import com.capstone101.bebas.util.Function.createSnackBar
 import com.capstone101.bebas.util.Function.glide
+import com.capstone101.core.domain.model.Danger
 import com.capstone101.core.utils.MapVal
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,34 +39,72 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private var granted: Int = 0
     private lateinit var permissions: Array<String>
-    private var handlerAnimation = Handler()
+    private lateinit var manager: LocationManager
+    private lateinit var listener: LocationListener
+    private val danger = Danger()
+    private val viewModel: MainViewModel by inject()
+    private lateinit var data: String
+    private var handlerAnimation = Handler(Looper.getMainLooper())
 
     companion object {
         const val PERMISSION_CODE = 123456
+
         const val ACTION_RECORD = "com.capstone101.bebas.home.recordingStart"
 
         @Volatile
         var count = 0
     }
 
-    private val viewModel: MainViewModel by inject()
-    private lateinit var data: String
-    private var isRecording = false
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
 
+        permissionCheck()
         subscribeToViewModel()
         setupActionPanicButton()
         startPulse()
+
+        manager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        listener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                println("Latitude: ${location.latitude}\nLongitude: ${location.longitude}")
+                viewModel.setCondition.value =
+                    viewModel.setCondition.value?.apply { this[1] = true }
+                danger.place = GeoPoint(location.latitude, location.longitude)
+            }
+
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) = Unit
+
+            override fun onProviderEnabled(provider: String) = Unit
+
+            override fun onProviderDisabled(provider: String) = Unit
+        }
+
         if (requireActivity().intent.action == ACTION_RECORD) recording()
+
+        viewModel.condition.observe(viewLifecycleOwner) {
+            // UNTUK CEK APAKAH SUDAH SELESAI RECORD DAN FETCH LOKASI
+            if (it[0] && it[1]) {
+                viewModel.insertDanger(danger)
+                viewModel.setCondition.value = mutableListOf(false, false)
+            }
+        }
     }
 
 
     private fun subscribeToViewModel() {
-        viewModel.getUser.observe(viewLifecycleOwner) { user -> MapVal.user = user; setupUI() }
+        viewModel.getUser.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                MapVal.user = user.apply { user.inDanger = false }
+                viewModel.updateUserStatus()
+                setupUI()
+                viewModel.getRelative.observe(viewLifecycleOwner) { relative ->
+                    // TODO: BUAT RELATIVE
+                }
+                viewModel.getUser.removeObservers(viewLifecycleOwner)
+            }
+        }
     }
 
     private fun setupUI() {
@@ -97,6 +143,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 when (count) {
                     3 -> {
                         requireView().createSnackBar("start recording", 1000)
+                        location()
                         recording()
                         stopPulse()
                     }
@@ -120,9 +167,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             return
         }
 
-        isRecording = true
-        bind.btnPanic.isEnabled = false
         checkFolder()
+        MainActivity.isRecording = true
+        bind.btnPanic.isEnabled = false
 
         bind.btnPanic.text = StringBuilder("rec")
         val recording = MediaRecorder().apply {
@@ -142,12 +189,29 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 stop()
                 release()
             }
-            isRecording = false
+            MainActivity.isRecording = false
             bind.btnPanic.isEnabled = true
             count = 0
             bind.btnPanic.text = StringBuilder("danger")
             startPulse()
+            viewModel.setCondition.value =
+                viewModel.setCondition.value?.apply { this[0] = true }
         }, 11000)
+    }
+
+    private fun location() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requireView().createSnackBar("please accept permission", 2000)
+            permissionCheck()
+            return
+        }
+        manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 5F, listener)
+        Handler(Looper.getMainLooper()).postDelayed({
+            manager.removeUpdates(listener)
+        }, 60000)
     }
 
     private fun permissionCheck() {
@@ -164,44 +228,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireContext(), permissions[2]
             ) != granted
         ) ActivityCompat.requestPermissions(
-            requireActivity(),
-            permissions,
-            PERMISSION_CODE
+            requireActivity(), permissions, PERMISSION_CODE
         )
     }
 
     private fun checkFolder() {
-        val folder = File(requireActivity().externalCacheDir?.absolutePath!!)
+        val folder = File(requireContext().externalCacheDir?.absolutePath!!)
         val date = Date()
         val formatter = SimpleDateFormat("dd-MM-yyyy-HH-mm", Locale.getDefault())
-        val fileName = "${formatter.format(date)}.mp3"
+        val fileName = formatter.format(date)
 
-        data = "$folder/$fileName"
+        data = "$folder/$fileName.mp3"
+
+        danger.id = fileName
+        danger.time = Timestamp(date)
+        danger.record = "${MapVal.user!!.username}/$fileName.mp3"
 
         if (!folder.exists()) folder.mkdir()
-    }
-
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode != PERMISSION_CODE) {
-            if (ActivityCompat.checkSelfPermission(
-                    requireContext(), permissions[0]
-                ) != granted
-            )
-                ActivityCompat.requestPermissions(
-                    requireActivity(), arrayOf(permissions[0], permissions[1]), PERMISSION_CODE
-                )
-            if (ActivityCompat.checkSelfPermission(
-                    requireContext(), permissions[2]
-                ) != granted
-            )
-                ActivityCompat.requestPermissions(
-                    requireActivity(), arrayOf(permissions[2]), PERMISSION_CODE
-                )
-        }
     }
 
     private var runnable = object : Runnable {
