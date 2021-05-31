@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.capstone101.bebas.databinding.ActivityRelativeBinding
 import com.capstone101.core.domain.model.User
+import com.capstone101.core.utils.MapVal
 import org.koin.android.ext.android.inject
 
 class RelativeActivity : AppCompatActivity() {
@@ -30,11 +31,17 @@ class RelativeActivity : AppCompatActivity() {
             }
             bind.confirm.setOnClickListener {
                 viewModel.confirm(relatives, confirmTest, true)
-                Toast.makeText(this, "CONFIRM", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "CONFIRMED", Toast.LENGTH_LONG).show()
             }
             bind.deny.setOnClickListener {
                 viewModel.confirm(relatives, confirmTest, false)
-                Toast.makeText(this, "DENY", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "DENIED", Toast.LENGTH_LONG).show()
+            }
+            bind.delete.setOnClickListener {
+                viewModel.delete(
+                    relatives, if (test.username != MapVal.user!!.username) test else confirmTest
+                )
+                Toast.makeText(this, "DIVORCED", Toast.LENGTH_LONG).show()
             }
         }
     }

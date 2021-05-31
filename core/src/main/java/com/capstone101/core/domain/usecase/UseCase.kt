@@ -30,4 +30,7 @@ class UseCase(private val repositories: IRepositories) : IUseCase {
 
     override fun confirmRelative(relatives: Relatives, target: User, condition: Boolean) =
         repositories.confirmRelative(relatives, target, condition)
+
+    override fun deleteRelation(relatives: Relatives, target: User) =
+        repositories.deleteRelation(relatives, target)
 }

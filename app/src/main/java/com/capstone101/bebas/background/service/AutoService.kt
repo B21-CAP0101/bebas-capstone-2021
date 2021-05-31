@@ -135,10 +135,11 @@ class AutoService : LifecycleService() {
         val notification = NotificationCompat.Builder(this, CHANNEL_REMIND_ID).apply {
             setSmallIcon(R.mipmap.ic_launcher_round)
             setContentTitle("${user.username} in danger")
-            setContentText("${user.username} danger type is \"$type\"\nID: ${danger.id}")
+            setContentText("${user.username} danger type is \"$type\"")
             setContentIntent(pendingIntent)
             setVibrate(vibration)
             setSound(soundURI)
+            setStyle(NotificationCompat.BigTextStyle().bigText("ID: ${danger.id}"))
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel = NotificationChannel(

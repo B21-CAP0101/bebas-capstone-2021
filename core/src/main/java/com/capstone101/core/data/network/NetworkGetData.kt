@@ -90,6 +90,24 @@ class NetworkGetData(private val fs: FirebaseFirestore) {
             }
     }
 
+    fun deleteRelation(relatives: RelativesFire, target: UserFire) {
+        fs.collection(RelativesFire.COLLECTION).document(target.username!!).get()
+            .addOnSuccessListener {
+                val relativesTarget = it.toObject(RelativesFire::class.java)
+                    ?.apply { this.username = target.username } ?: RelativesFire(target.username)
+                val targetPure = relativesTarget.pure?.toMutableList() ?: mutableListOf()
+                val userPure = relatives.pure!!.toMutableList()
+                targetPure.remove(relatives.username!!)
+                userPure.remove(target.username)
+                relativesTarget.pure = targetPure
+                relatives.pure = userPure
+                fs.collection(RelativesFire.COLLECTION).document(target.username)
+                    .set(relativesTarget)
+                fs.collection(RelativesFire.COLLECTION).document(relatives.username!!)
+                    .set(relatives)
+            }
+    }
+
     fun checkInDanger(networkStatus: (NetworkStatus<List<UserFire>>) -> Unit) {
         fs.collection(UserFire.COLLECTION).whereEqualTo(UserFire.DANGER, true)
             .addSnapshotListener { value, e ->

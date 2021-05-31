@@ -20,4 +20,5 @@ interface IRepositories {
 
     fun invitingRelative(relatives: Relatives, target: User, condition: Boolean)
     fun confirmRelative(relatives: Relatives, target: User, condition: Boolean)
+    fun deleteRelation(relatives: Relatives, target: User)
 }

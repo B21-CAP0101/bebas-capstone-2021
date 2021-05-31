@@ -72,4 +72,7 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
         network.confirmRelative(
             MapVal.relativesDomToFire(relatives), MapVal.userDomToFire(target), condition
         )
+
+    override fun deleteRelation(relatives: Relatives, target: User) =
+        network.deleteRelation(MapVal.relativesDomToFire(relatives), MapVal.userDomToFire(target))
 }
