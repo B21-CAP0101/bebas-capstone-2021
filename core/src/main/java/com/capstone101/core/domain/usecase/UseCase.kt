@@ -10,7 +10,11 @@ import kotlinx.coroutines.flow.Flow
 class UseCase(private val repositories: IRepositories) : IUseCase {
     override fun login(user: User): Flow<Status<User>> = repositories.login(user)
     override fun getUser(): Flow<User?> = repositories.getUser()
-    override fun getRelative(): Flow<Relatives> = repositories.getRelative()
+    override fun getRelative(callback: (Relatives) -> Unit) =
+        repositories.getRelative { callback(it) }
+
+    override fun checkInDanger(callback: (Status<List<User>>) -> Unit) =
+        repositories.checkInDanger { callback(it) }
 
     override suspend fun insertToFs(user: User): Boolean? = repositories.insertToFs(user)
 
@@ -20,4 +24,13 @@ class UseCase(private val repositories: IRepositories) : IUseCase {
         repositories.insertDanger(danger)
 
     override suspend fun updateUser(user: User) = repositories.updateUser(user)
+
+    override fun invitingRelative(relatives: Relatives, target: User, condition: Boolean) =
+        repositories.invitingRelative(relatives, target, condition)
+
+    override fun confirmRelative(relatives: Relatives, target: User, condition: Boolean) =
+        repositories.confirmRelative(relatives, target, condition)
+
+    override fun deleteRelation(relatives: Relatives, target: User) =
+        repositories.deleteRelation(relatives, target)
 }

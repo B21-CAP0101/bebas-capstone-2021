@@ -23,21 +23,115 @@ class NetworkGetData(private val fs: FirebaseFirestore) {
         } else emit(NetworkStatus.Empty)
     }.flowOn(Dispatchers.IO)
 
-    suspend fun getRelatives(): Flow<NetworkStatus<RelativesFire>> = flow {
+    fun getRelatives(networkStatus: (NetworkStatus<RelativesFire>) -> Unit) {
         val user = MapVal.user!!
-        val relatives =
-            fs.collection(RelativesFire.COLLECTION).document(user.username).get().await()
-                .toObject(RelativesFire::class.java)
-        if (relatives == null) emit(NetworkStatus.Empty)
-        else emit(NetworkStatus.Success(relatives))
-    }.flowOn(Dispatchers.IO)
+        fs.collection(RelativesFire.COLLECTION).document(user.username)
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    networkStatus(NetworkStatus.Failed("Error occurred\n${e.code}"))
+                    return@addSnapshotListener
+                }
+                if (value == null) networkStatus(NetworkStatus.Empty)
+                else {
+                    val relatives = value.toObject(RelativesFire::class.java)!!
+                    networkStatus(NetworkStatus.Success(relatives))
+                }
+            }
+    }
+
+    fun invitingRelative(relatives: RelativesFire, target: UserFire, condition: Boolean) {
+        fs.collection(RelativesFire.COLLECTION).document(target.username!!).get()
+            .addOnSuccessListener {
+                val relativesTarget = it.toObject(RelativesFire::class.java)
+                    ?.apply { this.username = target.username } ?: RelativesFire(target.username)
+                val userInviting = relatives.inviting!!.toMutableList()
+                val targetInvited = relativesTarget.invited?.toMutableList() ?: mutableListOf()
+                if (condition) {
+                    userInviting.add(target.username)
+                    targetInvited.add(relatives.username!!)
+                    relatives.inviting = userInviting.toList()
+                    relativesTarget.invited = targetInvited.toList()
+                } else {
+                    userInviting.remove(target.username)
+                    targetInvited.remove(relatives.username!!)
+                    relatives.inviting = userInviting.toList()
+                    relativesTarget.invited = targetInvited.toList()
+                }
+                fs.collection(RelativesFire.COLLECTION).document(target.username)
+                    .set(relativesTarget)
+                fs.collection(RelativesFire.COLLECTION).document(relatives.username!!)
+                    .set(relatives)
+            }
+    }
+
+    fun confirmRelative(relatives: RelativesFire, target: UserFire, condition: Boolean) {
+        fs.collection(RelativesFire.COLLECTION).document(target.username!!).get()
+            .addOnSuccessListener {
+                val relativesTarget = it.toObject(RelativesFire::class.java)
+                    ?.apply { this.username = target.username } ?: RelativesFire(target.username)
+                val targetInviting = relativesTarget.inviting?.toMutableList() ?: mutableListOf()
+                val userInvited = relatives.invited!!.toMutableList()
+                if (condition) {
+                    val targetPure = relativesTarget.pure?.toMutableList() ?: mutableListOf()
+                    val userPure = relatives.pure!!.toMutableList()
+                    targetPure.add(relatives.username!!)
+                    userPure.add(target.username)
+                    relatives.pure = userPure.toList()
+                    relativesTarget.pure = targetPure.toList()
+                }
+                targetInviting.remove(relatives.username!!)
+                userInvited.remove(target.username)
+                relatives.invited = userInvited.toList()
+                relativesTarget.inviting = targetInviting.toList()
+                fs.collection(RelativesFire.COLLECTION).document(target.username)
+                    .set(relativesTarget)
+                fs.collection(RelativesFire.COLLECTION).document(relatives.username!!)
+                    .set(relatives)
+            }
+    }
+
+    fun deleteRelation(relatives: RelativesFire, target: UserFire) {
+        fs.collection(RelativesFire.COLLECTION).document(target.username!!).get()
+            .addOnSuccessListener {
+                val relativesTarget = it.toObject(RelativesFire::class.java)
+                    ?.apply { this.username = target.username } ?: RelativesFire(target.username)
+                val targetPure = relativesTarget.pure?.toMutableList() ?: mutableListOf()
+                val userPure = relatives.pure!!.toMutableList()
+                targetPure.remove(relatives.username!!)
+                userPure.remove(target.username)
+                relativesTarget.pure = targetPure
+                relatives.pure = userPure
+                fs.collection(RelativesFire.COLLECTION).document(target.username)
+                    .set(relativesTarget)
+                fs.collection(RelativesFire.COLLECTION).document(relatives.username!!)
+                    .set(relatives)
+            }
+    }
+
+    fun checkInDanger(networkStatus: (NetworkStatus<List<UserFire>>) -> Unit) {
+        fs.collection(UserFire.COLLECTION).whereEqualTo(UserFire.DANGER, true)
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    networkStatus(NetworkStatus.Failed("Error occurred\n${e.code}"))
+                    return@addSnapshotListener
+                }
+                if (value == null || value.isEmpty) networkStatus(NetworkStatus.Empty)
+                else {
+                    val users = value.map { it.toObject(UserFire::class.java) }
+                    networkStatus(NetworkStatus.Success(users))
+                }
+            }
+    }
 
     suspend fun insertToFs(user: UserFire): Boolean? = try {
         if (check(user.username!!)) null
         else {
             val password = Security.encrypt(user.password!!)
             val input =
-                UserFire(user.username, password, user.email, user.address, user.type, user.key)
+                UserFire(
+                    user.username, password, user.email, user.name,
+                    user.address, user.type, user.key
+                )
             fs.collection(UserFire.COLLECTION).document(input.username!!).set(input)
             true
         }
@@ -54,7 +148,6 @@ class NetworkGetData(private val fs: FirebaseFirestore) {
 
     fun insertDanger(danger: DangerFire): Boolean = try {
         val user = updateUserFS()
-        println(user)
         val userID = hashMapOf("user_id" to user.username)
         fs.collection(DangerFire.COLLECTION).document(user.username!!).set(userID)
         fs.collection(DangerFire.COLLECTION).document(user.username)

@@ -13,7 +13,6 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -22,13 +21,13 @@ import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentHomeBinding
 import com.capstone101.bebas.main.MainActivity
 import com.capstone101.bebas.main.MainViewModel
+import com.capstone101.bebas.util.Function.createSnackBar
 import com.capstone101.bebas.util.Function.glide
 import com.capstone101.core.domain.model.Danger
 import com.capstone101.core.utils.MapVal
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -99,20 +98,41 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 viewModel.setCondition.value = mutableListOf(false, false)
             }
         }
+        bind.seeAll.setOnClickListener {
+            startActivity(Intent(requireContext(), RelativeActivity::class.java))
+        }
     }
 
+    private var relative: Relatives? = null
 
     private fun subscribeToViewModel() {
+        val inDangerCallback: (Status<List<User>>) -> Unit = {
+            if (relative != null) {
+                when (it) {
+                    is Status.Success ->
+                        viewModel.setUsers.value =
+                            it.data?.filter { user -> user.username in relative!!.pure }
+                    else -> requireView().createSnackBar(it.error!!, 1000)
+                }
+            }
+        }
         viewModel.getUser.observe(viewLifecycleOwner) { user ->
             if (user != null) {
                 MapVal.user = user.apply { user.inDanger = false }
                 viewModel.updateUserStatus()
                 setupUI()
-                viewModel.getRelative.observe(viewLifecycleOwner) { relative ->
+                viewModel.getRelative { relatives ->
+                    relative = relatives
                     // TODO: BUAT RELATIVE
+
+                    viewModel.checkInDanger(inDangerCallback)
                 }
                 viewModel.getUser.removeObservers(viewLifecycleOwner)
             }
+        }
+        viewModel.users.observe(viewLifecycleOwner) { users ->
+            bind.textView2.text = "USER DALAM BAHAYA: ${users.size}"
+            users?.forEach { user -> bind.textView2.append("\n${user.username}") }
         }
     }
 
@@ -127,8 +147,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         } else {
             handleSuccess()
         }
-        job?.cancel()
-
     }
 
     private fun handleLoading(): String {
@@ -144,7 +162,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireView().glide("", cardUser.spProfile)
             }
         }
-        return bind.cardUser.tvUsername.text.toString()
     }
 
     private fun handleSuccess() {

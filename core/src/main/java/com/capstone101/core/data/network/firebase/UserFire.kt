@@ -4,6 +4,7 @@ data class UserFire(
     val username: String? = null,
     val password: String? = null,
     val email: String? = null,
+    val name: String? = null,
     val address: String? = null,
     val type: Int? = null,
     val key: List<String>? = null,
@@ -11,5 +12,6 @@ data class UserFire(
 ) {
     companion object {
         const val COLLECTION = "users"
+        const val DANGER = "inDanger"
     }
 }
