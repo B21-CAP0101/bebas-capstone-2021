@@ -11,7 +11,6 @@
         android:id="@+id/spProfile"
         style="@style/photoProfile.user"
         android:layout_marginTop="20dp"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
@@ -27,26 +26,24 @@
 
 
     <TextView
-        android:id="@+id/ivUsername"
+        android:id="@+id/tvUsername"
         style="@style/mediumText"
+        android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:textColor="@color/white"
         android:textSize="30sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/spProfile"
         app:layout_constraintStart_toEndOf="@+id/spProfile"
         app:layout_constraintTop_toTopOf="@+id/spProfile"
         tools:text="@tools:sample/first_names" />
 
-    <ProgressBar
-        android:id="@+id/pbUser"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        style="@style/normalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white_20off"
+        app:layout_constraintStart_toStartOf="@+id/tvUsername"
+        app:layout_constraintTop_toBottomOf="@+id/tvUsername"
+        tools:text="@tools:sample/last_names" />
 </androidx.constraintlayout.widget.ConstraintLayout>

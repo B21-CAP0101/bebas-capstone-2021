@@ -28,6 +28,7 @@ import com.capstone101.core.utils.MapVal
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -116,30 +117,40 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setupUI() {
-        lifecycleScope.launch(Dispatchers.Main) {
-            handleLoading()
-            delay(1000)
+        var job: Job? = null
+
+        if (handleLoading().isEmpty()) {
+            job = lifecycleScope.launch(Dispatchers.Main) {
+                delay(1000)
+                handleSuccess()
+            }
+        } else {
             handleSuccess()
         }
+        job?.cancel()
+
     }
 
-    private fun handleLoading() {
+    private fun handleLoading(): String {
         MapVal.user?.apply {
             with(bind) {
-                cardUser.pbUser.isVisible = true
-                cardUser.ivUsername.isVisible = false
+                layoutLoading.root.isVisible = true
+                layoutLoading.MKLoader.isVisible = false
+                layoutLoading.tvStatusLogin.text = StringBuilder("welcome")
+                cardUser.tvUsername.isVisible = false
                 cardUser.spProfile.isVisible = false
-                cardUser.ivUsername.text = username
+                cardUser.tvUsername.text = username
 
                 requireView().glide("", cardUser.spProfile)
             }
         }
+        return bind.cardUser.tvUsername.text.toString()
     }
 
     private fun handleSuccess() {
         with(bind) {
-            cardUser.pbUser.isVisible = false
-            cardUser.ivUsername.isVisible = true
+            layoutLoading.root.isVisible = false
+            cardUser.tvUsername.isVisible = true
             cardUser.spProfile.isVisible = true
         }
     }
@@ -266,14 +277,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         override fun run() {
 
             with(bind) {
-                ivAnim1.animate().scaleX(2f).scaleY(2f).alpha(0f).setDuration(1000)
+                ivAnim1.animate().scaleX(1.5f).scaleY(1.5f).alpha(0f).setDuration(1000)
                     .withEndAction {
                         ivAnim1.scaleX = 1f
                         ivAnim1.scaleY = 1f
                         ivAnim1.alpha = 1f
                     }
 
-                ivAnim2.animate().scaleX(2f).scaleY(2f).alpha(0f).setDuration(700)
+                ivAnim2.animate().scaleX(1.5f).scaleY(1.5f).alpha(0f).setDuration(700)
                     .withEndAction {
                         ivAnim2.scaleX = 1f
                         ivAnim2.scaleY = 1f

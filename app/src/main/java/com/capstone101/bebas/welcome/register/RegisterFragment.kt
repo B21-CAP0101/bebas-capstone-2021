@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentRegisterBinding
@@ -13,9 +12,6 @@ import com.capstone101.bebas.util.Function.hideKeyboard
 import com.capstone101.bebas.util.Function.setOnPressEnter
 import com.capstone101.bebas.util.Function.showKeyboard
 import com.capstone101.core.utils.SessionManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
@@ -78,23 +74,14 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
 
     private fun navigateToHome() {
-        lifecycleScope.launch(Dispatchers.Main) {
-            delay(500)
-            findNavController().navigate(R.id.action_registerFragment_to_mainActivity)
-            requireActivity().finish()
-        }
+        findNavController().navigate(R.id.action_registerFragment_to_mainActivity)
+        requireActivity().finish()
     }
 
 
     private fun handleSuccess() {
-        with(bind) {
-            session.createLogin()
-
-            layoutLoading.tvStatusLogin.text = resources.getString(R.string.success)
-            layoutLoading.MKLoader.isVisible = false
-
-            navigateToHome()
-        }
+        session.createLogin()
+        navigateToHome()
     }
 
     private fun handleLoading() {

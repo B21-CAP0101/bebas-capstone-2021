@@ -15,7 +15,7 @@
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/ivUsername"
+        android:id="@+id/tvUsername"
         style="@style/normalText"
         android:layout_marginTop="5dp"
         android:layout_width="wrap_content"

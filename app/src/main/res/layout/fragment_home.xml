@@ -23,9 +23,9 @@
         android:drawablePadding="10dp"
         android:text="People In danger"
         android:textColor="@color/black"
+        app:drawableEndCompat="@drawable/ic_notif"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardUser"
-        app:drawableEndCompat="@drawable/ic_notif" />
+        app:layout_constraintTop_toBottomOf="@+id/cardUser" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPeopleInDanger"
@@ -96,4 +96,6 @@
         android:text="@string/txt_panic_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <include android:id="@+id/layoutLoading" layout="@layout/layout_loading_welcome" />
 </androidx.constraintlayout.widget.ConstraintLayout>

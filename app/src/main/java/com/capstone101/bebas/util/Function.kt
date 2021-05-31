@@ -1,7 +1,6 @@
 package com.capstone101.bebas.util
 
 import android.app.Activity
-import android.content.Intent
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -9,12 +8,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat.getColor
-import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.capstone101.bebas.R
-import com.capstone101.bebas.main.MainActivity
 import com.google.android.material.snackbar.Snackbar
 
 object Function {
@@ -50,20 +47,11 @@ object Function {
     fun View.glide(url: String, imgView: ImageView) {
         Glide.with(this).setDefaultRequestOptions(
             RequestOptions()
-                .placeholder(R.drawable.ic_guard)
-                .error(R.drawable.ic_guard)
-                .centerCrop()
+                .placeholder(R.drawable.ic_guard_small)
+                .error(R.drawable.ic_guard_small)
+                .centerInside()
         ).load(url)
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(imgView)
-    }
-
-    fun clearWelcomeActivityAndCreateMainActivity(activity: FragmentActivity): Intent {
-        val i = Intent(activity, MainActivity::class.java)
-        // set the new task and clear flags
-        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-
-        return i
     }
 }
