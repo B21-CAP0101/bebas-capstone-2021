@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@color/white"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:padding="10dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/spProfile"
-        android:layout_marginTop="20dp"
         style="@style/photoProfile.relative"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -18,13 +17,13 @@
     <TextView
         android:id="@+id/ivUsername"
         style="@style/normalText"
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/spProfile"
-        app:layout_constraintStart_toEndOf="@+id/spProfile"
-        app:layout_constraintTop_toTopOf="@+id/spProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spProfile"
         tools:text="@tools:sample/first_names" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

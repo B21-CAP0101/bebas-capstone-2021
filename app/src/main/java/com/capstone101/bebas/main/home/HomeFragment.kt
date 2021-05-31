@@ -13,6 +13,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -21,7 +22,6 @@ import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentHomeBinding
 import com.capstone101.bebas.main.MainActivity
 import com.capstone101.bebas.main.MainViewModel
-import com.capstone101.bebas.util.Function.createSnackBar
 import com.capstone101.bebas.util.Function.glide
 import com.capstone101.core.domain.model.Danger
 import com.capstone101.core.utils.MapVal
@@ -150,15 +150,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 count++
                 when (count) {
                     3 -> {
-                        requireView().createSnackBar("start recording", 1000)
+                        Toast.makeText(requireContext(), "start recording", Toast.LENGTH_SHORT)
+                            .show()
                         location()
                         recording()
                         stopPulse()
                     }
-                    2 -> requireView().createSnackBar("press 1 more time", 1000)
+                    2 -> Toast.makeText(requireContext(), "press1 more time", Toast.LENGTH_SHORT)
+                        .show()
 
 
-                    1 -> requireView().createSnackBar("press 2 more time", 1000)
+                    1 -> Toast.makeText(requireContext(), "press 2 more time", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 Handler(Looper.getMainLooper()).postDelayed({ count = 0 }, 3000)
             }
@@ -170,7 +173,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireContext(), Manifest.permission.RECORD_AUDIO
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            requireView().createSnackBar("please accept permission", 2000)
+            Toast.makeText(requireContext(), "please accept this permission", Toast.LENGTH_SHORT)
+                .show()
             permissionCheck()
             return
         }
@@ -200,7 +204,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             MainActivity.isRecording = false
             bind.btnPanic.isEnabled = true
             count = 0
-            bind.btnPanic.text = StringBuilder("danger")
+            Toast.makeText(requireContext(), "finished record", Toast.LENGTH_SHORT)
+                .show()
+            bind.btnPanic.text = resources.getString(R.string.txt_panic_btn)
             startPulse()
             viewModel.setCondition.value =
                 viewModel.setCondition.value?.apply { this[0] = true }
@@ -212,7 +218,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            requireView().createSnackBar("please accept permission", 2000)
+            Toast.makeText(requireContext(), "please accept this permission", Toast.LENGTH_SHORT)
+                .show()
             permissionCheck()
             return
         }

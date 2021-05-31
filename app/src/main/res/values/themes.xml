@@ -152,6 +152,11 @@
         <item name="android:padding">0dp</item>
         <item name="backgroundTint">@color/bgBlue</item>
         <item name="android:background">@drawable/round_button_blue</item>
+
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
     </style>
 
     <style name="photoProfile">
@@ -176,5 +181,12 @@
 
     <style name="circle">
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="panicBtn">
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
     </style>
 </resources>
