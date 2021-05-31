@@ -1,4 +1,4 @@
-package com.capstone101.bebas.welcome.login
+package com.capstone101.bebas.ui.welcome.login
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,11 +1,11 @@
-package com.capstone101.bebas.welcome
+package com.capstone101.bebas.ui.welcome
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.ActivityWelcomeBinding
-import com.capstone101.bebas.main.MainActivity
+import com.capstone101.bebas.ui.main.MainActivity
 import com.capstone101.core.utils.SessionManager
 import org.koin.android.ext.android.inject
 

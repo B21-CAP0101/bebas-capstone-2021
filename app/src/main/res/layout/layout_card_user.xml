@@ -8,7 +8,7 @@
     android:padding="20dp">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/spProfile"
+        android:id="@+id/svProfile"
         style="@style/photoProfile.user"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,8 +34,8 @@
         android:layout_marginStart="10dp"
         android:textColor="@color/white"
         android:textSize="30sp"
-        app:layout_constraintStart_toEndOf="@+id/spProfile"
-        app:layout_constraintTop_toTopOf="@+id/spProfile"
+        app:layout_constraintStart_toEndOf="@+id/svProfile"
+        app:layout_constraintTop_toTopOf="@+id/svProfile"
         tools:text="@tools:sample/first_names" />
 
     <TextView

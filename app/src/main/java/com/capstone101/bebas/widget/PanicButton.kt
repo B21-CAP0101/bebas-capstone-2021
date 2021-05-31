@@ -10,8 +10,8 @@ import android.os.Looper
 import android.widget.RemoteViews
 import android.widget.Toast
 import com.capstone101.bebas.R
-import com.capstone101.bebas.main.MainActivity
-import com.capstone101.bebas.main.home.HomeFragment.Companion.ACTION_RECORD
+import com.capstone101.bebas.ui.main.MainActivity
+import com.capstone101.bebas.ui.main.home.HomeFragment.Companion.ACTION_RECORD
 import com.capstone101.core.utils.SessionManager
 
 class PanicButton : AppWidgetProvider() {

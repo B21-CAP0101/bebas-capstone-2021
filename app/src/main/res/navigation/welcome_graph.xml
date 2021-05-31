@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.capstone101.bebas.welcome.WelcomeFragment"
+        android:name="com.capstone101.bebas.ui.welcome.WelcomeFragment"
         android:label="fragment_welcome"
         tools:layout="@layout/fragment_welcome">
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.capstone101.bebas.welcome.login.LoginFragment"
+        android:name="com.capstone101.bebas.ui.welcome.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.capstone101.bebas.welcome.register.RegisterFragment"
+        android:name="com.capstone101.bebas.ui.welcome.register.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register">
         <action
@@ -37,7 +37,7 @@
     </fragment>
     <activity
         android:id="@+id/mainActivity"
-        android:name="com.capstone101.bebas.main.MainActivity"
+        android:name="com.capstone101.bebas.ui.main.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
 

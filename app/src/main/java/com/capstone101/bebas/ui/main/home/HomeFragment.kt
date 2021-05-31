@@ -1,4 +1,4 @@
-package com.capstone101.bebas.main.home
+package com.capstone101.bebas.ui.main.home
 
 import android.Manifest
 import android.content.Context
@@ -20,8 +20,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentHomeBinding
-import com.capstone101.bebas.main.MainActivity
-import com.capstone101.bebas.main.MainViewModel
+import com.capstone101.bebas.ui.main.MainActivity
+import com.capstone101.bebas.ui.main.MainViewModel
 import com.capstone101.bebas.util.Function.glide
 import com.capstone101.core.domain.model.Danger
 import com.capstone101.core.utils.MapVal
@@ -47,6 +47,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val viewModel: MainViewModel by inject()
     private lateinit var data: String
     private var handlerAnimation = Handler(Looper.getMainLooper())
+
 
     companion object {
         const val PERMISSION_CODE = 123456
@@ -138,10 +139,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 layoutLoading.MKLoader.isVisible = false
                 layoutLoading.tvStatusLogin.text = StringBuilder("welcome")
                 cardUser.tvUsername.isVisible = false
-                cardUser.spProfile.isVisible = false
+                cardUser.svProfile.isVisible = false
                 cardUser.tvUsername.text = username
 
-                requireView().glide("", cardUser.spProfile)
+                requireView().glide("", cardUser.svProfile)
             }
         }
         return bind.cardUser.tvUsername.text.toString()
@@ -151,7 +152,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         with(bind) {
             layoutLoading.root.isVisible = false
             cardUser.tvUsername.isVisible = true
-            cardUser.spProfile.isVisible = true
+            cardUser.svProfile.isVisible = true
         }
     }
 
@@ -161,18 +162,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 count++
                 when (count) {
                     3 -> {
-                        Toast.makeText(requireContext(), "start recording", Toast.LENGTH_SHORT)
-                            .show()
+                        "start recording".createToast()
                         location()
                         recording()
                         stopPulse()
                     }
-                    2 -> Toast.makeText(requireContext(), "press1 more time", Toast.LENGTH_SHORT)
-                        .show()
-
-
-                    1 -> Toast.makeText(requireContext(), "press 2 more time", Toast.LENGTH_SHORT)
-                        .show()
+                    2 -> "press 1 more time".createToast()
                 }
                 Handler(Looper.getMainLooper()).postDelayed({ count = 0 }, 3000)
             }
@@ -215,8 +210,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             MainActivity.isRecording = false
             bind.btnPanic.isEnabled = true
             count = 0
-            Toast.makeText(requireContext(), "finished record", Toast.LENGTH_SHORT)
-                .show()
+            "sending record".createToast()
             bind.btnPanic.text = resources.getString(R.string.txt_panic_btn)
             startPulse()
             viewModel.setCondition.value =
@@ -229,8 +223,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Toast.makeText(requireContext(), "please accept this permission", Toast.LENGTH_SHORT)
-                .show()
+            "please accept this permission".createToast()
             permissionCheck()
             return
         }
@@ -295,6 +288,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             handlerAnimation.postDelayed(this, 1500)
         }
+    }
+
+    private fun String.createToast() {
+        val mToast = Toast.makeText(requireContext(), "", Toast.LENGTH_SHORT)
+        mToast.setText(this)
+        mToast.show()
     }
 
     private fun startPulse() {

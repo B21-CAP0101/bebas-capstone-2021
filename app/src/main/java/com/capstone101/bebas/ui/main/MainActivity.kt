@@ -1,4 +1,4 @@
-package com.capstone101.bebas.main
+package com.capstone101.bebas.ui.main
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.ActivityMainBinding
-import com.capstone101.bebas.main.home.HomeFragment
+import com.capstone101.bebas.ui.main.home.HomeFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

@@ -1,4 +1,4 @@
-package com.capstone101.bebas.welcome.login
+package com.capstone101.bebas.ui.welcome.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
