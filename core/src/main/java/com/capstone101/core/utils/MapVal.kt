@@ -60,4 +60,7 @@ object MapVal {
 
     fun dangerDomToFire(data: Danger): DangerFire =
         DangerFire(data.id, data.place, data.record, data.time, data.type)
+
+    fun dangerFireToDom(data: DangerFire): Danger =
+        Danger(data.id, data.place, data.record, data.time, data.type)
 }

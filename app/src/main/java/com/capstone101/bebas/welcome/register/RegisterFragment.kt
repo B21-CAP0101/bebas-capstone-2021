@@ -11,6 +11,7 @@ import com.capstone101.bebas.util.Function.createSnackBar
 import com.capstone101.bebas.util.Function.hideKeyboard
 import com.capstone101.bebas.util.Function.setOnPressEnter
 import com.capstone101.bebas.util.Function.showKeyboard
+import com.capstone101.core.data.Status
 import com.capstone101.core.utils.SessionManager
 import org.koin.android.ext.android.inject
 
@@ -80,8 +81,20 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
 
     private fun handleSuccess() {
-        session.createLogin()
-        navigateToHome()
+        viewModel.login(bind.etUsername.text.toString(), bind.etPassword.text.toString())
+            .observe(viewLifecycleOwner) {
+                when (it) {
+                    is Status.Success -> {
+                        session.createLogin()
+                        navigateToHome()
+                    }
+                    is Status.Loading -> Unit
+                    is Status.Error -> requireView().createSnackBar(
+                        "Something's wrong\n${it.error}",
+                        2000
+                    )
+                }
+            }
     }
 
     private fun handleLoading() {

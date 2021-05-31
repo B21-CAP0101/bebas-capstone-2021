@@ -35,4 +35,6 @@ class MainViewModel(private val useCase: IUseCase) : ViewModel() {
 
     val setUsers = MutableLiveData<List<User>>().apply { this.value = listOf() }
     val users: LiveData<List<User>> = setUsers
+
+    fun latestDanger(user: User) = useCase.getLatestDanger(user).asLiveData()
 }

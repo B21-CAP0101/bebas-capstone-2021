@@ -6,6 +6,7 @@ import com.capstone101.core.data.network.firebase.UserFire
 import com.capstone101.core.utils.MapVal
 import com.capstone101.core.utils.Security
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -33,7 +34,7 @@ class NetworkGetData(private val fs: FirebaseFirestore) {
                 }
                 if (value == null) networkStatus(NetworkStatus.Empty)
                 else {
-                    val relatives = value.toObject(RelativesFire::class.java)!!
+                    val relatives = value.toObject(RelativesFire::class.java) ?: RelativesFire()
                     networkStatus(NetworkStatus.Success(relatives))
                 }
             }
@@ -123,13 +124,21 @@ class NetworkGetData(private val fs: FirebaseFirestore) {
             }
     }
 
+    fun getLatestDanger(user: UserFire) = flow {
+        val result = fs.collection(DangerFire.COLLECTION)
+            .document(user.username!!)
+            .collection(DangerFire.SUB_COLLECTION)
+            .orderBy(DangerFire.TIME, Query.Direction.DESCENDING)
+            .limit(1).get().await()
+        emit(result.documents[0].toObject(DangerFire::class.java)!!)
+    }
+
     suspend fun insertToFs(user: UserFire): Boolean? = try {
         if (check(user.username!!)) null
         else {
-            val password = Security.encrypt(user.password!!)
             val input =
                 UserFire(
-                    user.username, password, user.email, user.name,
+                    user.username, user.password, user.email, user.name,
                     user.address, user.type, user.key
                 )
             fs.collection(UserFire.COLLECTION).document(input.username!!).set(input)

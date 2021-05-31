@@ -52,6 +52,7 @@
         app:layout_constraintTop_toBottomOf="@+id/rvPeopleInDanger" />
 
     <TextView
+        android:id="@+id/seeAll"
         style="@style/normalText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,5 +98,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <include android:id="@+id/layoutLoading" layout="@layout/layout_loading_welcome" />
+    <include
+        android:id="@+id/layoutLoading"
+        layout="@layout/layout_loading_welcome"
+        android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.capstone101.bebas.main.home
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -13,6 +14,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -21,13 +23,18 @@ import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentHomeBinding
 import com.capstone101.bebas.main.MainActivity
 import com.capstone101.bebas.main.MainViewModel
+import com.capstone101.bebas.relative.RelativeActivity
 import com.capstone101.bebas.util.Function.createSnackBar
 import com.capstone101.bebas.util.Function.glide
+import com.capstone101.core.data.Status
 import com.capstone101.core.domain.model.Danger
+import com.capstone101.core.domain.model.Relatives
+import com.capstone101.core.domain.model.User
 import com.capstone101.core.utils.MapVal
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -131,8 +138,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
         viewModel.users.observe(viewLifecycleOwner) { users ->
-            bind.textView2.text = "USER DALAM BAHAYA: ${users.size}"
-            users?.forEach { user -> bind.textView2.append("\n${user.username}") }
+            users.forEach { user ->
+                viewModel.latestDanger(user).observe(viewLifecycleOwner) {
+                    println("TEST $it")
+                }
+            }
         }
     }
 
@@ -140,7 +150,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         var job: Job? = null
 
         if (handleLoading().isEmpty()) {
-            job = lifecycleScope.launch(Dispatchers.Main) {
+            lifecycleScope.launch(Dispatchers.Main) {
                 delay(1000)
                 handleSuccess()
             }
@@ -162,6 +172,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireView().glide("", cardUser.spProfile)
             }
         }
+        // TODO: RETURN NYA BRAM
+        return ""
     }
 
     private fun handleSuccess() {

@@ -4,7 +4,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 
 data class DangerFire(
-    val id: String?,
+    val id: String? = null,
     var place: GeoPoint? = null,
     var record: String? = null,
     var time: Timestamp? = null,

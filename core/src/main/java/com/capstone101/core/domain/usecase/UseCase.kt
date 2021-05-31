@@ -33,4 +33,6 @@ class UseCase(private val repositories: IRepositories) : IUseCase {
 
     override fun deleteRelation(relatives: Relatives, target: User) =
         repositories.deleteRelation(relatives, target)
+
+    override fun getLatestDanger(user: User): Flow<Danger> = repositories.getLatestDanger(user)
 }

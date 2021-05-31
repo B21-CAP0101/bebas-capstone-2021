@@ -21,4 +21,6 @@ interface IUseCase {
     fun invitingRelative(relatives: Relatives, target: User, condition: Boolean)
     fun confirmRelative(relatives: Relatives, target: User, condition: Boolean)
     fun deleteRelation(relatives: Relatives, target: User)
+
+    fun getLatestDanger(user: User): Flow<Danger>
 }

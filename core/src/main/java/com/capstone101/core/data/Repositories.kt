@@ -75,4 +75,7 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
 
     override fun deleteRelation(relatives: Relatives, target: User) =
         network.deleteRelation(MapVal.relativesDomToFire(relatives), MapVal.userDomToFire(target))
+
+    override fun getLatestDanger(user: User): Flow<Danger> =
+        network.getLatestDanger(MapVal.userDomToFire(user)).map { MapVal.dangerFireToDom(it) }
 }

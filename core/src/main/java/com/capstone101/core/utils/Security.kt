@@ -39,10 +39,15 @@ object Security {
 
     private fun setSecretKey(keyS: ByteArray) {
         key = Array(keyS.size) { it.toString() }
-        for (i in keyS.indices) key[i] = keyS[i].toString()
+        for (i in keyS.indices) {
+            print("${keyS[i]} ")
+            key[i] = keyS[i].toString()
+        }
+        print(" TEST AWAL")
     }
 
     fun decrypt(data: String, key: Array<String>): String {
+        println("${key.toList()} TEST AKHIR")
         val ciphered = Base64.decode(data, Base64.DEFAULT)
 
         val cipher = Cipher.getInstance("AES")
