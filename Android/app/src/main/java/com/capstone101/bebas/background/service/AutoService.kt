@@ -32,6 +32,7 @@ class AutoService : LifecycleService() {
         const val NOTIFICATION_REMIND = 20
         const val CHANNEL_FORE_ID = "CHANNEL_FORE_1"
         const val CHANNEL_REMIND_ID = "CHANNEL_REMIND_1"
+        const val GROUP_REMINDER = "GROUP_REMINDER"
         const val CHANNEL_FORE_NAME = "Channel for Foreground Service"
         const val CHANNEL_REMIND_NAME = "Channel for Alert Reminder"
     }
@@ -43,9 +44,11 @@ class AutoService : LifecycleService() {
 
     private val mainViewModel: MainViewModel by inject()
 
+    private lateinit var manager: NotificationManager
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val fs = Firebase.firestore
-
+        manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         fs.collection(UserFire.COLLECTION).whereEqualTo(UserFire.DANGER, true)
             .addSnapshotListener { value, e ->
                 if (e != null) {
@@ -86,6 +89,7 @@ class AutoService : LifecycleService() {
                                         ).show()
                                     }
                                 }
+                                notificationSummary(MapVal.userDomToFire(it))
                             }
                         mainViewModel.getUser.removeObservers(this)
                     }
@@ -120,7 +124,6 @@ class AutoService : LifecycleService() {
     }
 
     private fun notificationReminder(user: UserFire, danger: DangerFire) {
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val intent = Intent(this, WelcomeActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
         val soundURI =
@@ -139,7 +142,7 @@ class AutoService : LifecycleService() {
             setContentIntent(pendingIntent)
             setVibrate(vibration)
             setSound(soundURI)
-            setStyle(NotificationCompat.BigTextStyle().bigText("ID: ${danger.id}"))
+            setGroup(GROUP_REMINDER)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel = NotificationChannel(
@@ -160,6 +163,23 @@ class AutoService : LifecycleService() {
                 setChannelId(CHANNEL_REMIND_ID)
                 manager.createNotificationChannel(channel)
             }
+        }.build()
+        val id = ((danger.time!!.seconds / 1000L) % Int.MAX_VALUE).toInt()
+        manager.notify(id, notification)
+    }
+
+    private fun notificationSummary(user: UserFire) {
+        val notification = NotificationCompat.Builder(this, CHANNEL_REMIND_ID).apply {
+            setContentTitle("Relative Danger Notification")
+            setContentText("See all Relative Danger Notification")
+            setSmallIcon(R.mipmap.ic_launcher_round)
+            setGroup(GROUP_REMINDER)
+            setGroupSummary(true)
+            setStyle(
+                NotificationCompat.InboxStyle()
+                    .setBigContentTitle("Relative In Danger")
+                    .setSummaryText(user.username)
+            )
         }.build()
         manager.notify(NOTIFICATION_REMIND, notification)
     }
