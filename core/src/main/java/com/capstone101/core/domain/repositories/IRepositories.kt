@@ -10,7 +10,7 @@ interface IRepositories {
     fun login(user: User): Flow<Status<User>>
     fun getUser(): Flow<User?>
     fun getRelative(): Flow<Relatives>
-    fun checkInDanger(): Flow<Status<List<User>>>
+    fun checkInDanger(callback: (Status<List<User>>) -> Unit)
 
     suspend fun insertToFs(user: User): Boolean?
 

@@ -7,10 +7,7 @@ import com.capstone101.core.utils.MapVal
 import com.capstone101.core.utils.Security
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
@@ -35,22 +32,20 @@ class NetworkGetData(private val fs: FirebaseFirestore) {
         else emit(NetworkStatus.Success(relatives))
     }.flowOn(Dispatchers.IO)
 
-    @ExperimentalCoroutinesApi
-    suspend fun checkInDanger(): Flow<NetworkStatus<List<UserFire>>> = callbackFlow {
-        val check = fs.collection(UserFire.COLLECTION).whereEqualTo(UserFire.DANGER, true)
+    fun checkInDanger(networkStatus: (NetworkStatus<List<UserFire>>) -> Unit) {
+        fs.collection(UserFire.COLLECTION).whereEqualTo(UserFire.DANGER, true)
             .addSnapshotListener { value, e ->
                 if (e != null) {
-                    trySend(NetworkStatus.Failed("Error occurred\n${e.code}"))
+                    networkStatus(NetworkStatus.Failed("Error occurred\n${e.code}"))
                     return@addSnapshotListener
                 }
-                if (value == null || value.isEmpty) trySend(NetworkStatus.Empty)
+                if (value == null || value.isEmpty) networkStatus(NetworkStatus.Empty)
                 else {
                     val users = value.map { it.toObject(UserFire::class.java) }
-                    trySend(NetworkStatus.Success(users))
+                    networkStatus(NetworkStatus.Success(users))
                 }
             }
-        awaitClose { check.remove() }
-    }.flowOn(Dispatchers.IO)
+    }
 
     suspend fun insertToFs(user: UserFire): Boolean? = try {
         if (check(user.username!!)) null

@@ -1,6 +1,7 @@
 package com.capstone101.bebas.main
 
 import androidx.lifecycle.*
+import com.capstone101.core.data.Status
 import com.capstone101.core.domain.model.Danger
 import com.capstone101.core.domain.model.User
 import com.capstone101.core.domain.usecase.IUseCase
@@ -28,7 +29,9 @@ class MainViewModel(private val useCase: IUseCase) : ViewModel() {
         useCase.updateUserFS()
     }
 
-    val checkInDanger = useCase.checkInDanger().asLiveData()
+    fun checkInDanger(callback: (Status<List<User>>) -> Unit) =
+        useCase.checkInDanger { callback(it) }
+
     val setUsers = MutableLiveData<List<User>>().apply { this.value = listOf() }
     val users: LiveData<List<User>> = setUsers
 }

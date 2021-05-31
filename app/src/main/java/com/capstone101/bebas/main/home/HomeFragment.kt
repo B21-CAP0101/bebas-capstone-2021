@@ -16,7 +16,6 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentHomeBinding
@@ -107,9 +106,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var relative: Relatives? = null
 
     private fun subscribeToViewModel() {
-        val inDangerObserver = Observer<Status<List<User>>> {
+        val inDangerCallback: (Status<List<User>>) -> Unit = {
             if (relative != null) {
-                println("ASDF")
                 when (it) {
                     is Status.Success ->
                         viewModel.setUsers.value =
@@ -117,7 +115,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     else -> requireView().createSnackBar(it.error!!, 1000)
                 }
             }
-            viewModel.checkInDanger.removeObservers(viewLifecycleOwner)
         }
         viewModel.getUser.observe(viewLifecycleOwner) { user ->
             if (user != null) {
@@ -128,12 +125,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     relative = relatives
                     // TODO: BUAT RELATIVE
 
-                    viewModel.checkInDanger.observe(viewLifecycleOwner, inDangerObserver)
+                    viewModel.checkInDanger(inDangerCallback)
                 }
                 viewModel.getUser.removeObservers(viewLifecycleOwner)
             }
         }
-        viewModel.checkInDanger.observe(viewLifecycleOwner, inDangerObserver)
+        viewModel.checkInDanger(inDangerCallback)
         viewModel.users.observe(viewLifecycleOwner) { users ->
             bind.textView2.text = "USER DALAM BAHAYA: ${users.size}"
             users?.forEach { user -> bind.textView2.append("\n${user.username}") }
