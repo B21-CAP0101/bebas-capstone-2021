@@ -10,15 +10,14 @@ import com.capstone101.core.domain.model.User
 import com.capstone101.core.domain.repositories.IRepositories
 import com.capstone101.core.utils.MapVal
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class Repositories(private val db: DBGetData, private val network: NetworkGetData) : IRepositories {
     override fun login(user: User): Flow<Status<User>> =
         object : AccountBoundRes<UserFire, User>() {
             override fun loadDB(): Flow<User> =
-                db.getUser().map { MapVal.userEntToDom(it) ?: User("", "", "", null, 2, listOf()) }
+                db.getUser()
+                    .map { MapVal.userEntToDom(it) ?: User("", "", "", null, null, 2, listOf()) }
 
             override fun shouldFetch(db: User?): Boolean = true
 
@@ -32,10 +31,12 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
 
     override fun getUser(): Flow<User?> = db.getUser().map { MapVal.userEntToDom(it) }
 
-    override fun getRelative(): Flow<Relatives> = flow {
-        when (val result = network.getRelatives().first()) {
-            is NetworkStatus.Success -> emit(MapVal.relativesFireToDom(result.data))
-            else -> emit(Relatives(listOf(), listOf(), listOf()))
+    override fun getRelative(callback: (Relatives) -> Unit) {
+        network.getRelatives { result ->
+            when (result) {
+                is NetworkStatus.Success -> callback(MapVal.relativesFireToDom(result.data))
+                else -> callback(Relatives(MapVal.user!!.username, listOf(), listOf(), listOf()))
+            }
         }
     }
 
@@ -61,4 +62,14 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
         network.insertDanger(MapVal.dangerDomToFire(danger))
 
     override suspend fun updateUser(user: User) = db.update(MapVal.userDomToEnt(user))
+
+    override fun invitingRelative(relatives: Relatives, target: User, condition: Boolean) =
+        network.invitingRelative(
+            MapVal.relativesDomToFire(relatives), MapVal.userDomToFire(target), condition
+        )
+
+    override fun confirmRelative(relatives: Relatives, target: User, condition: Boolean) =
+        network.confirmRelative(
+            MapVal.relativesDomToFire(relatives), MapVal.userDomToFire(target), condition
+        )
 }

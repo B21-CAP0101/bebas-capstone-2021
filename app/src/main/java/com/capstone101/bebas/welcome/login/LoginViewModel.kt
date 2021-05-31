@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.flowOn
 
 class LoginViewModel(private val useCase: IUseCase) : ViewModel() {
     fun login(username: String, password: String) =
-        useCase.login(User(username, password, "", null, 2, listOf())).flowOn(Dispatchers.IO)
+        useCase.login(User(username, password, "", null, null, 2, listOf())).flowOn(Dispatchers.IO)
 }

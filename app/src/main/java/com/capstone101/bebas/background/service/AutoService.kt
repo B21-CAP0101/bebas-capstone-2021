@@ -55,6 +55,7 @@ class AutoService : LifecycleService() {
                 }
                 mainViewModel.getUser.observe(this) {
                     if (it != null) {
+                        MapVal.user = it
                         fs.collection(RelativesFire.COLLECTION).document(it.username).get()
                             .addOnSuccessListener { relDoc ->
                                 val relatives =

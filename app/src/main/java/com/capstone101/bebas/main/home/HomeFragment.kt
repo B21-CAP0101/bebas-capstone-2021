@@ -2,6 +2,7 @@ package com.capstone101.bebas.main.home
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -21,6 +22,7 @@ import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentHomeBinding
 import com.capstone101.bebas.main.MainActivity
 import com.capstone101.bebas.main.MainViewModel
+import com.capstone101.bebas.relative.RelativeActivity
 import com.capstone101.bebas.util.Function.createSnackBar
 import com.capstone101.bebas.util.Function.glide
 import com.capstone101.core.data.Status
@@ -101,6 +103,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 viewModel.setCondition.value = mutableListOf(false, false)
             }
         }
+        bind.seeAll.setOnClickListener {
+            startActivity(Intent(requireContext(), RelativeActivity::class.java))
+        }
     }
 
     private var relative: Relatives? = null
@@ -121,7 +126,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 MapVal.user = user.apply { user.inDanger = false }
                 viewModel.updateUserStatus()
                 setupUI()
-                viewModel.getRelative.observe(viewLifecycleOwner) { relatives ->
+                viewModel.getRelative { relatives ->
                     relative = relatives
                     // TODO: BUAT RELATIVE
 
@@ -130,7 +135,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 viewModel.getUser.removeObservers(viewLifecycleOwner)
             }
         }
-        viewModel.checkInDanger(inDangerCallback)
         viewModel.users.observe(viewLifecycleOwner) { users ->
             bind.textView2.text = "USER DALAM BAHAYA: ${users.size}"
             users?.forEach { user -> bind.textView2.append("\n${user.username}") }

@@ -3,6 +3,7 @@ package com.capstone101.bebas.main
 import androidx.lifecycle.*
 import com.capstone101.core.data.Status
 import com.capstone101.core.domain.model.Danger
+import com.capstone101.core.domain.model.Relatives
 import com.capstone101.core.domain.model.User
 import com.capstone101.core.domain.usecase.IUseCase
 import com.capstone101.core.utils.MapVal
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(private val useCase: IUseCase) : ViewModel() {
     val getUser = useCase.getUser().asLiveData()
 
-    val getRelative = useCase.getRelative().asLiveData()
+    fun getRelative(callback: (Relatives) -> Unit) = useCase.getRelative { callback(it) }
 
     val setCondition =
         MutableLiveData<MutableList<Boolean>>().apply { this.value = mutableListOf(false, false) }

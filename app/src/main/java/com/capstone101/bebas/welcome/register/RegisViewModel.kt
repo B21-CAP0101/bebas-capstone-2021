@@ -19,7 +19,7 @@ class RegisViewModel(private val useCase: IUseCase) : ViewModel() {
             val condition: Boolean?
             withContext(Dispatchers.IO) {
                 condition = useCase.insertToFs(
-                    User(username, password, email, null, 2, key)
+                    User(username, password, email, null, null, 2, key)
                 )
             }
             data.value = condition
@@ -27,5 +27,5 @@ class RegisViewModel(private val useCase: IUseCase) : ViewModel() {
     }
 
     fun login(username: String, password: String) =
-        useCase.login(User(username, password, "", null, 2, listOf())).asLiveData()
+        useCase.login(User(username, password, "", null, null, 2, listOf())).asLiveData()
 }
