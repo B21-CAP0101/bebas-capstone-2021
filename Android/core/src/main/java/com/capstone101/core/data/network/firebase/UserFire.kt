@@ -6,6 +6,8 @@ data class UserFire(
     val email: String? = null,
     val name: String? = null,
     val address: String? = null,
+    val photoURL: String? = null,
+    val gender: Boolean? = null,
     val type: Int? = null,
     val key: List<String>? = null,
     var inDanger: Boolean = false

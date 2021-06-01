@@ -17,7 +17,12 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
         object : AccountBoundRes<UserFire, User>() {
             override fun loadDB(): Flow<User> =
                 db.getUser()
-                    .map { MapVal.userEntToDom(it) ?: User("", "", "", null, null, 2, listOf()) }
+                    .map {
+                        MapVal.userEntToDom(it) ?: User(
+                            "", "", "", null,
+                            null, null, null, 2, listOf(),
+                        )
+                    }
 
             override fun shouldFetch(db: User?): Boolean = true
 

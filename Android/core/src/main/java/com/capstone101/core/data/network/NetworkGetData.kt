@@ -142,7 +142,7 @@ class NetworkGetData(private val fs: FirebaseFirestore, private val storage: Fir
             val input =
                 UserFire(
                     user.username, user.password, user.email, user.name,
-                    user.address, user.type, user.key
+                    user.address, user.photoURL, user.gender, user.type, user.key
                 )
             fs.collection(UserFire.COLLECTION).document(input.username!!).set(input)
             true

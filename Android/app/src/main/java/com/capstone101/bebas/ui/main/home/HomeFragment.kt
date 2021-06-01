@@ -101,7 +101,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             override fun onProviderDisabled(provider: String) = Unit
         }
 
-        if (requireActivity().intent.action == ACTION_RECORD) recording()
+        if (requireActivity().intent.action == ACTION_RECORD) {
+            recording()
+            location()
+        }
 
         viewModel.condition.observe(viewLifecycleOwner) {
             // UNTUK CEK APAKAH SUDAH SELESAI RECORD DAN FETCH LOKASI
