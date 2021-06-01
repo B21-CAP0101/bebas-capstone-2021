@@ -1,6 +1,7 @@
 package com.capstone101.bebas.di
 
 import com.capstone101.bebas.ui.main.MainViewModel
+import com.capstone101.bebas.ui.main.detail.DetailDangerViewModel
 import com.capstone101.bebas.ui.main.relative.RelativeViewModel
 import com.capstone101.bebas.ui.welcome.login.LoginViewModel
 import com.capstone101.bebas.ui.welcome.register.RegisViewModel
@@ -18,4 +19,5 @@ val viewModelModule = module {
     viewModel { LoginViewModel(get()) }
     viewModel { MainViewModel(get()) }
     viewModel { RelativeViewModel(get()) }
+    viewModel { DetailDangerViewModel(get()) }
 }
