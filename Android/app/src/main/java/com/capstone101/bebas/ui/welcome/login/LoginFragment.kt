@@ -9,10 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentLoginBinding
-import com.capstone101.bebas.util.Function.createSnackBar
-import com.capstone101.bebas.util.Function.hideKeyboard
-import com.capstone101.bebas.util.Function.setOnPressEnter
-import com.capstone101.bebas.util.Function.showKeyboard
+import com.capstone101.core.utils.Function.createSnackBar
+import com.capstone101.core.utils.Function.hideKeyboard
+import com.capstone101.core.utils.Function.setOnPressEnter
+import com.capstone101.core.utils.Function.showKeyboard
 import com.capstone101.core.data.Status
 import com.capstone101.core.utils.SessionManager
 import org.koin.android.ext.android.inject

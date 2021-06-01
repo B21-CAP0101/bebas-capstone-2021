@@ -15,9 +15,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -31,8 +29,7 @@ import com.capstone101.bebas.databinding.FragmentHomeBinding
 import com.capstone101.bebas.ui.main.MainActivity
 import com.capstone101.bebas.ui.main.MainViewModel
 import com.capstone101.bebas.ui.main.relative.RelativeActivity
-import com.capstone101.bebas.util.Function.createSnackBar
-import com.capstone101.bebas.util.Function.createToast
+import com.capstone101.core.utils.Function.createToast
 import com.capstone101.core.data.Status
 import com.capstone101.core.domain.model.Danger
 import com.capstone101.core.domain.model.Relatives
@@ -46,7 +43,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
-    private lateinit var bind: FragmentHomeBinding
+    private var _bind: FragmentHomeBinding? = null
+    private val bind get() = _bind!!
 
 
     private var granted: Int = 0
@@ -67,17 +65,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         var count = 0
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        bind = FragmentHomeBinding.inflate(inflater, container, false)
-        return bind.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _bind = FragmentHomeBinding.bind(view)
+
 
         handleLoading()
         permissionCheck()
@@ -129,7 +121,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     is Status.Success ->
                         viewModel.setUsers.value =
                             it.data?.filter { user -> user.username in relative!!.pure }
-                    else -> requireView().createSnackBar(it.error!!, 1000)
+                    else -> requireContext().createToast(it.error!!, 1000)
                 }
             }
         }
@@ -154,10 +146,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
         viewModel.users.observe(viewLifecycleOwner) { users ->
-            users.forEach { user ->
-                viewModel.latestDanger(user).observe(viewLifecycleOwner) {
-                    Log.e("danger", it.place.toString())
-                }
+            if (users.isEmpty()) {
+                bind.tvTitlePeopleInDanger.isVisible = false
+                bind.rvPeopleInDanger.isVisible = false
+            } else {
+
             }
         }
     }
@@ -356,5 +349,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun stopPulse() {
         handlerAnimation.removeCallbacks(runnable)
+    }
+
+    override fun onDestroy() {
+        _bind = null
+        super.onDestroy()
     }
 }

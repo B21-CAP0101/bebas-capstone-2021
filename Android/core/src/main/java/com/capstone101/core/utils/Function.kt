@@ -1,4 +1,4 @@
-package com.capstone101.bebas.util
+package com.capstone101.core.utils
 
 import android.app.Activity
 import android.content.Context
@@ -13,7 +13,7 @@ import androidx.core.content.res.ResourcesCompat.getColor
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.capstone101.bebas.R
+import com.capstone101.core.R
 import com.google.android.material.snackbar.Snackbar
 
 object Function {

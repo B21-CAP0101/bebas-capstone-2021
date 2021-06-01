@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BeBaS</string>
     <string name="appwidget_text">EXAMPLE</string>
@@ -30,4 +31,5 @@
     <string name="txt_panic_btn">panic</string>
     <string name="titleDangerHome">People In danger</string>
     <string name="see_all">see all</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyB5ILbLugByYqa6FSNSBrOE7_7i6Wb8FiI</string>
 </resources>

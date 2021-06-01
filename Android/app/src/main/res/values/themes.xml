@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Base application theme. -->
     <style name="Theme.BeBaS" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -15,18 +17,39 @@
 
     </style>
 
+    <style name="AppTheme.ButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:padding">0dp</item>
+        <item name="backgroundTint">@color/bgBlue</item>
+        <item name="android:background">@drawable/round_button_blue</item>
+
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+    </style>
+
+    <style name="panicBtn">
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+    </style>
+
 
     <style name="splashScreenTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowBackground">@drawable/bg_splash</item>
         <item name="android:statusBarColor">@color/transparent</item>
     </style>
 
+
     <style name="ThemeOverlay.BeBaS.AppWidgetContainer" parent="">
         <item name="appWidgetBackgroundColor">@color/light_blue_600</item>
         <item name="appWidgetTextColor">@color/light_blue_50</item>
     </style>
 
-    <style name="btn">
+        <style name="btn">
         <item name="android:layout_height">55dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:background">@drawable/bg_rounded_white</item>
@@ -123,77 +146,5 @@
         <item name="android:layout_width">50dp</item>
         <item name="android:background">@color/transparent</item>
         <item name="android:src">@drawable/ic_left_arrow</item>
-    </style>
-
-    <style name="smallText">
-        <item name="fontFamily">@font/raleway_regular</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="normalText">
-        <item name="fontFamily">@font/raleway_regular</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-
-    <style name="mediumText">
-        <item name="fontFamily">@font/raleway_medium</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">24sp</item>
-    </style>
-
-    <style name="boldText">
-        <item name="fontFamily">@font/raleway_bold</item>
-        <item name="android:textSize">28sp</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="AppTheme.ButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:padding">0dp</item>
-        <item name="backgroundTint">@color/bgBlue</item>
-        <item name="android:background">@drawable/round_button_blue</item>
-
-        <item name="android:layout_height">80dp</item>
-        <item name="android:layout_width">80dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
-        <item name="android:layout_marginBottom">20dp</item>
-    </style>
-
-    <style name="photoProfile">
-        <item name="android:scaleType">centerCrop</item>
-        <item name="shapeAppearanceOverlay">@style/circle</item>
-        <item name="android:padding">5dp</item>
-        <item name="strokeColor">@color/white</item>
-    </style>
-
-    <style name="photoProfile.user">
-        <item name="android:layout_width">100dp</item>
-        <item name="android:layout_height">100dp</item>
-        <item name="strokeWidth">4dp</item>
-    </style>
-
-    <style name="photoProfile.relative">
-        <item name="android:layout_width">80dp</item>
-        <item name="android:layout_height">80dp</item>
-        <item name="strokeWidth">2dp</item>
-        <item name="strokeColor">@color/black</item>
-    </style>
-
-    <style name="circle">
-        <item name="cornerSize">50%</item>
-    </style>
-
-    <style name="panicBtn">
-        <item name="android:layout_height">80dp</item>
-        <item name="android:layout_width">80dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
-        <item name="android:layout_marginBottom">20dp</item>
     </style>
 </resources>
