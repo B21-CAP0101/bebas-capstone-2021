@@ -2,7 +2,6 @@ package com.capstone101.bebas.util
 
 import android.app.Activity
 import android.content.Context
-import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -50,8 +49,8 @@ object Function {
     fun View.glide(url: String, imgView: ImageView) {
         Glide.with(this).setDefaultRequestOptions(
             RequestOptions()
-                .placeholder(R.drawable.ic_guard_small)
-                .error(R.drawable.ic_guard_small)
+                .placeholder(R.drawable.ic_female_avatar)
+                .error(R.drawable.ic_female_avatar)
                 .centerInside()
         ).load(url)
             .transition(DrawableTransitionOptions.withCrossFade())

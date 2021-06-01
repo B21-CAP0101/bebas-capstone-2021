@@ -168,8 +168,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                 Glide.with(requireView())
                     .load("")
-                    .placeholder(R.drawable.ic_guard_small)
-                    .error(R.drawable.ic_guard_small)
+                    .error(R.drawable.ic_male_avatar)
                     .centerInside()
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(
