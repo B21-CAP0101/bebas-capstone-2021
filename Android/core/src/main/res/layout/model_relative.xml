@@ -73,6 +73,10 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/svProfile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/svProfile"/>
+        app:layout_constraintTop_toTopOf="@+id/svProfile" />
+
+    <include
+        android:id="@+id/layout_loading"
+        layout="@layout/layout_loading_relative" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -21,11 +20,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentHomeBinding
 import com.capstone101.bebas.ui.main.MainActivity
@@ -37,6 +31,7 @@ import com.capstone101.core.domain.model.Danger
 import com.capstone101.core.domain.model.Relatives
 import com.capstone101.core.domain.model.User
 import com.capstone101.core.utils.Function.createToast
+import com.capstone101.core.utils.Function.glideWithLoading
 import com.capstone101.core.utils.MapVal
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
@@ -197,33 +192,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             MapVal.user?.apply {
                 cardUser.tvName.text = name ?: username
                 cardUser.tvUsername.text = username
-
-                Glide.with(requireView())
-                    .load("")
-                    .error(R.drawable.ic_male_avatar)
-                    .centerInside()
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            layoutLoading.root.isVisible = false
-                            return false
-                        }
-
-                        override fun onResourceReady(
-                            resource: Drawable?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            dataSource: DataSource?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            layoutLoading.root.isVisible = false
-                            return false
-                        }
-                    }).into(cardUser.svProfile)
+                requireView().glideWithLoading(
+                    "",
+                    cardUser.svProfile,
+                    if (gender == false) R.drawable.ic_female_avatar else R.drawable.ic_male_avatar,
+                    layoutLoading.root
+                )
             }
 
             cardUser.btnCopy.setOnClickListener {

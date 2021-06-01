@@ -2,6 +2,7 @@ package com.capstone101.core.utils
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -10,9 +11,14 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat.getColor
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.capstone101.core.R
 import com.google.android.material.snackbar.Snackbar
 
@@ -46,14 +52,34 @@ object Function {
         }
     }
 
-    fun View.glide(url: String, imgView: ImageView, placeHolder:Int) {
+    fun View.glideWithLoading(url: String, imgView: ImageView, placeHolder: Int, loading: View) {
         Glide.with(this).setDefaultRequestOptions(
             RequestOptions()
                 .placeholder(placeHolder)
                 .error(placeHolder)
                 .centerInside()
-        ).load(url)
-            .transition(DrawableTransitionOptions.withCrossFade())
+        ).load(url).listener(object : RequestListener<Drawable> {
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Drawable>?,
+                isFirstResource: Boolean
+            ): Boolean {
+                loading.isVisible = false
+                return false
+            }
+
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: Target<Drawable>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                loading.isVisible = false
+                return false
+            }
+        }).transition(DrawableTransitionOptions.withCrossFade())
             .into(imgView)
     }
 

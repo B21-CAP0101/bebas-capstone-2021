@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.capstone101.core.R
 import com.capstone101.core.databinding.ModelRelativeBinding
 import com.capstone101.core.domain.model.User
-import com.capstone101.core.utils.Function.glide
+import com.capstone101.core.utils.Function.glideWithLoading
 
 class RelativeAdapter(private val typeRelative: String) :
     RecyclerView.Adapter<RelativeAdapter.RelativeAdapterViewHolder>() {
@@ -33,12 +33,15 @@ class RelativeAdapter(private val typeRelative: String) :
                 with(user) {
                     tvName.text = name ?: username
                     tvUsername.text = username
-
-                    if (gender == false) {
-                        itemView.glide("", svProfile, R.drawable.ic_female_avatar)
-                    } else {
-                        itemView.glide("", svProfile, R.drawable.ic_male_avatar)
-                    }
+                    layoutLoading.root.isVisible = true
+                    layoutLoading.tvName.text = name ?: username
+                    layoutLoading.tvUsername.text = username
+                    itemView.glideWithLoading(
+                        "",
+                        svProfile,
+                        if (gender == false) R.drawable.ic_male_avatar else R.drawable.ic_female_avatar,
+                        layoutLoading.root
+                    )
 
                     when (typeRelative) {
                         "inviting" -> {

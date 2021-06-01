@@ -29,6 +29,9 @@ dependencies {
     // https://github.com/robertlevonyan/material-chip-view
     implementation 'com.robertlevonyan.view:MaterialChipView:2.2.0'
 
+    //Shimmer loading
+    implementation "com.facebook.shimmer:shimmer:0.5.0"
+
     // Test Base
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
