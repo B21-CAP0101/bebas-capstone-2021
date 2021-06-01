@@ -20,6 +20,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/ripple_for_image_btn_50dp"
+        android:clickable="true"
+        android:focusable="true"
         android:src="@drawable/ic_edit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,10 +30,10 @@
     <TextView
         android:id="@+id/tvName"
         style="@style/mediumText"
-        android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
         android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintStart_toEndOf="@+id/svProfile"

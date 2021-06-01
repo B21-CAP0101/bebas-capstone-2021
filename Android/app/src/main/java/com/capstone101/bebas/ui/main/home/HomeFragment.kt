@@ -12,10 +12,10 @@ import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -30,6 +30,7 @@ import com.capstone101.bebas.ui.main.MainActivity
 import com.capstone101.bebas.ui.main.MainViewModel
 import com.capstone101.bebas.ui.main.relative.RelativeActivity
 import com.capstone101.bebas.util.Function.createSnackBar
+import com.capstone101.bebas.util.Function.createToast
 import com.capstone101.core.data.Status
 import com.capstone101.core.domain.model.Danger
 import com.capstone101.core.domain.model.Relatives
@@ -44,6 +45,7 @@ import java.util.*
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var bind: FragmentHomeBinding
+
 
     private var granted: Int = 0
     private lateinit var permissions: Array<String>
@@ -80,11 +82,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         subscribeToViewModel()
         setupActionPanicButton()
         startPulse()
+        navigateToRelative()
 
         manager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         listener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                println("Latitude: ${location.latitude}\nLongitude: ${location.longitude}")
+                Log.e("Latitude", "${location.latitude}\nLongitude: ${location.longitude}")
                 viewModel.setCondition.value =
                     viewModel.setCondition.value?.apply { this[1] = true }
                 danger.place = GeoPoint(location.latitude, location.longitude)
@@ -106,7 +109,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 viewModel.setCondition.value = mutableListOf(false, false)
             }
         }
-        bind.seeAll.setOnClickListener {
+    }
+
+
+    private fun navigateToRelative() {
+        bind.tvSeeAll.setOnClickListener {
             startActivity(Intent(requireContext(), RelativeActivity::class.java))
         }
     }
@@ -131,8 +138,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 setupUI()
                 viewModel.getRelative { relatives ->
                     relative = relatives
-                    // TODO: BUAT RELATIVE
-
+                    bind.layoutEmptyRelative.root.isVisible =
+                        if (relatives.pure.isEmpty()) {
+                            bind.tvSeeAll.text = StringBuilder("add")
+                            true
+                        } else {
+                            bind.tvSeeAll.text = StringBuilder("more")
+                            false
+                        }
                     viewModel.checkInDanger(inDangerCallback)
                 }
                 viewModel.getUser.removeObservers(viewLifecycleOwner)
@@ -141,7 +154,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewModel.users.observe(viewLifecycleOwner) { users ->
             users.forEach { user ->
                 viewModel.latestDanger(user).observe(viewLifecycleOwner) {
-                    println("TEST $it")
+                    Log.e("danger", it.place.toString())
                 }
             }
         }
@@ -184,8 +197,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun handleLoading(){
-        with(bind){
+    private fun handleLoading() {
+        with(bind) {
             layoutLoading.root.isVisible = true
             layoutLoading.tvStatusLogin.isVisible = false
         }
@@ -196,19 +209,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             btnPanic.setOnClickListener {
                 count++
                 when (count) {
-                    3 -> {
-                        Toast.makeText(requireContext(), "start recording", Toast.LENGTH_SHORT)
-                            .show()
+                    2 -> {
+                        requireContext().createToast("start recording", 500)
                         location()
                         recording()
                         stopPulse()
                     }
-                    2 -> Toast.makeText(requireContext(), "press1 more time", Toast.LENGTH_SHORT)
-                        .show()
-
-
-                    1 -> Toast.makeText(requireContext(), "press 2 more time", Toast.LENGTH_SHORT)
-                        .show()
+                    1 -> requireContext().createToast("press 1 more time", 500)
                 }
                 Handler(Looper.getMainLooper()).postDelayed({ count = 0 }, 3000)
             }
@@ -220,8 +227,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireContext(), Manifest.permission.RECORD_AUDIO
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Toast.makeText(requireContext(), "please accept this permission", Toast.LENGTH_SHORT)
-                .show()
+            requireContext().createToast("please accept the permission", 1000)
             permissionCheck()
             return
         }
@@ -251,8 +257,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             MainActivity.isRecording = false
             bind.btnPanic.isEnabled = true
             count = 0
-            Toast.makeText(requireContext(), "finished record", Toast.LENGTH_SHORT)
-                .show()
+            requireContext().createToast("sending record", 1000)
             bind.btnPanic.text = resources.getString(R.string.txt_panic_btn)
             startPulse()
             viewModel.setCondition.value =
@@ -265,8 +270,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Toast.makeText(requireContext(), "please accept this permission", Toast.LENGTH_SHORT)
-                .show()
+            requireContext().createToast("please accept the permission", 1000)
             permissionCheck()
             return
         }

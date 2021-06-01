@@ -58,6 +58,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chipInvitation"
-        tools:listitem="@layout/model_realative" />
+        tools:listitem="@layout/model_relative" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

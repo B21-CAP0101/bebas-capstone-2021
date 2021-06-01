@@ -125,6 +125,13 @@
         <item name="android:src">@drawable/ic_left_arrow</item>
     </style>
 
+    <style name="smallText">
+        <item name="fontFamily">@font/raleway_regular</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="normalText">
         <item name="fontFamily">@font/raleway_regular</item>
         <item name="android:layout_width">wrap_content</item>
