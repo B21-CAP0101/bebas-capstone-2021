@@ -68,6 +68,7 @@ class AutoService : LifecycleService() {
                                     )
                                 val users =
                                     value!!.map { user -> user.toObject(UserFire::class.java) }
+//                                notificationSummary(MapVal.userDomToFire(it))
                                 for (user in users) {
                                     if (user.username in relatives.pure) {
                                         fs.collection(DangerFire.COLLECTION)
@@ -89,7 +90,6 @@ class AutoService : LifecycleService() {
                                         ).show()
                                     }
                                 }
-                                notificationSummary(MapVal.userDomToFire(it))
                             }
                         mainViewModel.getUser.removeObservers(this)
                     }
@@ -142,6 +142,10 @@ class AutoService : LifecycleService() {
             setContentIntent(pendingIntent)
             setVibrate(vibration)
             setSound(soundURI)
+            setStyle(
+                NotificationCompat.BigTextStyle().setBigContentTitle("${user.username} in danger")
+                    .bigText("Danger type is \"$type\"\nDanger ID: ${danger.id}")
+            )
             setGroup(GROUP_REMINDER)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -164,23 +168,7 @@ class AutoService : LifecycleService() {
                 manager.createNotificationChannel(channel)
             }
         }.build()
-        val id = ((danger.time!!.seconds / 1000L) % Int.MAX_VALUE).toInt()
+        val id = (0..10000).random()
         manager.notify(id, notification)
-    }
-
-    private fun notificationSummary(user: UserFire) {
-        val notification = NotificationCompat.Builder(this, CHANNEL_REMIND_ID).apply {
-            setContentTitle("Relative Danger Notification")
-            setContentText("See all Relative Danger Notification")
-            setSmallIcon(R.mipmap.ic_launcher_round)
-            setGroup(GROUP_REMINDER)
-            setGroupSummary(true)
-            setStyle(
-                NotificationCompat.InboxStyle()
-                    .setBigContentTitle("Relative In Danger")
-                    .setSummaryText(user.username)
-            )
-        }.build()
-        manager.notify(NOTIFICATION_REMIND, notification)
     }
 }
