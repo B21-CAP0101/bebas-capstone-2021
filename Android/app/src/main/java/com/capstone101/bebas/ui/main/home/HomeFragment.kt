@@ -1,6 +1,8 @@
 package com.capstone101.bebas.ui.main.home
 
 import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -193,7 +195,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         }
                     }).into(cardUser.svProfile)
             }
+
+            cardUser.btnCopy.setOnClickListener {
+                val username = cardUser.tvUsername.text.toString()
+                copyText(username)
+                requireContext().createToast("copying id: $username", 1000)
+            }
         }
+    }
+
+    private fun copyText(text: String) {
+        val myClipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val myClip: ClipData = ClipData.newPlainText("Label", text)
+        myClipboard.setPrimaryClip(myClip)
     }
 
     private fun handleLoading() {
