@@ -78,4 +78,7 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
 
     override fun getLatestDanger(user: User): Flow<Danger> =
         network.getLatestDanger(MapVal.userDomToFire(user)).map { MapVal.dangerFireToDom(it) }
+
+    override fun uploadRecord(filePath: String, fileName: String): Flow<String> =
+        network.uploadRecord(filePath, fileName)
 }

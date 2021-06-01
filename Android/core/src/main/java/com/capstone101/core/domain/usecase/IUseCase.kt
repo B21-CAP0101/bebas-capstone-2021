@@ -23,4 +23,6 @@ interface IUseCase {
     fun deleteRelation(relatives: Relatives, target: User)
 
     fun getLatestDanger(user: User): Flow<Danger>
+
+    fun uploadRecord(filePath: String, fileName: String): Flow<String>
 }
