@@ -16,15 +16,37 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_left_arrow">
 
-        <TextView
-            android:id="@+id/tv_title_toolbar"
-            style="@style/mediumText"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:translationX="-20dp"
-            tools:text="@string/invitation" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_title_toolbar"
+                style="@style/mediumText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/invitation" />
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/ripple_for_image_btn_50dp"
+                android:contentDescription="@string/search_relative"
+                android:src="@drawable/ic_person_search"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView

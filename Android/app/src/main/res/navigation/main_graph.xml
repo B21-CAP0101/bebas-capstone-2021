@@ -8,6 +8,32 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.capstone101.bebas.ui.main.home.HomeFragment"
-        tools:layout="@layout/fragment_home"
-        android:label="HomeFragment" />
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_relativeFragmentMain"
+            app:destination="@id/relativeFragmentMain" />
+    </fragment>
+    <fragment
+        android:id="@+id/relativeFragmentMain"
+        android:name="com.capstone101.bebas.ui.main.relative.RelativeFragmentMain"
+        android:label="RelativeFragmentMain"
+        tools:layout="@layout/fragment_main_relative">
+        <action
+            android:id="@+id/action_relativeFragmentMain_to_relativeInvitedFragment"
+            app:destination="@id/relativeInvitedFragment" />
+        <action
+            android:id="@+id/action_relativeFragmentMain_to_relativeInvitingFragment"
+            app:destination="@id/relativeInvitingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/relativeInvitedFragment"
+        android:name="com.capstone101.bebas.ui.main.relative.RelativeInvitedFragment"
+        android:label="RelativeInvitedFragment"
+        tools:layout="@layout/fragment_invited" />
+    <fragment
+        android:id="@+id/relativeInvitingFragment"
+        android:name="com.capstone101.bebas.ui.main.relative.RelativeInvitingFragment"
+        android:label="RelativeInvitingFragment"
+        tools:layout="@layout/fragment_invitation" />
 </navigation>

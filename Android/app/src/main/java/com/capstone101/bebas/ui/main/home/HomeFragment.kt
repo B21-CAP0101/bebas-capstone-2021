@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.location.Location
@@ -28,12 +27,13 @@ import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentHomeBinding
 import com.capstone101.bebas.ui.main.MainActivity
 import com.capstone101.bebas.ui.main.MainViewModel
-import com.capstone101.bebas.ui.main.relative.RelativeActivity
-import com.capstone101.core.utils.Function.createToast
+import com.capstone101.core.adapters.PeopleInDangerAdapter
+import com.capstone101.core.adapters.RelativeAdapter
 import com.capstone101.core.data.Status
 import com.capstone101.core.domain.model.Danger
 import com.capstone101.core.domain.model.Relatives
 import com.capstone101.core.domain.model.User
+import com.capstone101.core.utils.Function.createToast
 import com.capstone101.core.utils.MapVal
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
@@ -45,7 +45,8 @@ import java.util.*
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private var _bind: FragmentHomeBinding? = null
     private val bind get() = _bind!!
-
+    private lateinit var relativeAdapter: RelativeAdapter
+    private lateinit var peopleInDangerAdapter: PeopleInDangerAdapter
 
     private var granted: Int = 0
     private lateinit var permissions: Array<String>
@@ -78,6 +79,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         startPulse()
         navigateToRelative()
 
+
+
         manager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         listener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
@@ -106,9 +109,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
 
+    private fun setupAdapters() {
+        relativeAdapter = RelativeAdapter("pure")
+        peopleInDangerAdapter = PeopleInDangerAdapter()
+    }
+
     private fun navigateToRelative() {
         bind.tvSeeAll.setOnClickListener {
-            startActivity(Intent(requireContext(), RelativeActivity::class.java))
+
         }
     }
 
@@ -132,6 +140,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 setupUI()
                 viewModel.getRelative { relatives ->
                     relative = relatives
+                    // TODO: MASUKIN LIST PURE RELATIVE KEDALAM SUBMIT LIST INI
+                    //  relativeAdapter.differ.submitList()
+
                     bind.layoutEmptyRelative.root.isVisible =
                         if (relatives.pure.isEmpty()) {
                             bind.tvSeeAll.text = StringBuilder("add")
@@ -150,7 +161,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 bind.tvTitlePeopleInDanger.isVisible = false
                 bind.rvPeopleInDanger.isVisible = false
             } else {
-
+                peopleInDangerAdapter.differ.submitList(users)
             }
         }
     }
@@ -158,7 +169,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setupUI() {
         with(bind) {
             MapVal.user?.apply {
-                cardUser.tvName.text = name
+                cardUser.tvName.text = name ?: username
                 cardUser.tvUsername.text = username
 
                 Glide.with(requireView())
