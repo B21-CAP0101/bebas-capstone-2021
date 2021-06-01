@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.capstone101.core.R
 import com.capstone101.core.databinding.ModelPeopleInDangerBinding
 import com.capstone101.core.domain.model.User
 import com.capstone101.core.utils.Function.glide
@@ -31,15 +32,17 @@ class PeopleInDangerAdapter :
     }
 
 
-
     inner class PeopleInDangerViewHolder(private val bind: ModelPeopleInDangerBinding) :
         RecyclerView.ViewHolder(bind.root) {
         fun bind(user: User) {
             bind.apply {
                 with(user) {
-                    itemView.glide("", svProfile)
                     tvUsername.text = username
-
+                    if (gender == false) {
+                        itemView.glide("", svProfile, R.drawable.ic_female_avatar)
+                    } else {
+                        itemView.glide("", svProfile, R.drawable.ic_male_avatar)
+                    }
                     itemView.setOnClickListener {
                         onItemClickListener?.let { click -> click(this) }
                     }

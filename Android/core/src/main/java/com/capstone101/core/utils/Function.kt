@@ -46,11 +46,11 @@ object Function {
         }
     }
 
-    fun View.glide(url: String, imgView: ImageView) {
+    fun View.glide(url: String, imgView: ImageView, placeHolder:Int) {
         Glide.with(this).setDefaultRequestOptions(
             RequestOptions()
-                .placeholder(R.drawable.ic_female_avatar)
-                .error(R.drawable.ic_female_avatar)
+                .placeholder(placeHolder)
+                .error(placeHolder)
                 .centerInside()
         ).load(url)
             .transition(DrawableTransitionOptions.withCrossFade())

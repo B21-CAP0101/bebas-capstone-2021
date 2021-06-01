@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.capstone101.core.R
 import com.capstone101.core.databinding.ModelRelativeBinding
 import com.capstone101.core.domain.model.User
 import com.capstone101.core.utils.Function.glide
@@ -30,8 +31,14 @@ class RelativeAdapter(private val typeRelative: String) :
         fun bind(user: User) {
             bind.apply {
                 with(user) {
-                    itemView.glide("", svProfile)
+                    tvName.text = name ?: username
                     tvUsername.text = username
+
+                    if (gender == false) {
+                        itemView.glide("", svProfile, R.drawable.ic_female_avatar)
+                    } else {
+                        itemView.glide("", svProfile, R.drawable.ic_male_avatar)
+                    }
 
                     when (typeRelative) {
                         "inviting" -> {

@@ -14,10 +14,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -43,8 +46,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
-    private var _bind: FragmentHomeBinding? = null
-    private val bind get() = _bind!!
+    private lateinit var bind: FragmentHomeBinding
+
     private lateinit var relativeAdapter: RelativeAdapter
     private lateinit var peopleInDangerAdapter: PeopleInDangerAdapter
 
@@ -67,12 +70,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         var count = 0
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+
+        bind = FragmentHomeBinding.inflate(inflater, container, false)
+        return bind.root
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _bind = FragmentHomeBinding.bind(view)
 
 
+        setupAdapters()
         handleLoading()
         permissionCheck()
         subscribeToViewModel()
@@ -118,9 +131,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         peopleInDangerAdapter = PeopleInDangerAdapter()
     }
 
+    private fun setupRecyclerView() {
+        with(bind) {
+            rvPeopleInDanger.adapter = peopleInDangerAdapter
+            rvRelative.adapter = relativeAdapter
+        }
+    }
+
     private fun navigateToRelative() {
         bind.tvSeeAll.setOnClickListener {
-
+            findNavController().navigate(R.id.action_homeFragment_to_relativeFragmentMain)
         }
     }
 
@@ -144,8 +164,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 setupUI()
                 viewModel.getRelative { relatives ->
                     relative = relatives
-                    // TODO: MASUKIN LIST PURE RELATIVE KEDALAM SUBMIT LIST INI
-                    //  relativeAdapter.differ.submitList()
 
                     bind.layoutEmptyRelative.root.isVisible =
                         if (relatives.pure.isEmpty()) {
@@ -155,14 +173,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             bind.tvSeeAll.text = StringBuilder("more")
                             false
                         }
-                    viewModel.getUserInfoByRelative(relatives).observe(viewLifecycleOwner) {
-                        // TODO: FETCH USER INFO
-                    }
+                    viewModel.getUserInfoByRelative(relatives)
+                        .observe(viewLifecycleOwner) { pureUser ->
+                            relativeAdapter.differ.submitList(pureUser.take(10))
+                        }
                     viewModel.checkInDanger(inDangerCallback)
-                }
-
-                viewModel.testSearch("rum").observe(viewLifecycleOwner) {
-                    // TODO: INI BUAT SEARCH, HARUS ADA USERNAMENYA
                 }
                 viewModel.getUser.removeObservers(viewLifecycleOwner)
             }
@@ -214,7 +229,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             cardUser.btnCopy.setOnClickListener {
                 val username = cardUser.tvUsername.text.toString()
                 copyText(username)
-                requireContext().createToast("copying id: $username", 1000)
+                requireContext().createToast("copying $username", 1000)
             }
         }
     }
@@ -233,6 +248,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setupActionPanicButton() {
+        setupRecyclerView()
+
         with(bind) {
             btnPanic.setOnClickListener {
                 count++
@@ -375,10 +392,5 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun stopPulse() {
         handlerAnimation.removeCallbacks(runnable)
-    }
-
-    override fun onDestroy() {
-        _bind = null
-        super.onDestroy()
     }
 }
