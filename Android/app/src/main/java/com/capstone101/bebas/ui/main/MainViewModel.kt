@@ -15,6 +15,9 @@ class MainViewModel(private val useCase: IUseCase) : ViewModel() {
 
     fun getRelative(callback: (Relatives) -> Unit) = useCase.getRelative { callback(it) }
 
+    fun getUserInfoByRelative(relatives: Relatives) =
+        useCase.getUserInfoForRelatives(relatives).asLiveData()
+
     val setCondition =
         MutableLiveData<MutableList<Boolean>>().apply { this.value = mutableListOf(false, false) }
     val condition: LiveData<MutableList<Boolean>> = setCondition

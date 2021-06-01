@@ -88,7 +88,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         manager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         listener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                Log.e("Latitude", "${location.latitude}\nLongitude: ${location.longitude}")
+                Log.i("Location", "${location.latitude}\nLongitude: ${location.longitude}")
                 viewModel.setCondition.value =
                     viewModel.setCondition.value?.apply { this[1] = true }
                 danger.place = GeoPoint(location.latitude, location.longitude)
@@ -107,7 +107,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         viewModel.condition.observe(viewLifecycleOwner) {
-            // UNTUK CEK APAKAH SUDAH SELESAI RECORD DAN FETCH LOKASI
+            // FOR CHECK IF UPLOAD RECORD AND FETCH LOCATION DONE
             if (it[0] && it[1]) {
                 viewModel.insertDanger(danger)
                 viewModel.setCondition.value = mutableListOf(false, false)
@@ -150,10 +150,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             bind.tvSeeAll.text = StringBuilder("more")
                             false
                         }
+                    viewModel.getUserInfoByRelative(relatives).observe(viewLifecycleOwner) {
+                        // TODO: FETCH USER INFO
+                    }
                     viewModel.checkInDanger(inDangerCallback)
                 }
 
-                viewModel.testSearch("abrakadabra").observe(viewLifecycleOwner) {
+                viewModel.testSearch("rum").observe(viewLifecycleOwner) {
                     // TODO: INI BUAT SEARCH, HARUS ADA USERNAMENYA
                 }
                 viewModel.getUser.removeObservers(viewLifecycleOwner)

@@ -43,6 +43,14 @@ class NetworkGetData(private val fs: FirebaseFirestore, private val storage: Fir
             }
     }
 
+    fun getUserInfoForRelatives(relatives: RelativesFire): Flow<List<UserFire>> = flow {
+        if (MapVal.user == null) emit(listOf())
+        emit(fs.collection(UserFire.COLLECTION).get()
+            .await().documents.map { it.toObject(UserFire::class.java) }
+            .filter { relatives.pure?.contains(it?.username ?: "") == true }.filterNotNull()
+        )
+    }
+
     fun invitingRelative(relatives: RelativesFire, target: UserFire, condition: Boolean) {
         fs.collection(RelativesFire.COLLECTION).document(target.username!!).get()
             .addOnSuccessListener {
@@ -180,10 +188,10 @@ class NetworkGetData(private val fs: FirebaseFirestore, private val storage: Fir
 
     fun getUserSearch(username: String): Flow<List<UserFire>> = flow {
         if (MapVal.user == null) emit(listOf())
-        val users = fs.collection(UserFire.COLLECTION).get()
+        emit(fs.collection(UserFire.COLLECTION).get()
             .await().documents.map { it.toObject(UserFire::class.java) }
             .filter { it?.username?.contains(username) == true }.filterNotNull()
-        emit(users)
+        )
     }
 
     private suspend fun check(username: String): Boolean =

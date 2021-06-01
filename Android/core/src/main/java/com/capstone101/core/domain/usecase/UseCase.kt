@@ -25,6 +25,9 @@ class UseCase(private val repositories: IRepositories) : IUseCase {
 
     override suspend fun updateUser(user: User) = repositories.updateUser(user)
 
+    override fun getUserInfoForRelatives(relatives: Relatives): Flow<List<User>> =
+        repositories.getUserInfoForRelatives(relatives)
+
     override fun getUserSearch(username: String): Flow<List<User>> =
         repositories.getUserSearch(username)
 
