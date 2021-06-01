@@ -1,4 +1,4 @@
-package com.capstone101.bebas.welcome.register
+package com.capstone101.bebas.ui.welcome.register
 
 import androidx.lifecycle.*
 import com.capstone101.core.domain.model.User

@@ -21,9 +21,9 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:drawablePadding="10dp"
-        android:text="People In danger"
+        android:text="@string/titleDangerHome"
         android:textColor="@color/black"
-        app:drawableEndCompat="@drawable/ic_notif"
+        app:drawableEndCompat="@drawable/ic_notification"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardUser" />
 
@@ -40,28 +40,30 @@
         tools:listitem="@layout/model_people_in_danger" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvTitleRelative"
         style="@style/mediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:layout_marginStart="20dp"
-        android:text="relative"
+        android:text="@string/relative"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rvPeopleInDanger" />
 
     <TextView
-        android:id="@+id/seeAll"
+        android:id="@+id/tvSeeAll"
         style="@style/normalText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="see all"
+        android:clickable="true"
+        android:focusable="true"
+        tools:text="@string/see_all"
         android:textColor="@color/btn_blue"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTitleRelative"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="@+id/tvTitleRelative" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRelative"
@@ -73,8 +75,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:listitem="@layout/model_realative" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitleRelative"
+        tools:listitem="@layout/model_relative" />
+
+
+    <include
+        android:id="@+id/layoutEmptyRelative"
+        layout="@layout/layout_empty_relative"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rvRelative" />
 
     <ImageView
         android:id="@+id/ivAnim2"

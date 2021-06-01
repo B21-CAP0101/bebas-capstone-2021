@@ -14,8 +14,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleService
 import com.capstone101.bebas.R
-import com.capstone101.bebas.main.MainViewModel
-import com.capstone101.bebas.welcome.WelcomeActivity
+import com.capstone101.bebas.ui.main.MainViewModel
+import com.capstone101.bebas.ui.welcome.WelcomeActivity
 import com.capstone101.core.data.network.firebase.DangerFire
 import com.capstone101.core.data.network.firebase.RelativesFire
 import com.capstone101.core.data.network.firebase.UserFire

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".relative.RelativeActivity">
+    tools:context=".ui.main.relative.RelativeActivity">
 
     <TextView
         android:id="@+id/invite"

@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/spProfile"
+        android:id="@+id/svProfile"
         android:layout_marginTop="20dp"
         style="@style/photoProfile.relative"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,9 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/spProfile"
-        app:layout_constraintStart_toEndOf="@+id/spProfile"
-        app:layout_constraintTop_toTopOf="@+id/spProfile"
+        app:layout_constraintBottom_toBottomOf="@+id/svProfile"
+        app:layout_constraintStart_toEndOf="@+id/svProfile"
+        app:layout_constraintTop_toTopOf="@+id/svProfile"
         tools:text="@tools:sample/first_names" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

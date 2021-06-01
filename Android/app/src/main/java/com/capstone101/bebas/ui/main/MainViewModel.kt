@@ -1,4 +1,4 @@
-package com.capstone101.bebas.main
+package com.capstone101.bebas.ui.main
 
 import androidx.lifecycle.*
 import com.capstone101.core.data.Status

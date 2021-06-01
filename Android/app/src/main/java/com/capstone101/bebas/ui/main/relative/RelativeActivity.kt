@@ -1,4 +1,4 @@
-package com.capstone101.bebas.relative
+package com.capstone101.bebas.ui.main.relative
 
 import android.os.Bundle
 import android.widget.Toast

@@ -1,9 +1,10 @@
-package com.capstone101.bebas.main.home
+package com.capstone101.bebas.ui.main.home
 
 import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -11,21 +12,25 @@ import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentHomeBinding
-import com.capstone101.bebas.main.MainActivity
-import com.capstone101.bebas.main.MainViewModel
-import com.capstone101.bebas.relative.RelativeActivity
+import com.capstone101.bebas.ui.main.MainActivity
+import com.capstone101.bebas.ui.main.MainViewModel
+import com.capstone101.bebas.ui.main.relative.RelativeActivity
 import com.capstone101.bebas.util.Function.createSnackBar
-import com.capstone101.bebas.util.Function.glide
+import com.capstone101.bebas.util.Function.createToast
 import com.capstone101.core.data.Status
 import com.capstone101.core.domain.model.Danger
 import com.capstone101.core.domain.model.Relatives
@@ -33,10 +38,6 @@ import com.capstone101.core.domain.model.User
 import com.capstone101.core.utils.MapVal
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import java.io.File
 import java.text.SimpleDateFormat
@@ -44,6 +45,7 @@ import java.util.*
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var bind: FragmentHomeBinding
+
 
     private var granted: Int = 0
     private lateinit var permissions: Array<String>
@@ -75,15 +77,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        handleLoading()
         permissionCheck()
         subscribeToViewModel()
         setupActionPanicButton()
         startPulse()
+        navigateToRelative()
 
         manager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         listener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                println("Latitude: ${location.latitude}\nLongitude: ${location.longitude}")
+                Log.e("Latitude", "${location.latitude}\nLongitude: ${location.longitude}")
                 viewModel.setCondition.value =
                     viewModel.setCondition.value?.apply { this[1] = true }
                 danger.place = GeoPoint(location.latitude, location.longitude)
@@ -105,7 +109,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 viewModel.setCondition.value = mutableListOf(false, false)
             }
         }
-        bind.seeAll.setOnClickListener {
+    }
+
+
+    private fun navigateToRelative() {
+        bind.tvSeeAll.setOnClickListener {
             startActivity(Intent(requireContext(), RelativeActivity::class.java))
         }
     }
@@ -130,8 +138,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 setupUI()
                 viewModel.getRelative { relatives ->
                     relative = relatives
-                    // TODO: BUAT RELATIVE
-
+                    bind.layoutEmptyRelative.root.isVisible =
+                        if (relatives.pure.isEmpty()) {
+                            bind.tvSeeAll.text = StringBuilder("add")
+                            true
+                        } else {
+                            bind.tvSeeAll.text = StringBuilder("more")
+                            false
+                        }
                     viewModel.checkInDanger(inDangerCallback)
                 }
                 viewModel.getUser.removeObservers(viewLifecycleOwner)
@@ -140,47 +154,52 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewModel.users.observe(viewLifecycleOwner) { users ->
             users.forEach { user ->
                 viewModel.latestDanger(user).observe(viewLifecycleOwner) {
-                    println("TEST $it")
+                    Log.e("danger", it.place.toString())
                 }
             }
         }
     }
 
     private fun setupUI() {
-        var job: Job? = null
-
-        if (handleLoading().isEmpty()) {
-            lifecycleScope.launch(Dispatchers.Main) {
-                delay(1000)
-                handleSuccess()
-            }
-        } else {
-            handleSuccess()
-        }
-    }
-
-    private fun handleLoading(): String {
-        MapVal.user?.apply {
-            with(bind) {
-                layoutLoading.root.isVisible = true
-                layoutLoading.MKLoader.isVisible = false
-                layoutLoading.tvStatusLogin.text = StringBuilder("welcome")
-                cardUser.tvUsername.isVisible = false
-                cardUser.spProfile.isVisible = false
+        with(bind) {
+            MapVal.user?.apply {
+                cardUser.tvName.text = name
                 cardUser.tvUsername.text = username
 
-                requireView().glide("", cardUser.spProfile)
+                Glide.with(requireView())
+                    .load("")
+                    .error(R.drawable.ic_male_avatar)
+                    .centerInside()
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            layoutLoading.root.isVisible = false
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            layoutLoading.root.isVisible = false
+                            return false
+                        }
+                    }).into(cardUser.svProfile)
             }
         }
-        // TODO: RETURN NYA BRAM
-        return ""
     }
 
-    private fun handleSuccess() {
+    private fun handleLoading() {
         with(bind) {
-            layoutLoading.root.isVisible = false
-            cardUser.tvUsername.isVisible = true
-            cardUser.spProfile.isVisible = true
+            layoutLoading.root.isVisible = true
+            layoutLoading.tvStatusLogin.isVisible = false
         }
     }
 
@@ -189,19 +208,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             btnPanic.setOnClickListener {
                 count++
                 when (count) {
-                    3 -> {
-                        Toast.makeText(requireContext(), "start recording", Toast.LENGTH_SHORT)
-                            .show()
+                    2 -> {
+                        requireContext().createToast("start recording", 500)
                         location()
                         recording()
                         stopPulse()
                     }
-                    2 -> Toast.makeText(requireContext(), "press1 more time", Toast.LENGTH_SHORT)
-                        .show()
-
-
-                    1 -> Toast.makeText(requireContext(), "press 2 more time", Toast.LENGTH_SHORT)
-                        .show()
+                    1 -> requireContext().createToast("press 1 more time", 500)
                 }
                 Handler(Looper.getMainLooper()).postDelayed({ count = 0 }, 3000)
             }
@@ -213,8 +226,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireContext(), Manifest.permission.RECORD_AUDIO
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Toast.makeText(requireContext(), "please accept this permission", Toast.LENGTH_SHORT)
-                .show()
+            requireContext().createToast("please accept the permission", 1000)
             permissionCheck()
             return
         }
@@ -244,8 +256,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             MainActivity.isRecording = false
             bind.btnPanic.isEnabled = true
             count = 0
-            Toast.makeText(requireContext(), "finished record", Toast.LENGTH_SHORT)
-                .show()
+            requireContext().createToast("sending record", 1000)
             bind.btnPanic.text = resources.getString(R.string.txt_panic_btn)
             startPulse()
             viewModel.setCondition.value =
@@ -258,8 +269,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Toast.makeText(requireContext(), "please accept this permission", Toast.LENGTH_SHORT)
-                .show()
+            requireContext().createToast("please accept the permission", 1000)
             permissionCheck()
             return
         }

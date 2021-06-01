@@ -1,4 +1,4 @@
-package com.capstone101.bebas.relative
+package com.capstone101.bebas.ui.main.relative
 
 import androidx.lifecycle.ViewModel
 import com.capstone101.core.domain.model.Relatives

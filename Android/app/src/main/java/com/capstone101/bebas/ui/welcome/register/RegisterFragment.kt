@@ -1,4 +1,4 @@
-package com.capstone101.bebas.welcome.register
+package com.capstone101.bebas.ui.welcome.register
 
 import android.os.Bundle
 import android.view.View
@@ -90,7 +90,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     }
                     is Status.Loading -> Unit
                     is Status.Error -> requireView().createSnackBar(
-                        "Something's wrong\n${it.error}",
+                        "Something's wrong ${it.error}",
                         2000
                     )
                 }
