@@ -176,6 +176,14 @@ class NetworkGetData(private val fs: FirebaseFirestore, private val storage: Fir
         val storageRef = storage.reference.child("${MapVal.user!!.username}/record/$fileName")
         val downloadURL = storageRef.putFile(file).await().storage.downloadUrl.await().toString()
         emit(downloadURL)
+    }.flowOn(Dispatchers.IO)
+
+    fun getUserSearch(username: String): Flow<List<UserFire>> = flow {
+        if (MapVal.user == null) emit(listOf())
+        val users = fs.collection(UserFire.COLLECTION).get()
+            .await().documents.map { it.toObject(UserFire::class.java) }
+            .filter { it?.username?.contains(username) == true }.filterNotNull()
+        emit(users)
     }
 
     private suspend fun check(username: String): Boolean =

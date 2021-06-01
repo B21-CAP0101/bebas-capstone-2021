@@ -54,6 +54,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val danger = Danger()
     private val viewModel: MainViewModel by inject()
     private lateinit var data: String
+    private lateinit var fileName: String
     private var handlerAnimation = Handler(Looper.getMainLooper())
 
     companion object {
@@ -147,6 +148,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             false
                         }
                     viewModel.checkInDanger(inDangerCallback)
+                }
+
+                viewModel.testSearch("abrakadabra").observe(viewLifecycleOwner) {
+                    // TODO: INI BUAT SEARCH, HARUS ADA USERNAMENYA
                 }
                 viewModel.getUser.removeObservers(viewLifecycleOwner)
             }
@@ -259,8 +264,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             requireContext().createToast("sending record", 1000)
             bind.btnPanic.text = resources.getString(R.string.txt_panic_btn)
             startPulse()
-            viewModel.setCondition.value =
-                viewModel.setCondition.value?.apply { this[0] = true }
+            viewModel.uploadRecord(data, "$fileName.mp3").observe(viewLifecycleOwner) {
+                if (it != null) {
+                    danger.record = it
+                    viewModel.setCondition.value =
+                        viewModel.setCondition.value?.apply { this[0] = true }
+                }
+            }
         }, 11000)
     }
 
@@ -301,13 +311,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val folder = File(requireContext().externalCacheDir?.absolutePath!!)
         val date = Date()
         val formatter = SimpleDateFormat("dd-MM-yyyy-HH-mm", Locale.getDefault())
-        val fileName = formatter.format(date)
+        fileName = formatter.format(date)
 
         data = "$folder/$fileName.mp3"
 
         danger.id = fileName
         danger.time = Timestamp(date)
-        danger.record = "${MapVal.user!!.username}/$fileName.mp3"
 
         if (!folder.exists()) folder.mkdir()
     }

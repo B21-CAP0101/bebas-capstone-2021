@@ -37,4 +37,9 @@ class MainViewModel(private val useCase: IUseCase) : ViewModel() {
     val users: LiveData<List<User>> = setUsers
 
     fun latestDanger(user: User) = useCase.getLatestDanger(user).asLiveData()
+
+    fun uploadRecord(filePath: String, fileName: String) =
+        useCase.uploadRecord(filePath, fileName).asLiveData()
+
+    fun testSearch(username: String = "ru") = useCase.getUserSearch(username).asLiveData()
 }

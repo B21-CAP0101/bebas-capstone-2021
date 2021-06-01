@@ -18,6 +18,7 @@ interface IRepositories {
     fun updateUserFS()
     suspend fun updateUser(user: User)
 
+    fun getUserSearch(username: String): Flow<List<User>>
     fun invitingRelative(relatives: Relatives, target: User, condition: Boolean)
     fun confirmRelative(relatives: Relatives, target: User, condition: Boolean)
     fun deleteRelation(relatives: Relatives, target: User)
