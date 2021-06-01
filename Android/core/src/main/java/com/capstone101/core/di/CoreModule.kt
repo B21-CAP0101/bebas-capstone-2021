@@ -9,6 +9,7 @@ import com.capstone101.core.domain.repositories.IRepositories
 import com.capstone101.core.utils.SessionManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 import org.koin.android.ext.koin.androidContext
@@ -25,13 +26,14 @@ val databaseModule = module {
     single { get<UserDB>().getDao() }
 }
 
-val fireStoreModule = module {
+val firebaseModule = module {
     single { Firebase.firestore }
+    single { Firebase.storage }
 }
 
 val repositoriesModule = module {
     single { DBGetData(get()) }
-    single { NetworkGetData(get()) }
+    single { NetworkGetData(get(), get()) }
     single<IRepositories> { Repositories(get(), get()) }
 }
 

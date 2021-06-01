@@ -35,4 +35,7 @@ class UseCase(private val repositories: IRepositories) : IUseCase {
         repositories.deleteRelation(relatives, target)
 
     override fun getLatestDanger(user: User): Flow<Danger> = repositories.getLatestDanger(user)
+
+    override fun uploadRecord(filePath: String, fileName: String): Flow<String> =
+        repositories.uploadRecord(filePath, fileName)
 }

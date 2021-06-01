@@ -22,7 +22,7 @@ open class MyApp : Application() {
             modules(
                 listOf(
                     databaseModule,
-                    fireStoreModule,
+                    firebaseModule,
                     repositoriesModule,
                     sessionModule,
                     useCaseModule,

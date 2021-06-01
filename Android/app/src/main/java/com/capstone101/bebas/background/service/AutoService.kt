@@ -28,10 +28,10 @@ import org.koin.android.ext.android.inject
 class AutoService : LifecycleService() {
 
     companion object {
-        const val NOTIFICATION_FORE = 16
-        const val NOTIFICATION_REMIND = 20
+        const val NOTIFICATION_FORE = -16
         const val CHANNEL_FORE_ID = "CHANNEL_FORE_1"
         const val CHANNEL_REMIND_ID = "CHANNEL_REMIND_1"
+        const val GROUP_REMINDER = "GROUP_REMINDER"
         const val CHANNEL_FORE_NAME = "Channel for Foreground Service"
         const val CHANNEL_REMIND_NAME = "Channel for Alert Reminder"
     }
@@ -43,9 +43,11 @@ class AutoService : LifecycleService() {
 
     private val mainViewModel: MainViewModel by inject()
 
+    private lateinit var manager: NotificationManager
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val fs = Firebase.firestore
-
+        manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         fs.collection(UserFire.COLLECTION).whereEqualTo(UserFire.DANGER, true)
             .addSnapshotListener { value, e ->
                 if (e != null) {
@@ -65,6 +67,7 @@ class AutoService : LifecycleService() {
                                     )
                                 val users =
                                     value!!.map { user -> user.toObject(UserFire::class.java) }
+                                manager.cancelAll()
                                 for (user in users) {
                                     if (user.username in relatives.pure) {
                                         fs.collection(DangerFire.COLLECTION)
@@ -79,11 +82,6 @@ class AutoService : LifecycleService() {
                                                     danger ?: DangerFire(null)
                                                 )
                                             }
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "${user.username} dalam bahaya",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
                                     }
                                 }
                             }
@@ -120,7 +118,6 @@ class AutoService : LifecycleService() {
     }
 
     private fun notificationReminder(user: UserFire, danger: DangerFire) {
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val intent = Intent(this, WelcomeActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
         val soundURI =
@@ -139,7 +136,11 @@ class AutoService : LifecycleService() {
             setContentIntent(pendingIntent)
             setVibrate(vibration)
             setSound(soundURI)
-            setStyle(NotificationCompat.BigTextStyle().bigText("ID: ${danger.id}"))
+            setStyle(
+                NotificationCompat.BigTextStyle().setBigContentTitle("${user.username} in danger")
+                    .bigText("Danger type is \"$type\"\nDanger ID: ${danger.id}")
+            )
+            setGroup(GROUP_REMINDER)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel = NotificationChannel(
@@ -161,6 +162,7 @@ class AutoService : LifecycleService() {
                 manager.createNotificationChannel(channel)
             }
         }.build()
-        manager.notify(NOTIFICATION_REMIND, notification)
+        val id = (0..10000).random()
+        manager.notify(id, notification)
     }
 }
