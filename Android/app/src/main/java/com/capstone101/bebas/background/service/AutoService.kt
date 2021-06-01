@@ -28,8 +28,7 @@ import org.koin.android.ext.android.inject
 class AutoService : LifecycleService() {
 
     companion object {
-        const val NOTIFICATION_FORE = 16
-        const val NOTIFICATION_REMIND = 20
+        const val NOTIFICATION_FORE = -16
         const val CHANNEL_FORE_ID = "CHANNEL_FORE_1"
         const val CHANNEL_REMIND_ID = "CHANNEL_REMIND_1"
         const val GROUP_REMINDER = "GROUP_REMINDER"
@@ -68,7 +67,7 @@ class AutoService : LifecycleService() {
                                     )
                                 val users =
                                     value!!.map { user -> user.toObject(UserFire::class.java) }
-//                                notificationSummary(MapVal.userDomToFire(it))
+                                manager.cancelAll()
                                 for (user in users) {
                                     if (user.username in relatives.pure) {
                                         fs.collection(DangerFire.COLLECTION)
@@ -83,11 +82,6 @@ class AutoService : LifecycleService() {
                                                     danger ?: DangerFire(null)
                                                 )
                                             }
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "${user.username} dalam bahaya",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
                                     }
                                 }
                             }
