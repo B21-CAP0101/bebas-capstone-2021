@@ -14,8 +14,8 @@
             android:id="@+id/action_homeFragment_to_relativeFragmentMain"
             app:destination="@id/relativeFragmentMain" />
         <action
-            android:id="@+id/action_homeFragment_to_fragmentDetail"
-            app:destination="@id/fragmentDetail" />
+            android:id="@+id/action_homeFragment_to_detailDangerFragment"
+            app:destination="@id/detailDangerFragment" />
     </fragment>
     <fragment
         android:id="@+id/relativeFragmentMain"
@@ -39,10 +39,14 @@
         android:name="com.capstone101.bebas.ui.main.relative.RelativeInvitingFragment"
         android:label="RelativeInvitingFragment"
         tools:layout="@layout/fragment_invitation" />
-
     <fragment
-        android:id="@+id/fragmentDetail"
-        android:name="com.capstone101.bebas.ui.main.detail.FragmentDetailDanger"
-        android:label="FragmentDetail"
-        tools:layout="@layout/fragment_detail_danger" />
+        android:id="@+id/detailDangerFragment"
+        android:name="com.capstone101.bebas.ui.main.detail.DetailDangerFragment"
+        android:label="DetailDangerFragment" >
+        <argument
+            android:name="user"
+            app:argType="com.capstone101.core.domain.model.User" />
+    </fragment>
+
+
 </navigation>

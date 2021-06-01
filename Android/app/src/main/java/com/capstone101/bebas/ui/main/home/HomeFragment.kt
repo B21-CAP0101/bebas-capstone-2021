@@ -124,8 +124,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setupAdapters() {
         relativeAdapter = RelativeAdapter("pure")
         peopleInDangerAdapter = PeopleInDangerAdapter()
-        peopleInDangerAdapter.setOnItemClickListener {
 
+        peopleInDangerAdapter.setOnItemClickListener { user ->
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToDetailDangerFragment(
+                    user
+                )
+            )
         }
     }
 
@@ -185,6 +190,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 bind.tvTitlePeopleInDanger.isVisible = false
                 bind.rvPeopleInDanger.isVisible = false
             } else {
+                bind.tvTitlePeopleInDanger.isVisible = true
+                bind.rvPeopleInDanger.isVisible = true
                 peopleInDangerAdapter.differ.submitList(users)
             }
         }

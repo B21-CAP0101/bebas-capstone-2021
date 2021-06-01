@@ -32,6 +32,10 @@ dependencies {
     //Shimmer loading
     implementation "com.facebook.shimmer:shimmer:0.5.0"
 
+    // https://github.com/rygelouv/android-audio-sensei
+    compile 'com.github.rygelouv:android-audio-sensei:0.1.2'
+
+
     // Test Base
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

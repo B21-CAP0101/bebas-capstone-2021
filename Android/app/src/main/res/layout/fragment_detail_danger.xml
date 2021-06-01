@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:ignore="MissingDefaultResource">
+    android:background="@color/white">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
@@ -14,14 +13,43 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/svRelative"
+        android:id="@+id/svProfile"
         style="@style/photoProfile.relative"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/mapView"
         tools:src="@tools:sample/avatars" />
 
+    <TextView
+        android:id="@+id/tvName"
+        style="@style/mediumText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/svProfile"
+        app:layout_constraintTop_toTopOf="@+id/svProfile"
+        tools:text="@tools:sample/first_names" />
 
+    <TextView
+        android:id="@+id/tvUsername"
+        style="@style/normalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/tvName"
+        app:layout_constraintTop_toBottomOf="@+id/tvName"
+        tools:text="@tools:sample/last_names" />
+
+    <com.rygelouv.audiosensei.player.AudioSenseiPlayerView
+        android:id="@+id/audio_player"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/svProfile" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

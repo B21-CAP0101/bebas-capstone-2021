@@ -52,6 +52,16 @@ object Function {
         }
     }
 
+    fun View.glide(url: String, imgView: ImageView, placeHolder: Int) {
+        Glide.with(this).setDefaultRequestOptions(
+            RequestOptions()
+                .placeholder(placeHolder)
+                .error(placeHolder)
+                .centerInside()
+        ).load(url).transition(DrawableTransitionOptions.withCrossFade())
+            .into(imgView)
+    }
+
     fun View.glideWithLoading(url: String, imgView: ImageView, placeHolder: Int, loading: View) {
         Glide.with(this).setDefaultRequestOptions(
             RequestOptions()
