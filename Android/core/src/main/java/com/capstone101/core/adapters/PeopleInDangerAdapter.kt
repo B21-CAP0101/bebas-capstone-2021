@@ -38,16 +38,21 @@ class PeopleInDangerAdapter :
         fun bind(user: User) {
             bind.apply {
                 with(user) {
+                    tvUsername.isVisible = false
+                    svProfile.isVisible = false
                     progressbar.isVisible = true
+
                     tvUsername.text = username
                     itemView.glideWithLoading(
                         "",
                         svProfile,
-                        if (gender == false) R.drawable.ic_male_avatar else R.drawable.ic_female_avatar,
-                        progressbar
+                        if (gender == false) R.drawable.ic_female_avatar else R.drawable.ic_male_avatar,
+                        progressbar, listOf(tvUsername, svProfile)
                     )
                     itemView.setOnClickListener {
-                        onItemClickListener?.let { click -> click(this) }
+                        onItemClickListener?.let { click ->
+                            click(this)
+                        }
                     }
                 }
             }

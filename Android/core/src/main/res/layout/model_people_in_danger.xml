@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     android:padding="10dp">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -26,7 +25,7 @@
         app:layout_constraintTop_toBottomOf="@+id/svProfile"
         tools:text="@tools:sample/first_names" />
 
-    <ProgressBar
+    <com.tuyenmonkey.mkloader.MKLoader
         android:id="@+id/progressbar"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -35,6 +34,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:mk_color="@color/bgBlue"
+        app:mk_type="TwinFishesSpinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

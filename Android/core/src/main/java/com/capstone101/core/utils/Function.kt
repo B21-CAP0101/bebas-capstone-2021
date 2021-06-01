@@ -62,7 +62,13 @@ object Function {
             .into(imgView)
     }
 
-    fun View.glideWithLoading(url: String, imgView: ImageView, placeHolder: Int, loading: View) {
+    fun View.glideWithLoading(
+        url: String,
+        imgView: ImageView,
+        placeHolder: Int,
+        loading: View,
+        allView: List<View>? = null
+    ) {
         Glide.with(this).setDefaultRequestOptions(
             RequestOptions()
                 .placeholder(placeHolder)
@@ -76,6 +82,9 @@ object Function {
                 isFirstResource: Boolean
             ): Boolean {
                 loading.isVisible = false
+                allView?.forEach { view ->
+                    view.isVisible = true
+                }
                 return false
             }
 
@@ -87,6 +96,10 @@ object Function {
                 isFirstResource: Boolean
             ): Boolean {
                 loading.isVisible = false
+
+                allView?.forEach { view ->
+                    view.isVisible = true
+                }
                 return false
             }
         }).transition(DrawableTransitionOptions.withCrossFade())
@@ -94,8 +107,7 @@ object Function {
     }
 
     fun Context.createToast(message: String, duration: Int) {
-        val mToast = Toast(this)
-        mToast.duration = duration
+        val mToast = Toast.makeText(this, "", duration)
         mToast.setText(message)
         mToast.show()
     }

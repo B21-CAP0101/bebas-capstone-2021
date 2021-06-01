@@ -25,4 +25,5 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="bgBlue">#2196F3</color>
     <color name="bgBlue_plus">#0291DF</color>
+    <color name="danger">#E14F4F</color>
 </resources>

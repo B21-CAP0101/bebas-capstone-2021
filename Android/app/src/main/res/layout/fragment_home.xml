@@ -65,12 +65,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvTitleRelative" />
 
+
+    <include
+        android:id="@+id/layoutEmptyRelative"
+        layout="@layout/layout_empty_relative"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitleRelative" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRelative"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:paddingHorizontal="20dp"
+        android:background="@color/white"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,13 +89,7 @@
         tools:listitem="@layout/model_relative" />
 
 
-    <include
-        android:id="@+id/layoutEmptyRelative"
-        layout="@layout/layout_empty_relative"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rvRelative" />
+
 
     <ImageView
         android:id="@+id/ivAnim2"

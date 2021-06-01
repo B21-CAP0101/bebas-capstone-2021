@@ -31,16 +31,21 @@ class RelativeAdapter(private val typeRelative: String) :
         fun bind(user: User) {
             bind.apply {
                 with(user) {
+                    tvName.isVisible = false
+                    tvUsername.isVisible = false
+                    layoutLoading.root.isVisible = true
+
                     tvName.text = name ?: username
                     tvUsername.text = username
-                    layoutLoading.root.isVisible = true
+
                     layoutLoading.tvName.text = name ?: username
                     layoutLoading.tvUsername.text = username
+
                     itemView.glideWithLoading(
                         "",
                         svProfile,
-                        if (gender == false) R.drawable.ic_male_avatar else R.drawable.ic_female_avatar,
-                        layoutLoading.root
+                        if (gender == false) R.drawable.ic_female_avatar else R.drawable.ic_male_avatar,
+                        layoutLoading.root, listOf(tvName, tvUsername, svProfile)
                     )
 
                     when (typeRelative) {
@@ -77,16 +82,6 @@ class RelativeAdapter(private val typeRelative: String) :
                             tbAdd.isVisible = false
                         }
                     }
-
-                    tbAdd.setOnCheckedChangeListener { _, isChecked ->
-                        if (isChecked) {
-                            // TODO:
-                        } else {
-
-                        }
-                    }
-
-
                 }
             }
         }

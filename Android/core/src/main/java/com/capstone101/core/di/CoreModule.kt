@@ -1,5 +1,6 @@
 package com.capstone101.core.di
 
+import android.annotation.SuppressLint
 import androidx.room.Room
 import com.capstone101.core.data.Repositories
 import com.capstone101.core.data.db.DBGetData
@@ -7,6 +8,7 @@ import com.capstone101.core.data.db.room.UserDB
 import com.capstone101.core.data.network.NetworkGetData
 import com.capstone101.core.domain.repositories.IRepositories
 import com.capstone101.core.utils.SessionManager
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -24,6 +26,13 @@ val databaseModule = module {
         ).fallbackToDestructiveMigration().openHelperFactory(factory).build()
     }
     single { get<UserDB>().getDao() }
+}
+
+@SuppressLint("VisibleForTests")
+val fusedLocationProviderClient = module {
+    factory {
+        FusedLocationProviderClient(androidContext())
+    }
 }
 
 val firebaseModule = module {

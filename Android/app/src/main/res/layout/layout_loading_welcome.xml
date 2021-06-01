@@ -8,22 +8,23 @@
     <TextView
         android:id="@+id/tvStatusLogin"
         style="@style/mediumText"
+        android:layout_marginTop="20dp"
         android:text="@string/verification"
         android:textAllCaps="false"
-        android:layout_marginTop="20dp"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/MKLoader" />
 
-    <ProgressBar
+    <com.tuyenmonkey.mkloader.MKLoader
         android:id="@+id/MKLoader"
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline6"
-       />
+        app:mk_color="@color/white"
+        app:mk_type="TwinFishesSpinner" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"

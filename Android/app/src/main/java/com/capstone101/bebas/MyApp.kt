@@ -26,7 +26,8 @@ open class MyApp : Application() {
                     repositoriesModule,
                     sessionModule,
                     useCaseModule,
-                    viewModelModule
+                    viewModelModule,
+                    fusedLocationProviderClient
                 )
             )
         }

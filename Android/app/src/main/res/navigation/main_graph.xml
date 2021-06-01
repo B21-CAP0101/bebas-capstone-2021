@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homeFragment_to_detailDangerFragment"
             app:destination="@id/detailDangerFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailDangerActivity"
+            app:destination="@id/detailDangerActivity" />
     </fragment>
     <fragment
         android:id="@+id/relativeFragmentMain"
@@ -47,6 +50,14 @@
             android:name="user"
             app:argType="com.capstone101.core.domain.model.User" />
     </fragment>
+    <activity
+        android:id="@+id/detailDangerActivity"
+        android:name="com.capstone101.bebas.ui.main.detail.DetailDangerActivity"
+        android:label="DetailDangerActivity" >
+        <argument
+            android:name="user"
+            app:argType="com.capstone101.core.domain.model.User" />
+    </activity>
 
 
 </navigation>

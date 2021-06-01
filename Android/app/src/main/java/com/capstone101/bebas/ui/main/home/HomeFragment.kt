@@ -127,7 +127,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         peopleInDangerAdapter.setOnItemClickListener { user ->
             findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToDetailDangerFragment(
+                HomeFragmentDirections.actionHomeFragmentToDetailDangerActivity(
                     user
                 )
             )
@@ -168,14 +168,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 viewModel.getRelative { relatives ->
                     relative = relatives
 
-                    bind.layoutEmptyRelative.root.isVisible =
-                        if (relatives.pure.isEmpty()) {
-                            bind.tvSeeAll.text = StringBuilder("add")
-                            true
-                        } else {
-                            bind.tvSeeAll.text = StringBuilder("more")
-                            false
-                        }
+
+                    if (relatives.pure.isEmpty()) {
+                        bind.rvRelative.isVisible = false
+                        bind.tvSeeAll.text = StringBuilder("add")
+                    } else {
+                        bind.rvRelative.isVisible = true
+                        bind.tvSeeAll.text = StringBuilder("more")
+                    }
                     viewModel.getUserInfoByRelative(relatives)
                         .observe(viewLifecycleOwner) { pureUser ->
                             relativeAdapter.differ.submitList(pureUser.take(10))
@@ -238,13 +238,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             btnPanic.setOnClickListener {
                 count++
                 when (count) {
-                    2 -> {
+                    3 -> {
                         requireContext().createToast("start recording", 500)
                         location()
                         recording()
                         stopPulse()
                     }
-                    1 -> requireContext().createToast("press 1 more time", 500)
+                    1 -> requireContext().createToast("press 2 more time", 500)
                 }
                 Handler(Looper.getMainLooper()).postDelayed({ count = 0 }, 3000)
             }
