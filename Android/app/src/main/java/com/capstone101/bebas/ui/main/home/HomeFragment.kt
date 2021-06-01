@@ -55,6 +55,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val danger = Danger()
     private val viewModel: MainViewModel by inject()
     private lateinit var data: String
+    private lateinit var fileName: String
     private var handlerAnimation = Handler(Looper.getMainLooper())
 
     companion object {
@@ -84,7 +85,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         manager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         listener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                Log.e("Latitude", "${location.latitude}\nLongitude: ${location.longitude}")
+                Log.i("Location", "${location.latitude}\nLongitude: ${location.longitude}")
                 viewModel.setCondition.value =
                     viewModel.setCondition.value?.apply { this[1] = true }
                 danger.place = GeoPoint(location.latitude, location.longitude)
@@ -97,10 +98,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             override fun onProviderDisabled(provider: String) = Unit
         }
 
-        if (requireActivity().intent.action == ACTION_RECORD) recording()
+        if (requireActivity().intent.action == ACTION_RECORD) {
+            recording()
+            location()
+        }
 
         viewModel.condition.observe(viewLifecycleOwner) {
-            // UNTUK CEK APAKAH SUDAH SELESAI RECORD DAN FETCH LOKASI
+            // FOR CHECK IF UPLOAD RECORD AND FETCH LOCATION DONE
             if (it[0] && it[1]) {
                 viewModel.insertDanger(danger)
                 viewModel.setCondition.value = mutableListOf(false, false)
@@ -151,7 +155,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             bind.tvSeeAll.text = StringBuilder("more")
                             false
                         }
+                    viewModel.getUserInfoByRelative(relatives).observe(viewLifecycleOwner) {
+                        // TODO: FETCH USER INFO
+                    }
                     viewModel.checkInDanger(inDangerCallback)
+                }
+
+                viewModel.testSearch("rum").observe(viewLifecycleOwner) {
+                    // TODO: INI BUAT SEARCH, HARUS ADA USERNAMENYA
                 }
                 viewModel.getUser.removeObservers(viewLifecycleOwner)
             }
@@ -277,8 +288,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             requireContext().createToast("sending record", 1000)
             bind.btnPanic.text = resources.getString(R.string.txt_panic_btn)
             startPulse()
-            viewModel.setCondition.value =
-                viewModel.setCondition.value?.apply { this[0] = true }
+            viewModel.uploadRecord(data, "$fileName.mp3").observe(viewLifecycleOwner) {
+                if (it != null) {
+                    danger.record = it
+                    viewModel.setCondition.value =
+                        viewModel.setCondition.value?.apply { this[0] = true }
+                }
+            }
         }, 11000)
     }
 
@@ -319,13 +335,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val folder = File(requireContext().externalCacheDir?.absolutePath!!)
         val date = Date()
         val formatter = SimpleDateFormat("dd-MM-yyyy-HH-mm", Locale.getDefault())
-        val fileName = formatter.format(date)
+        fileName = formatter.format(date)
 
         data = "$folder/$fileName.mp3"
 
         danger.id = fileName
         danger.time = Timestamp(date)
-        danger.record = "${MapVal.user!!.username}/$fileName.mp3"
 
         if (!folder.exists()) folder.mkdir()
     }

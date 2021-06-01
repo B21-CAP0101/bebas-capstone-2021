@@ -10,6 +10,8 @@ data class UserEntity(
     val email: String,
     val name: String? = null,
     val address: String? = null,
+    val photoURL: String? = null,
+    val gender: Boolean? = null,
     val type: Int,
     val key: String,
     var inDanger: Boolean = false

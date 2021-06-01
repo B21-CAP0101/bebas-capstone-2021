@@ -17,7 +17,12 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
         object : AccountBoundRes<UserFire, User>() {
             override fun loadDB(): Flow<User> =
                 db.getUser()
-                    .map { MapVal.userEntToDom(it) ?: User("", "", "", null, null, 2, listOf()) }
+                    .map {
+                        MapVal.userEntToDom(it) ?: User(
+                            "", "", "", null,
+                            null, null, null, 2, listOf(),
+                        )
+                    }
 
             override fun shouldFetch(db: User?): Boolean = true
 
@@ -62,6 +67,13 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
         network.insertDanger(MapVal.dangerDomToFire(danger))
 
     override suspend fun updateUser(user: User) = db.update(MapVal.userDomToEnt(user))
+
+    override fun getUserInfoForRelatives(relatives: Relatives): Flow<List<User>> =
+        network.getUserInfoForRelatives(MapVal.relativesDomToFire(relatives))
+            .map { it.map { user -> MapVal.userFireToDom(user) } }
+
+    override fun getUserSearch(username: String): Flow<List<User>> =
+        network.getUserSearch(username).map { it.map { user -> MapVal.userFireToDom(user) } }
 
     override fun invitingRelative(relatives: Relatives, target: User, condition: Boolean) =
         network.invitingRelative(
