@@ -124,6 +124,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setupAdapters() {
         relativeAdapter = RelativeAdapter("pure")
         peopleInDangerAdapter = PeopleInDangerAdapter()
+        peopleInDangerAdapter.setOnItemClickListener {
+
+        }
     }
 
     private fun setupRecyclerView() {

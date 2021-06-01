@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FramentDetailDangerBinding
 
-class FragmentDetail : Fragment(R.layout.frament_detail_danger) {
+class FragmentDetailDanger : Fragment(R.layout.frament_detail_danger) {
     private var _bind: FramentDetailDangerBinding? = null
     private val bind get() = _bind
 
