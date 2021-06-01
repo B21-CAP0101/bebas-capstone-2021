@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.capstone101.core.R
 import com.capstone101.core.databinding.ModelRelativeBinding
 import com.capstone101.core.domain.model.User
+import com.capstone101.core.utils.Constant.TYPE_INVITATION
+import com.capstone101.core.utils.Constant.TYPE_INVITED
+import com.capstone101.core.utils.Constant.TYPE_PURE
 import com.capstone101.core.utils.Function.glideWithLoading
 
 class RelativeAdapter(private val typeRelative: String) :
@@ -49,7 +52,7 @@ class RelativeAdapter(private val typeRelative: String) :
                     )
 
                     when (typeRelative) {
-                        "inviting" -> {
+                        TYPE_INVITATION -> {
                             tbAdd.isVisible = true
 
                             tbAdd.setOnCheckedChangeListener { _, isChecked ->
@@ -62,7 +65,7 @@ class RelativeAdapter(private val typeRelative: String) :
                         }
 
 
-                        "invited" -> {
+                        TYPE_INVITED -> {
                             btnConfirm.isVisible = true
                             btnCancel.isVisible = true
 
@@ -76,7 +79,7 @@ class RelativeAdapter(private val typeRelative: String) :
                             }
 
                         }
-                        else -> {
+                        TYPE_PURE -> {
                             btnConfirm.isVisible = false
                             btnCancel.isVisible = false
                             tbAdd.isVisible = false
