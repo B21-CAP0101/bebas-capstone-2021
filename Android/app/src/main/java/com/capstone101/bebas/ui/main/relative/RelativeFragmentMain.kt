@@ -33,7 +33,7 @@ class RelativeFragmentMain : Fragment(R.layout.fragment_main_relative) {
     }
 
     private fun setupAdapters() {
-        relativeAdapter = RelativeAdapter(TYPE_PURE)
+        relativeAdapter = RelativeAdapter(TYPE_PURE, { _, _ -> }) { _, _ -> }
     }
 
     private fun setupRecyclerView() {

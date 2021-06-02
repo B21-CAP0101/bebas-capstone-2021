@@ -9,27 +9,29 @@ import androidx.navigation.fragment.findNavController
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentInvitedBinding
 import com.capstone101.core.adapters.RelativeAdapter
+import com.capstone101.core.domain.model.Relatives
 import com.capstone101.core.utils.Constant.TYPE_INVITED
+import org.koin.android.ext.android.inject
 
 class RelativeInvitedFragment : Fragment(R.layout.fragment_invited) {
     private var _bind: FragmentInvitedBinding? = null
     private val bind get() = _bind!!
     private lateinit var relativeAdapter: RelativeAdapter
 
+    private val viewModel: RelativeViewModel by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _bind = FragmentInvitedBinding.bind(view)
-
-        setupAdapters()
-        setupRecyclerView()
         subscribeToViewModel()
         setupToolbar()
         setHasOptionsMenu(true)
     }
 
-    private fun setupAdapters() {
-        relativeAdapter = RelativeAdapter(TYPE_INVITED)
+    private fun setupAdapters(relatives: Relatives) {
+        relativeAdapter = RelativeAdapter(TYPE_INVITED, { user, condition ->
+            viewModel.invite(relatives, user, condition)
+        }) { user, condition -> viewModel.confirm(relatives, user, condition) }
     }
 
     private fun setupRecyclerView() {
@@ -39,8 +41,16 @@ class RelativeInvitedFragment : Fragment(R.layout.fragment_invited) {
     }
 
     private fun subscribeToViewModel() {
-        //TODO GET DATA INVITED
+        // DONE
         // masukin ke relativeAdapter.differ.submitList({data invited})
+        viewModel.getRelative {
+            setupAdapters(it)
+            setupRecyclerView()
+            viewModel.getUserInfoByRelative(it, Relatives.INVITED)
+                .observe(viewLifecycleOwner) { users ->
+                    relativeAdapter.differ.submitList(users)
+                }
+        }
     }
 
     private fun setupToolbar() {

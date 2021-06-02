@@ -8,5 +8,8 @@ data class RelativesFire(
 ) {
     companion object {
         const val COLLECTION = "relatives"
+        const val INVITING = "inviting"
+        const val INVITED = "invited"
+        const val PURE = "pure"
     }
 }

@@ -24,15 +24,23 @@ object MapVal {
     fun userFireToEnt(data: UserFire): UserEntity {
         val key = data.key!!.toList().toString().replace("[", "").replace("]", "")
         return UserEntity(
-            data.username!!, data.password!!, data.email!!, data.name!!,
-            data.address, data.photoURL, data.gender!!, data.type ?: 2, key, data.inDanger
+            data.username!!, data.password!!, data.email!!, data.name ?: "",
+            data.address, data.photoURL, data.gender ?: true, data.type ?: 2, key, data.inDanger
         )
     }
 
     fun userFireToDom(data: UserFire): User =
         User(
-            data.username!!, data.password!!, data.email!!, data.name!!,
-            data.address, data.photoURL, data.gender!!, data.type ?: 2, data.key!!, data.inDanger
+            data.username!!,
+            data.password!!,
+            data.email!!,
+            data.name ?: "",
+            data.address,
+            data.photoURL,
+            data.gender ?: true,
+            data.type ?: 2,
+            data.key!!,
+            data.inDanger
         )
 
     fun userDomToFire(data: User): UserFire =

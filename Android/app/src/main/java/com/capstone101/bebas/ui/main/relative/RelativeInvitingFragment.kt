@@ -9,27 +9,31 @@ import androidx.navigation.fragment.findNavController
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentInvitationBinding
 import com.capstone101.core.adapters.RelativeAdapter
-import com.capstone101.core.utils.Constant.TYPE_INVITATION
+import com.capstone101.core.domain.model.Relatives
+import com.capstone101.core.utils.Constant
+import org.koin.android.ext.android.inject
 
 class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
     private var _bind: FragmentInvitationBinding? = null
     private val bind get() = _bind!!
     private lateinit var relativeAdapter: RelativeAdapter
 
+    private val viewModel: RelativeViewModel by inject()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _bind = FragmentInvitationBinding.bind(view)
 
-        setupAdapters()
-        setupRecyclerView()
         subscribeToViewModel()
         setupToolbar()
         setHasOptionsMenu(true)
     }
 
-    private fun setupAdapters() {
-        relativeAdapter = RelativeAdapter(TYPE_INVITATION)
+    private fun setupAdapters(relatives: Relatives) {
+        relativeAdapter = RelativeAdapter(Constant.TYPE_INVITED, { user, condition ->
+            viewModel.invite(relatives, user, condition)
+        }) { user, condition -> viewModel.confirm(relatives, user, condition) }
     }
 
     private fun setupRecyclerView() {
@@ -40,8 +44,16 @@ class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
 
 
     private fun subscribeToViewModel() {
-        //TODO GET DATA INVITATION
+        // DONE GET DATA INVITATION
         // masukin ke relativeAdapter.differ.submitList({data INVITATION})
+        viewModel.getRelative {
+            setupAdapters(it)
+            setupRecyclerView()
+            viewModel.getUserInfoByRelative(it, Relatives.INVITING)
+                .observe(viewLifecycleOwner) { users ->
+                    relativeAdapter.differ.submitList(users)
+                }
+        }
     }
 
     private fun setupToolbar() {
