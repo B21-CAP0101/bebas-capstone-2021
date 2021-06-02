@@ -122,7 +122,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
 
     private fun setupAdapters() {
-        relativeAdapter = RelativeAdapter("pure")
+        relativeAdapter = RelativeAdapter(Relatives.PURE, { _, _ -> }) { _, _ -> }
         peopleInDangerAdapter = PeopleInDangerAdapter()
 
         peopleInDangerAdapter.setOnItemClickListener { user ->
