@@ -7,6 +7,7 @@
 1. [Koin](https://insert-koin.io/) for our Dependency Injection
 2. [Room](https://developer.android.com/jetpack/androidx/releases/room) for our Database Services
 3. [Firebase](https://firebase.google.com/) for our online server (Firestore and Firebase Storage)  
+
    In this application, we separated to 2 modules, app and core:  
 1. app Module for application interface, widget, and background service (foreground service) to fetch danger data automatically if someone press panic button.
 2. core Module for backend folder for this android application. This module contains every function that used for connect to Firebase or to store data to Room Database.
