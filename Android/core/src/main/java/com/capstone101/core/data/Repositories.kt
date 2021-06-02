@@ -19,8 +19,8 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
                 db.getUser()
                     .map {
                         MapVal.userEntToDom(it) ?: User(
-                            "", "", "", null,
-                            null, null, null, 2, listOf(),
+                            "", "", "", "",
+                            null, null, false, 2, listOf(),
                         )
                     }
 

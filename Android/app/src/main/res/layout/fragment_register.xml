@@ -14,6 +14,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView"
         style="@style/shadowColor.title"
         android:text="@string/let_s_create_an_account"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,6 +34,18 @@
     </EditText>
 
     <EditText
+        android:id="@+id/etName"
+        style="@style/inputText.username"
+        android:hint="@string/name"
+        android:importantForAutofill="no"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/glInputText">
+
+    </EditText>
+
+    <EditText
         android:id="@+id/etEmail"
         style="@style/inputText.email"
         android:hint="@string/e_mail_address"
@@ -40,6 +53,60 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etUsername" />
+
+
+    <LinearLayout
+        android:id="@+id/layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_rounded_white"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etName">
+
+        <TextView
+            android:id="@+id/tvTitleGender"
+            style="@style/mediumText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_gender"
+            android:textColor="@color/black_40off" />
+
+        <RadioGroup
+            android:id="@+id/rgGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbFemale"
+                style="@style/normalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:buttonTint="@color/bgBlue"
+                android:checked="true"
+                android:text="@string/female"
+                android:textColor="@color/black_40off" />
+
+            <RadioButton
+                android:id="@+id/rbMale"
+                style="@style/normalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/bgBlue"
+                android:text="@string/male"
+                android:textColor="@color/black_40off" />
+
+        </RadioGroup>
+
+    </LinearLayout>
+
 
     <EditText
         android:id="@+id/etPassword"
@@ -53,11 +120,10 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegisterGo"
         style="@style/btn.primary"
-        android:layout_marginTop="40dp"
-        android:text="@string/register"
+        android:text="@string/next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/guideline3" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/glInputText"
@@ -81,5 +147,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="512dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="search_relative">search relative</string>
+    <string name="name">name</string>
+    <string name="select_gender">Select Gender :</string>
+    <string name="female">Female</string>
+    <string name="male">Male</string>
+    <string name="next">next</string>
 </resources>

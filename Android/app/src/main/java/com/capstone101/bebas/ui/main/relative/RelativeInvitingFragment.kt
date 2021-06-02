@@ -38,6 +38,7 @@ class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
         }
     }
 
+
     private fun subscribeToViewModel() {
         //TODO GET DATA INVITATION
         // masukin ke relativeAdapter.differ.submitList({data INVITATION})
@@ -46,6 +47,12 @@ class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
     private fun setupToolbar() {
         (activity as AppCompatActivity?)!!.setSupportActionBar(bind.toolbar)
         (activity as AppCompatActivity?)!!.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        with(bind) {
+            ibSearch.setOnClickListener {
+
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

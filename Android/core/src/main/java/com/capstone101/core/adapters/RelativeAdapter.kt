@@ -45,7 +45,7 @@ class RelativeAdapter(private val typeRelative: String) :
                     layoutLoading.tvUsername.text = username
 
                     itemView.glideWithLoading(
-                        "",
+                        photoURL ?: "",
                         svProfile,
                         if (gender == false) R.drawable.ic_female_avatar else R.drawable.ic_male_avatar,
                         layoutLoading.root, listOf(tvName, tvUsername, svProfile)

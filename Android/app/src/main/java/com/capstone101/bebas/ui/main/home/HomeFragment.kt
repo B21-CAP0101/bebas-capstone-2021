@@ -203,7 +203,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 cardUser.tvName.text = name ?: username
                 cardUser.tvUsername.text = username
                 requireView().glideWithLoading(
-                    "",
+                    photoURL ?: "",
                     cardUser.svProfile,
                     if (gender == false) R.drawable.ic_female_avatar else R.drawable.ic_male_avatar,
                     layoutLoading.root
@@ -220,7 +220,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun copyText(text: String) {
         val myClipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val myClip: ClipData = ClipData.newPlainText("Label", text)
+        val myClip: ClipData = ClipData.newPlainText("username", text)
         myClipboard.setPrimaryClip(myClip)
     }
 

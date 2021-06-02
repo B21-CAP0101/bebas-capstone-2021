@@ -29,13 +29,13 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton"
+                app:layout_constraintEnd_toStartOf="@+id/ibSearch"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/invitation" />
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/ibSearch"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@drawable/ripple_for_image_btn_50dp"

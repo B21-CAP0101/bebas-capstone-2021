@@ -12,14 +12,20 @@ class RegisViewModel(private val useCase: IUseCase) : ViewModel() {
     private val data = MutableLiveData<Boolean?>()
     val condition: LiveData<Boolean?> = data
 
-    fun insertToFs(username: String, dePassword: String, email: String) {
+    fun insertToFs(
+        username: String,
+        dePassword: String,
+        email: String,
+        name: String,
+        gender: Boolean
+    ) {
         viewModelScope.launch {
             val password = Security.encrypt(dePassword)
             val key = Security.key.toList()
             val condition: Boolean?
             withContext(Dispatchers.IO) {
                 condition = useCase.insertToFs(
-                    User(username, password, email, null, null, null, null, 2, key)
+                    User(username, password, email, name, null, null, gender, 2, key)
                 )
             }
             data.value = condition
@@ -27,6 +33,6 @@ class RegisViewModel(private val useCase: IUseCase) : ViewModel() {
     }
 
     fun login(username: String, password: String) =
-        useCase.login(User(username, password, "", null, null, null, null, 2, listOf()))
+        useCase.login(User(username, password, "", "", null, null, false, 2, listOf()))
             .asLiveData()
 }

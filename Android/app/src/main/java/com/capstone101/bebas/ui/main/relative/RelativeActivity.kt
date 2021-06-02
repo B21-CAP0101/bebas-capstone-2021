@@ -18,8 +18,8 @@ class RelativeActivity : AppCompatActivity() {
         binding = ActivityRelativeBinding.inflate(layoutInflater)
         setContentView(bind.root)
 
-        val test = User("rudy1609", "", "", null, null, null, null, 2, listOf())
-        val confirmTest = User("liong", "", "", null, null, null, null, 2, listOf())
+        val test = User("rudy1609", "", "", "", null, null, false, 2, listOf())
+        val confirmTest = User("liong", "", "", "", null, null, false, 2, listOf())
         viewModel.getRelative { relatives ->
             bind.invite.setOnClickListener {
                 viewModel.invite(relatives, test, true)

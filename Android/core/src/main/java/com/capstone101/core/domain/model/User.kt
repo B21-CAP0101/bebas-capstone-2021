@@ -8,10 +8,10 @@ data class User(
     val username: String,
     val password: String,
     val email: String,
-    val name: String? = null,
+    val name: String,
     val address: String? = null,
     val photoURL: String? = null,
-    val gender: Boolean? = null,
+    val gender: Boolean,
     val type: Int,
     val key: List<String>,
     var inDanger: Boolean = false
