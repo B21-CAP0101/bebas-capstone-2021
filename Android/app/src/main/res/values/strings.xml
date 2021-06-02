@@ -6,4 +6,5 @@
     <string name="female">Female</string>
     <string name="male">Male</string>
     <string name="next">next</string>
+    <string name="empty_text_search">add some relative</string>
 </resources>

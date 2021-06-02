@@ -52,7 +52,8 @@ object Function {
         }
     }
 
-    fun View.glide(url: String, imgView: ImageView, placeHolder: Int) {
+    fun View.glideGender(url: String, imgView: ImageView, gender: Boolean) {
+        val placeHolder = if (!gender) R.drawable.ic_male_avatar else R.drawable.ic_female_avatar
         Glide.with(this).setDefaultRequestOptions(
             RequestOptions()
                 .placeholder(placeHolder)
@@ -65,10 +66,11 @@ object Function {
     fun View.glideWithLoading(
         url: String,
         imgView: ImageView,
-        placeHolder: Int,
+        gender: Boolean,
         loading: View,
         allView: List<View>? = null
     ) {
+        val placeHolder = if (!gender) R.drawable.ic_male_avatar else R.drawable.ic_female_avatar
         Glide.with(this).setDefaultRequestOptions(
             RequestOptions()
                 .placeholder(placeHolder)
@@ -104,6 +106,12 @@ object Function {
             }
         }).transition(DrawableTransitionOptions.withCrossFade())
             .into(imgView)
+    }
+
+    fun List<View>.visibility(visible: Boolean) {
+        this.forEach { view ->
+            view.isVisible = visible
+        }
     }
 
     fun Context.createToast(message: String, duration: Int) {

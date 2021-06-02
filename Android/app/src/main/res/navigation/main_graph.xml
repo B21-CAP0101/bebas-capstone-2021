@@ -14,9 +14,6 @@
             android:id="@+id/action_homeFragment_to_relativeFragmentMain"
             app:destination="@id/relativeFragmentMain" />
         <action
-            android:id="@+id/action_homeFragment_to_detailDangerFragment"
-            app:destination="@id/detailDangerFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_detailDangerActivity"
             app:destination="@id/detailDangerActivity" />
     </fragment>
@@ -41,23 +38,25 @@
         android:id="@+id/relativeInvitingFragment"
         android:name="com.capstone101.bebas.ui.main.relative.RelativeInvitingFragment"
         android:label="RelativeInvitingFragment"
-        tools:layout="@layout/fragment_invitation" />
-    <fragment
-        android:id="@+id/detailDangerFragment"
-        android:name="com.capstone101.bebas.ui.main.detail.DetailDangerFragment"
-        android:label="DetailDangerFragment" >
-        <argument
-            android:name="user"
-            app:argType="com.capstone101.core.domain.model.User" />
+        tools:layout="@layout/fragment_invitation" >
+        <action
+            android:id="@+id/action_relativeInvitingFragment_to_relativeAddFragment"
+            app:destination="@id/relativeAddFragment" />
     </fragment>
     <activity
         android:id="@+id/detailDangerActivity"
         android:name="com.capstone101.bebas.ui.main.detail.DetailDangerActivity"
+        tools:layout="@layout/activity_detail_danger"
         android:label="DetailDangerActivity" >
         <argument
             android:name="user"
             app:argType="com.capstone101.core.domain.model.User" />
     </activity>
+    <fragment
+        tools:layout="@layout/fragment_add"
+        android:id="@+id/relativeAddFragment"
+        android:name="com.capstone101.bebas.ui.main.relative.RelativeAddFragment"
+        android:label="RelativeAddFragment" />
 
 
 </navigation>

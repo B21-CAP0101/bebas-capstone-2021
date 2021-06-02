@@ -6,10 +6,9 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.capstone101.core.R
 import com.capstone101.core.databinding.ModelPeopleInDangerBinding
 import com.capstone101.core.domain.model.User
-import com.capstone101.core.utils.Function.glideWithLoading
+import com.capstone101.core.utils.Function.glideGender
 
 class PeopleInDangerAdapter :
     RecyclerView.Adapter<PeopleInDangerAdapter.PeopleInDangerViewHolder>() {
@@ -43,12 +42,7 @@ class PeopleInDangerAdapter :
                     progressbar.isVisible = true
 
                     tvUsername.text = username
-                    itemView.glideWithLoading(
-                        photoURL ?: "",
-                        svProfile,
-                        if (!gender) R.drawable.ic_male_avatar else R.drawable.ic_female_avatar,
-                        progressbar, listOf(tvUsername, svProfile)
-                    )
+                    itemView.glideGender(photoURL ?: "", svProfile, gender)
                     itemView.setOnClickListener {
                         onItemClickListener?.let { click ->
                             click(this)

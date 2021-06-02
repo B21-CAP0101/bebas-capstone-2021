@@ -6,13 +6,12 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.capstone101.core.R
 import com.capstone101.core.databinding.ModelRelativeBinding
 import com.capstone101.core.domain.model.User
 import com.capstone101.core.utils.Constant.TYPE_INVITATION
 import com.capstone101.core.utils.Constant.TYPE_INVITED
 import com.capstone101.core.utils.Constant.TYPE_PURE
-import com.capstone101.core.utils.Function.glideWithLoading
+import com.capstone101.core.utils.Function.glideGender
 
 class RelativeAdapter(
     private val typeRelative: String,
@@ -38,22 +37,9 @@ class RelativeAdapter(
         fun bind(user: User) {
             bind.apply {
                 with(user) {
-                    tvName.isVisible = false
-                    tvUsername.isVisible = false
-                    layoutLoading.root.isVisible = true
-
-                    tvName.text = name ?: username
+                    tvName.text = name
                     tvUsername.text = username
-
-                    layoutLoading.tvName.text = name ?: username
-                    layoutLoading.tvUsername.text = username
-
-                    itemView.glideWithLoading(
-                        photoURL ?: "",
-                        svProfile,
-                        if (!gender) R.drawable.ic_male_avatar else R.drawable.ic_female_avatar,
-                        layoutLoading.root, listOf(tvName, tvUsername, svProfile)
-                    )
+                    itemView.glideGender(photoURL ?: "", svProfile, gender)
 
                     when (typeRelative) {
                         TYPE_INVITATION -> {
@@ -61,10 +47,8 @@ class RelativeAdapter(
 
                             tbAdd.setOnCheckedChangeListener { _, isChecked ->
                                 if (isChecked) {
-                                    // DONE : TAMBAHKAN MENJADI TEMAN/RELATIVE
                                     addCancelCallback(this, true)
                                 } else {
-                                    // DONE : MEMBATALAKAN PERMINTAAN PERTEMANAN
                                     addCancelCallback(this, false)
                                 }
                             }
@@ -77,12 +61,10 @@ class RelativeAdapter(
 
 
                             btnConfirm.setOnClickListener {
-                                // DONE: BUAT CONFIRMASI UNTUK MENERIMA USER YANG MELAKUKAN INVITING
                                 confirmDenyCallback(this, true)
                             }
 
                             btnCancel.setOnClickListener {
-                                // DONE: HAPUS USER YANG MELAKUKAN INVITING
                                 confirmDenyCallback(this, false)
                             }
 

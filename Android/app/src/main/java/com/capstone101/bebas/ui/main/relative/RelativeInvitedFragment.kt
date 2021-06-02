@@ -41,8 +41,6 @@ class RelativeInvitedFragment : Fragment(R.layout.fragment_invited) {
     }
 
     private fun subscribeToViewModel() {
-        // DONE
-        // masukin ke relativeAdapter.differ.submitList({data invited})
         viewModel.getRelative {
             setupAdapters(it)
             setupRecyclerView()

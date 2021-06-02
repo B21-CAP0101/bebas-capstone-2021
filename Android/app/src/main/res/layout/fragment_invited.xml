@@ -32,6 +32,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRelative"
         android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
         android:layout_height="0dp"
         android:paddingHorizontal="20dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

@@ -13,6 +13,7 @@ import com.capstone101.core.utils.Function.createSnackBar
 import com.capstone101.core.utils.Function.hideKeyboard
 import com.capstone101.core.utils.Function.setOnPressEnter
 import com.capstone101.core.utils.Function.showKeyboard
+import com.capstone101.core.utils.Function.visibility
 import com.capstone101.core.utils.SessionManager
 import org.koin.android.ext.android.inject
 import java.util.*
@@ -46,17 +47,17 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
     }
 
-     private fun handleBackPress(){
-         with(bind) {
-             if (btnRegisterGo.text.toString().lowercase(Locale.getDefault()) == "register"
-             ) {
-                 listOf(etUsername, etPassword, etEmail).visibility(true)
-                 listOf(layout2,etName).visibility(false)
-             } else {
-                 findNavController().popBackStack()
-             }
-         }
-     }
+    private fun handleBackPress() {
+        with(bind) {
+            if (btnRegisterGo.text.toString().lowercase(Locale.getDefault()) == "register"
+            ) {
+                listOf(etUsername, etPassword, etEmail).visibility(true)
+                listOf(layout2, etName).visibility(false)
+            } else {
+                findNavController().popBackStack()
+            }
+        }
+    }
 
     // TODO: Coba periksa apakah pendaftaran berjalan dengan baik
     private fun setupActionRegister() {
@@ -71,7 +72,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         "next" -> {
                             if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
                                 listOf(etUsername, etPassword, etEmail).visibility(false)
-                                listOf(layout2,etName).visibility(true)
+                                listOf(layout2, etName).visibility(true)
                                 btnRegisterGo.text = StringBuilder("register")
                             } else {
                                 when {
@@ -104,12 +105,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
     }
 
-
-    private fun List<View>.visibility(isVisible: Boolean) {
-        this.forEach { view ->
-            view.isVisible = isVisible
-        }
-    }
 
     private fun subscribeToViewModel() {
         viewModel.condition.observe(viewLifecycleOwner) { result ->
@@ -156,7 +151,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun handleError(message: String) {
         with(bind) {
             listOf(etUsername, etPassword, etEmail).visibility(true)
-            listOf(layout2,etName).visibility(false)
+            listOf(layout2, etName).visibility(false)
 
             etEmail.text.clear()
             etPassword.text.clear()

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/bgBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_left_arrow">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etQuery"
+                style="@style/mediumText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="enter username"
+                android:inputType="textPersonName"
+                android:lines="1"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white_20off"
+                android:textCursorDrawable="@drawable/custome_cursor_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ibSearch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <requestFocus />
+            </EditText>
+
+            <ImageButton
+                android:id="@+id/ibSearch"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/ripple_for_image_btn_50dp"
+                android:contentDescription="@string/search_relative"
+                android:src="@drawable/ic_search"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/svPhotoProfile"
+        style="@style/photoProfile.user"
+        android:layout_marginTop="50dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:strokeColor="@color/pasif_color"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvName"
+        style="@style/mediumText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/svPhotoProfile"
+        app:layout_constraintStart_toStartOf="@+id/svPhotoProfile"
+        app:layout_constraintTop_toBottomOf="@+id/svPhotoProfile"
+        tools:text="@tools:sample/first_names" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        style="@style/normalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/svPhotoProfile"
+        app:layout_constraintStart_toStartOf="@+id/svPhotoProfile"
+        app:layout_constraintTop_toBottomOf="@+id/tvName"
+        tools:text="@tools:sample/last_names" />
+
+    <androidx.appcompat.widget.AppCompatToggleButton
+        android:id="@+id/toggleAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/btn_add_toggle"
+        android:padding="0dp"
+        android:textColor="@color/white"
+        android:textOff="add"
+        android:textOn="cancel"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/svPhotoProfile"
+        app:layout_constraintHorizontal_bias="0.416"
+        app:layout_constraintStart_toStartOf="@+id/svPhotoProfile"
+        app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
+
+    <ImageView
+        android:id="@+id/illustration"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/ic_empty_invitation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <TextView
+        android:id="@+id/tvTextIllustration"
+        style="@style/mediumText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/empty_text_search"
+        app:layout_constraintEnd_toEndOf="@+id/illustration"
+        app:layout_constraintStart_toStartOf="@+id/illustration"
+        app:layout_constraintTop_toBottomOf="@+id/illustration" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

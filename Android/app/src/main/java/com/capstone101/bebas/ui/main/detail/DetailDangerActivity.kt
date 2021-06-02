@@ -6,7 +6,8 @@ import androidx.navigation.navArgs
 import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.ActivityDetailDangerBinding
 import com.capstone101.core.domain.model.Danger
-import com.capstone101.core.utils.Function.glide
+import com.capstone101.core.utils.Function.glideGender
+
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -37,12 +38,12 @@ class DetailDangerActivity : AppCompatActivity(), OnMapReadyCallback {
         bind?.apply {
             with(danger) {
                 with(args.user) {
-                    tvName.text = name ?: username
+                    tvName.text = name
                     tvUsername.text = username
-                    this@apply.root.glide(
+                    this@apply.root.glideGender(
                         photoURL ?: "",
                         svProfile,
-                        if (gender == false) R.drawable.ic_male_avatar else R.drawable.ic_female_avatar
+                        gender
                     )
                 }
                 audioPlayer.setAudioTarget(record)

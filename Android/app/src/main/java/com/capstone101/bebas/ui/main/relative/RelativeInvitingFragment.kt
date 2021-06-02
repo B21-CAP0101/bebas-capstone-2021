@@ -44,8 +44,6 @@ class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
 
 
     private fun subscribeToViewModel() {
-        // DONE GET DATA INVITATION
-        // masukin ke relativeAdapter.differ.submitList({data INVITATION})
         viewModel.getRelative {
             setupAdapters(it)
             setupRecyclerView()
@@ -54,10 +52,6 @@ class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
                     relativeAdapter.differ.submitList(users)
                 }
         }
-        // TODO: BRAM INI SEARCH USER DARI USERNAMENYA YA
-//        viewModel.searchUser("USERNAME").observe(viewLifecycleOwner) {
-//
-//        }
     }
 
     private fun setupToolbar() {
@@ -66,7 +60,7 @@ class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
 
         with(bind) {
             ibSearch.setOnClickListener {
-
+                findNavController().navigate(RelativeInvitingFragmentDirections.actionRelativeInvitingFragmentToRelativeAddFragment())
             }
         }
     }

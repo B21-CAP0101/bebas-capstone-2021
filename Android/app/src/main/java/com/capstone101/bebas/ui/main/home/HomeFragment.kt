@@ -199,12 +199,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setupUI() {
         with(bind) {
             MapVal.user?.apply {
-                cardUser.tvName.text = name ?: username
+                cardUser.tvName.text = name
                 cardUser.tvUsername.text = username
                 requireView().glideWithLoading(
                     photoURL ?: "",
                     cardUser.svProfile,
-                    if (!gender) R.drawable.ic_male_avatar else R.drawable.ic_female_avatar,
+                  gender,
                     layoutLoading.root
                 )
             }
