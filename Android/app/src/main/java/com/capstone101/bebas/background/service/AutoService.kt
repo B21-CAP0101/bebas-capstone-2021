@@ -82,7 +82,12 @@ class AutoService : LifecycleService() {
                                                     danger ?: DangerFire(null)
                                                 )
                                             }
-                                    }
+                                    } else if (user.username == it.username)
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Notification has sent",
+                                            Toast.LENGTH_LONG
+                                        ).show()
                                 }
                             }
                         mainViewModel.getUser.removeObservers(this)
