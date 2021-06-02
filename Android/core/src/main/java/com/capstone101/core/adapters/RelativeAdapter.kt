@@ -14,7 +14,11 @@ import com.capstone101.core.utils.Constant.TYPE_INVITED
 import com.capstone101.core.utils.Constant.TYPE_PURE
 import com.capstone101.core.utils.Function.glideWithLoading
 
-class RelativeAdapter(private val typeRelative: String) :
+class RelativeAdapter(
+    private val typeRelative: String,
+    private val addCancelCallback: (User, Boolean) -> Unit,
+    private val confirmDenyCallback: (User, Boolean) -> Unit
+) :
     RecyclerView.Adapter<RelativeAdapter.RelativeAdapterViewHolder>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<User>() {
@@ -57,9 +61,11 @@ class RelativeAdapter(private val typeRelative: String) :
 
                             tbAdd.setOnCheckedChangeListener { _, isChecked ->
                                 if (isChecked) {
-                                    // TODO : TAMBAHKAN MENJADI TEMAN/RELATIVE
+                                    // DONE : TAMBAHKAN MENJADI TEMAN/RELATIVE
+                                    addCancelCallback(this, true)
                                 } else {
-                                    // TODO : MEMBATALAKAN PERMINTAAN PERTEMANAN
+                                    // DONE : MEMBATALAKAN PERMINTAAN PERTEMANAN
+                                    addCancelCallback(this, false)
                                 }
                             }
                         }
@@ -71,11 +77,13 @@ class RelativeAdapter(private val typeRelative: String) :
 
 
                             btnConfirm.setOnClickListener {
-                                // TODO: BUAT CONFIRMASI UNTUK MENERIMA USER YANG MELAKUKAN INVITING
+                                // DONE: BUAT CONFIRMASI UNTUK MENERIMA USER YANG MELAKUKAN INVITING
+                                confirmDenyCallback(this, true)
                             }
 
                             btnCancel.setOnClickListener {
-                                // TODO: HAPUS USER YANG MELAKUKAN IVITING
+                                // DONE: HAPUS USER YANG MELAKUKAN INVITING
+                                confirmDenyCallback(this, false)
                             }
 
                         }

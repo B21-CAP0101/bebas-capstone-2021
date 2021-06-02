@@ -9,6 +9,9 @@ import com.capstone101.core.domain.usecase.IUseCase
 class RelativeViewModel(private val useCase: IUseCase) : ViewModel() {
     fun getRelative(callback: (Relatives) -> Unit) = useCase.getRelative { callback(it) }
 
+    fun getUserInfoByRelative(relatives: Relatives, type: String) =
+        useCase.getUserInfoForRelatives(relatives, type).asLiveData()
+
     fun searchUser(username: String) = useCase.getUserSearch(username).asLiveData()
 
     fun invite(relatives: Relatives, target: User, condition: Boolean) =

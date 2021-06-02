@@ -32,7 +32,6 @@
             android:name=".background.service.AutoService"
             android:enabled="true" />
 
-        <activity android:name=".ui.main.relative.RelativeActivity" />
         <activity
             android:name=".ui.welcome.WelcomeActivity"
             android:configChanges="orientation"

@@ -39,11 +39,8 @@ object Security {
 
     private fun setSecretKey(keyS: ByteArray) {
         key = Array(keyS.size) { it.toString() }
-        for (i in keyS.indices) {
-            print("${keyS[i]} ")
+        for (i in keyS.indices)
             key[i] = keyS[i].toString()
-        }
-        print(" TEST AWAL")
     }
 
     fun decrypt(data: String, key: Array<String>): String {

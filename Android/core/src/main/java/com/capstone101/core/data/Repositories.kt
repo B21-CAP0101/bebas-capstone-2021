@@ -68,8 +68,8 @@ class Repositories(private val db: DBGetData, private val network: NetworkGetDat
 
     override suspend fun updateUser(user: User) = db.update(MapVal.userDomToEnt(user))
 
-    override fun getUserInfoForRelatives(relatives: Relatives): Flow<List<User>> =
-        network.getUserInfoForRelatives(MapVal.relativesDomToFire(relatives))
+    override fun getUserInfoForRelatives(relatives: Relatives, type: String): Flow<List<User>> =
+        network.getUserInfoForRelatives(MapVal.relativesDomToFire(relatives), type)
             .map { it.map { user -> MapVal.userFireToDom(user) } }
 
     override fun getUserSearch(username: String): Flow<List<User>> =
