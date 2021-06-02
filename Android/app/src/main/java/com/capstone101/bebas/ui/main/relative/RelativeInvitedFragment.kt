@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.capstone101.bebas.R
@@ -47,8 +48,13 @@ class RelativeInvitedFragment : Fragment(R.layout.fragment_invited) {
             viewModel.getUserInfoByRelative(it, Relatives.INVITED)
                 .observe(viewLifecycleOwner) { users ->
                     relativeAdapter.differ.submitList(users)
+                    handleEmptyData()
                 }
         }
+    }
+
+    private fun handleEmptyData() {
+        bind.rvRelative.isVisible = relativeAdapter.differ.currentList.size > 0
     }
 
     private fun setupToolbar() {
