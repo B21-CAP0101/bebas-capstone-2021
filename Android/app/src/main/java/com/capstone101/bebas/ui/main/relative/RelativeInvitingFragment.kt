@@ -54,6 +54,10 @@ class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
                     relativeAdapter.differ.submitList(users)
                 }
         }
+        // TODO: BRAM INI SEARCH USER DARI USERNAMENYA YA
+//        viewModel.searchUser("USERNAME").observe(viewLifecycleOwner) {
+//
+//        }
     }
 
     private fun setupToolbar() {
