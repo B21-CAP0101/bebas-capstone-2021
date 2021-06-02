@@ -79,7 +79,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         setupAdapters()
         handleLoading()
         permissionCheck()
@@ -163,11 +162,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewModel.getUser.observe(viewLifecycleOwner) { user ->
             if (user != null) {
                 MapVal.user = user.apply { user.inDanger = false }
+                println(user)
                 viewModel.updateUserStatus()
                 setupUI()
                 viewModel.getRelative { relatives ->
                     relative = relatives
-
 
                     if (relatives.pure.isEmpty()) {
                         bind.rvRelative.isVisible = false
@@ -205,7 +204,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireView().glideWithLoading(
                     photoURL ?: "",
                     cardUser.svProfile,
-                    if (gender == false) R.drawable.ic_female_avatar else R.drawable.ic_male_avatar,
+                    if (!gender) R.drawable.ic_male_avatar else R.drawable.ic_female_avatar,
                     layoutLoading.root
                 )
             }

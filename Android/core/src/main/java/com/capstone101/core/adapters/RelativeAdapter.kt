@@ -51,7 +51,7 @@ class RelativeAdapter(
                     itemView.glideWithLoading(
                         photoURL ?: "",
                         svProfile,
-                        if (gender == false) R.drawable.ic_female_avatar else R.drawable.ic_male_avatar,
+                        if (!gender) R.drawable.ic_male_avatar else R.drawable.ic_female_avatar,
                         layoutLoading.root, listOf(tvName, tvUsername, svProfile)
                     )
 
