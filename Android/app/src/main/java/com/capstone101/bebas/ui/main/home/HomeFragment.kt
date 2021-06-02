@@ -79,6 +79,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         setupAdapters()
         handleLoading()
         permissionCheck()
@@ -162,11 +163,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewModel.getUser.observe(viewLifecycleOwner) { user ->
             if (user != null) {
                 MapVal.user = user.apply { user.inDanger = false }
-                println(user)
                 viewModel.updateUserStatus()
                 setupUI()
                 viewModel.getRelative { relatives ->
                     relative = relatives
+
 
                     if (relatives.pure.isEmpty()) {
                         bind.rvRelative.isVisible = false
@@ -204,7 +205,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireView().glideWithLoading(
                     photoURL ?: "",
                     cardUser.svProfile,
-                    if (!gender) R.drawable.ic_male_avatar else R.drawable.ic_female_avatar,
+                    if (gender == false) R.drawable.ic_female_avatar else R.drawable.ic_male_avatar,
                     layoutLoading.root
                 )
             }
@@ -288,7 +289,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             requireContext().createToast("sending record", 1000)
             bind.btnPanic.text = resources.getString(R.string.txt_panic_btn)
             startPulse()
-            viewModel.uploadRecord(data, "$fileName.wav").observe(viewLifecycleOwner) {
+            viewModel.uploadRecord(data, "$fileName.mp3").observe(viewLifecycleOwner) {
                 if (it != null) {
                     danger.record = it
                     viewModel.setCondition.value =
@@ -337,7 +338,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val formatter = SimpleDateFormat("dd-MM-yyyy-HH-mm", Locale.getDefault())
         fileName = formatter.format(date)
 
-        data = "$folder/$fileName.wav"
+        data = "$folder/$fileName.mp3"
 
         danger.id = fileName
         danger.time = Timestamp(date)
