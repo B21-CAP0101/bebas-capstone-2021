@@ -21,5 +21,8 @@ In this application, we seperated to 2 modules, app and core:
 If you want to change with your own Firebase, please replace [google-services.json](https://github.com/B21-CAP0101/bebas-capstone-2021/blob/master/Android/core/google-services.json) file in [this directory](https://github.com/B21-CAP0101/bebas-capstone-2021/tree/master/Android/core). Make sure you add application to Firebase to got [your own google-services.json file](https://support.google.com/firebase/answer/7015592?hl=en)  
 
 ### Cloud Computing
+1. To replicate cloud service, just copy command and paste to google cloud command line.
+2. Don’t forget to change the service name with your own service name.
 
 ### Machine Learning
+To replicate our model, simply copy and paste from our [notebook](https://github.com/B21-CAP0101/bebas-capstone-2021/blob/master/Machine%20Learning/training_custom_audio_model_in_python.ipynb).
