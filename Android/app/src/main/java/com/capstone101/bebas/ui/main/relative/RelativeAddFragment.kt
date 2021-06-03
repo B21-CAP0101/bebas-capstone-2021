@@ -1,8 +1,10 @@
 package com.capstone101.bebas.ui.main.relative
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -19,14 +21,22 @@ import org.koin.android.ext.android.inject
 
 class RelativeAddFragment : Fragment(R.layout.fragment_add) {
     private var _bind: FragmentAddBinding? = null
-    private val bind get() = _bind!!
+    private val bind get() = _bind
     private val viewModel: RelativeViewModel by inject()
 
     private val args: RelativeAddFragmentArgs by navArgs()
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _bind = FragmentAddBinding.inflate(layoutInflater)
+        return _bind?.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _bind = FragmentAddBinding.bind(view)
 
         subscribeToObserver()
         setupToolbar()
@@ -39,24 +49,26 @@ class RelativeAddFragment : Fragment(R.layout.fragment_add) {
     )
 
     private fun subscribeToObserver() {
-        with(bind) {
+        bind?.apply {
             ibSearch.setOnClickListener {
-                viewModel.searchUser(etQuery.text.toString()).observe(viewLifecycleOwner) { users ->
-                    if (users.isNotEmpty()) {
-                        relatives = args.relative ?: Relatives(
-                            MapVal.user?.username ?: "", listOf(), listOf(), listOf()
-                        )
-                        if (users[0].username != MapVal.user?.username && (!relatives.pure.contains(
-                                users[0].username
-                            )) && (!relatives.invited.contains(
-                                users[0].username
-                            ))
-                        ) {
-                            user = users[0]
-                            toggleAdd.isChecked = relatives.inviting.contains(user?.username)
-                            setupUI(users[0])
+                parentFragment?.viewLifecycleOwner?.let { it1 ->
+                    viewModel.searchUser(etQuery.text.toString()).observe(it1) { users ->
+                        if (users.isNotEmpty()) {
+                            relatives = args.relative ?: Relatives(
+                                MapVal.user?.username ?: "", listOf(), listOf(), listOf()
+                            )
+                            if (users[0].username != MapVal.user?.username && (!relatives.pure.contains(
+                                    users[0].username
+                                )) && (!relatives.invited.contains(
+                                    users[0].username
+                                ))
+                            ) {
+                                user = users[0]
+                                toggleAdd.isChecked = relatives.inviting.contains(user?.username)
+                                setupUI(users[0])
+                            } else toastEmpty()
                         } else toastEmpty()
-                    } else toastEmpty()
+                    }
                 }
             }
             toggleAdd.setOnClickListener {
@@ -74,7 +86,7 @@ class RelativeAddFragment : Fragment(R.layout.fragment_add) {
     }
 
     private fun setupToolbar() {
-        (activity as AppCompatActivity?)!!.setSupportActionBar(bind.toolbar)
+        (activity as AppCompatActivity?)!!.setSupportActionBar(bind?.toolbar)
         (activity as AppCompatActivity?)!!.supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -90,7 +102,7 @@ class RelativeAddFragment : Fragment(R.layout.fragment_add) {
 
 
     private fun setupUI(user: User?) {
-        with(bind) {
+        bind?.apply {
             user?.apply {
                 listOf(tvTextIllustration, illustration).visibility(false)
                 listOf(tvName, svPhotoProfile, tvUsername, toggleAdd).visibility(true)

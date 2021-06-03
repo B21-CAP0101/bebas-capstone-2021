@@ -32,4 +32,6 @@
     <string name="titleDangerHome">People In danger</string>
     <string name="see_all">see all</string>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyB5ILbLugByYqa6FSNSBrOE7_7i6Wb8FiI</string>
+    <string name="des_btn_confirm">confirm</string>
+    <string name="des_btn_cancel">cancel</string>
 </resources>

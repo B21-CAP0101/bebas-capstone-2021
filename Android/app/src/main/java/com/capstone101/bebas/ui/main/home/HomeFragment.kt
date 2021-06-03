@@ -30,6 +30,7 @@ import com.capstone101.core.data.Status
 import com.capstone101.core.domain.model.Danger
 import com.capstone101.core.domain.model.Relatives
 import com.capstone101.core.domain.model.User
+import com.capstone101.core.utils.Constant
 import com.capstone101.core.utils.Function.createToast
 import com.capstone101.core.utils.Function.glideWithLoading
 import com.capstone101.core.utils.MapVal
@@ -120,7 +121,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
 
     private fun setupAdapters() {
-        relativeAdapter = RelativeAdapter("pure", { _, _ -> }) { _, _ -> }
+        relativeAdapter = RelativeAdapter(Constant.TYPE_PURE)
         peopleInDangerAdapter = PeopleInDangerAdapter()
 
         peopleInDangerAdapter.setOnItemClickListener { user ->
@@ -203,7 +204,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireView().glideWithLoading(
                     photoURL ?: "",
                     cardUser.svProfile,
-                  gender,
+                    gender,
                     layoutLoading.root
                 )
             }

@@ -17,7 +17,8 @@ import com.capstone101.core.utils.Constant
 import org.koin.android.ext.android.inject
 
 class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
-    private lateinit var bind: FragmentInvitationBinding
+    private var _bind: FragmentInvitationBinding? = null
+    private val bind get() = _bind
     private lateinit var relativeAdapter: RelativeAdapter
 
     private val viewModel: RelativeViewModel by inject()
@@ -26,64 +27,79 @@ class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_invitation, container, false)
+    ): View? {
+        _bind = FragmentInvitationBinding.inflate(layoutInflater)
+        return _bind?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        bind = FragmentInvitationBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
 
+        setupAdapters()
         subscribeToViewModel()
         setupToolbar()
         setHasOptionsMenu(true)
     }
 
-    private fun setupAdapters(relatives: Relatives) {
-        relativeAdapter = RelativeAdapter(Constant.TYPE_INVITATION, { user, condition ->
-            viewModel.invite(relatives, user, condition)
-        }) { user, condition -> viewModel.confirm(relatives, user, condition) }
+    private fun setupAdapters() {
+        relativeAdapter = RelativeAdapter(Constant.TYPE_INVITATION)
+        setupRecyclerView()
     }
 
     private fun setupRecyclerView() {
-        with(bind) {
-            rvRelative.adapter = relativeAdapter
+        bind?.rvRelative?.adapter = relativeAdapter
+
+    }
+
+    private fun subscribeToViewModel() {
+        viewModel.getRelative { relative ->
+            setupNavigateToAddFragment(relative)
+
+            relativeAdapter.setAddCancelCallBack { user, condition ->
+                viewModel.invite(relative, user, condition)
+
+                setupAdapters()
+            }
+
+            relativeAdapter.setConfirmDenyCallBack { user, condition ->
+                viewModel.confirm(relative, user, condition)
+
+                setupAdapters()
+            }
+            relativeAdapter.setAddCancelCallBack { user, condition ->
+                viewModel.invite(relative, user, condition)
+
+                setupAdapters()
+            }
+
+            parentFragment?.viewLifecycleOwner?.let { it1 ->
+                viewModel.getUserInfoByRelative(relative, Relatives.INVITING)
+                    .observe(it1) { users ->
+                        relativeAdapter.differ.submitList(users)
+                        handleEmptyData()
+                    }
+            }
         }
     }
 
-    private var relative: Relatives? = null
-    private fun subscribeToViewModel() {
-        viewModel.getRelative {
-            relative = it
-            setupAdapters(it)
-            setupRecyclerView()
-            viewModel.getUserInfoByRelative(it, Relatives.INVITING)
-                .observe(requireActivity()) { users ->
-                    relativeAdapter.differ.submitList(users)
-                    handleEmptyData()
-                }
+    private fun setupNavigateToAddFragment(relative: Relatives) {
+        bind?.ibSearch?.setOnClickListener {
+            findNavController().navigate(
+                RelativeInvitingFragmentDirections.actionRelativeInvitingFragmentToRelativeAddFragment(
+                    relative
+                )
+            )
         }
     }
+
 
     private fun handleEmptyData() {
-        bind.rvRelative.isVisible = relativeAdapter.differ.currentList.size > 0
+        bind?.rvRelative?.isVisible = relativeAdapter.differ.currentList.size > 0
     }
 
     private fun setupToolbar() {
-        (activity as AppCompatActivity?)!!.setSupportActionBar(bind.toolbar)
+        (activity as AppCompatActivity?)!!.setSupportActionBar(bind?.toolbar)
         (activity as AppCompatActivity?)!!.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        with(bind) {
-            ibSearch.setOnClickListener {
-                if (relative != null) {
-                    val navigate =
-                        RelativeInvitingFragmentDirections.actionRelativeInvitingFragmentToRelativeAddFragment(
-                            relative
-                        )
-                    findNavController().navigate(navigate)
-                }
-            }
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -94,5 +110,10 @@ class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        _bind = null
+        super.onDestroy()
     }
 }

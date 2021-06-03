@@ -2,7 +2,6 @@ package com.capstone101.core.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -37,10 +36,6 @@ class PeopleInDangerAdapter :
         fun bind(user: User) {
             bind.apply {
                 with(user) {
-                    tvUsername.isVisible = false
-                    svProfile.isVisible = false
-                    progressbar.isVisible = true
-
                     tvUsername.text = username
                     itemView.glideGender(photoURL ?: "", svProfile, gender)
                     itemView.setOnClickListener {
@@ -48,9 +43,6 @@ class PeopleInDangerAdapter :
                             click(this)
                         }
                     }
-                    progressbar.isVisible = false
-                    tvUsername.isVisible = true
-                    svProfile.isVisible = true
                 }
             }
         }

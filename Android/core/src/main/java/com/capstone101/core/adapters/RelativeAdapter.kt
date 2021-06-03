@@ -15,8 +15,6 @@ import com.capstone101.core.utils.Function.glideGender
 
 class RelativeAdapter(
     private val typeRelative: String,
-    private val addCancelCallback: (User, Boolean) -> Unit,
-    private val confirmDenyCallback: (User, Boolean) -> Unit
 ) :
     RecyclerView.Adapter<RelativeAdapter.RelativeAdapterViewHolder>() {
 
@@ -32,6 +30,19 @@ class RelativeAdapter(
 
     val differ = AsyncListDiffer(this, differCallback)
 
+
+    private var addCancelCallback: ((User, Boolean) -> Unit)? = null
+
+    private var confirmDenyCallback: ((User, Boolean) -> Unit)? = null
+
+    fun setAddCancelCallBack(listener: (User, Boolean) -> Unit) {
+        addCancelCallback = listener
+    }
+
+    fun setConfirmDenyCallBack(listener: (User, Boolean) -> Unit) {
+        confirmDenyCallback = listener
+    }
+
     inner class RelativeAdapterViewHolder(private val bind: ModelRelativeBinding) :
         RecyclerView.ViewHolder(bind.root) {
         fun bind(user: User) {
@@ -46,7 +57,7 @@ class RelativeAdapter(
                             btnCancel.isVisible = true
 
                             btnCancel.setOnClickListener {
-                                addCancelCallback(this, false)
+                                addCancelCallback?.let { it1 -> it1(this,false) }
                             }
                         }
 
@@ -57,11 +68,11 @@ class RelativeAdapter(
 
 
                             btnConfirm.setOnClickListener {
-                                confirmDenyCallback(this, true)
+                                confirmDenyCallback?.let { it1 -> it1(this, true) }
                             }
 
                             btnCancel.setOnClickListener {
-                                confirmDenyCallback(this, false)
+                                confirmDenyCallback?.let { it1 -> it1(this, false) }
                             }
 
                         }

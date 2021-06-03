@@ -24,18 +24,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/svProfile"
         tools:text="@tools:sample/first_names" />
-
-    <com.tuyenmonkey.mkloader.MKLoader
-        android:id="@+id/progressbar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:mk_color="@color/bgBlue"
-        app:mk_type="TwinFishesSpinner" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

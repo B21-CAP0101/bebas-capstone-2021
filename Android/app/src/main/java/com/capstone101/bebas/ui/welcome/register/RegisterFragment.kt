@@ -53,6 +53,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             ) {
                 listOf(etUsername, etPassword, etEmail).visibility(true)
                 listOf(layout2, etName).visibility(false)
+                btnRegisterGo.text = StringBuilder("next")
             } else {
                 findNavController().popBackStack()
             }
