@@ -7,4 +7,5 @@
     <string name="male">Male</string>
     <string name="next">next</string>
     <string name="empty_text_search">add some relative</string>
+    <string name="des_btn_copy">copy username</string>
 </resources>
