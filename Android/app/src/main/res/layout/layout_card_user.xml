@@ -19,12 +19,14 @@
     <TextView
         android:id="@+id/tvName"
         style="@style/mediumText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
+        android:ellipsize="end"
         android:textColor="@color/white"
         android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@+id/btnCopy"
         app:layout_constraintStart_toEndOf="@+id/svProfile"
         app:layout_constraintTop_toTopOf="@+id/svProfile"
         tools:text="@tools:sample/first_names" />
@@ -32,9 +34,11 @@
     <TextView
         android:id="@+id/tvUsername"
         style="@style/normalText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:textColor="@color/white_20off"
+        app:layout_constraintEnd_toEndOf="@+id/tvName"
         app:layout_constraintStart_toStartOf="@+id/tvName"
         app:layout_constraintTop_toBottomOf="@+id/tvName"
         tools:text="@tools:sample/last_names" />
@@ -47,5 +51,6 @@
         android:src="@drawable/ic_clipboard"
         app:layout_constraintBottom_toBottomOf="@+id/tvUsername"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/des_btn_copy" />
 </androidx.constraintlayout.widget.ConstraintLayout>
