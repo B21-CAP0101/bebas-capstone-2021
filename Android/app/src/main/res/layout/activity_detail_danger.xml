@@ -50,13 +50,23 @@
             app:layout_constraintTop_toBottomOf="@+id/tvName"
             tools:text="@tools:sample/last_names" />
 
+        <TextView
+            android:id="@+id/dangerType"
+            style="@style/smallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/danger_type"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/tvUsername"
+            app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
+
         <com.rygelouv.audiosensei.player.AudioSenseiPlayerView
             android:id="@+id/audio_player"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/svProfile" />
+            app:layout_constraintTop_toBottomOf="@+id/dangerType" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"

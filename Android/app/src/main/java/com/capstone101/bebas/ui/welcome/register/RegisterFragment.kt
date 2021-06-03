@@ -60,7 +60,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
     }
 
-    // TODO REGIS
     private fun setupActionRegister() {
         with(bind) {
             btnRegisterGo.apply {

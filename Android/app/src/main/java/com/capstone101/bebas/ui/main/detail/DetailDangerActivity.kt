@@ -55,10 +55,18 @@ class DetailDangerActivity : AppCompatActivity(), OnMapReadyCallback {
         viewModel.getLatestDanger(args.user).observe(this) { danger ->
             setupUI(danger)
             googleMap?.apply {
+                val type = when (danger.type) {
+                    0 -> "BEGAL"
+                    1 -> "RAMPOK"
+                    2 -> "KDRT"
+                    else -> "Unidentified"
+                }
+                bind?.dangerType?.text = applicationContext.getString(R.string.danger_type, type)
                 danger.place?.apply {
                     val loc = LatLng(latitude, longitude)
                     addMarker(
-                        MarkerOptions().position(loc).title("${args.user.username} Location")
+                        MarkerOptions().position(loc)
+                            .title("${args.user.username} Location")
                     )
                     moveCamera(
                         CameraUpdateFactory.newLatLng(loc)
