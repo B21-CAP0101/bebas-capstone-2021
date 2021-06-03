@@ -70,7 +70,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-
         bind = FragmentHomeBinding.inflate(inflater, container, false)
         return bind.root
     }
@@ -176,7 +175,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         bind.tvSeeAll.text = StringBuilder("more")
                     }
                     viewModel.getUserInfoByRelative(relatives)
-                        .observe(viewLifecycleOwner) { pureUser ->
+                        .observe(requireActivity()) { pureUser ->
                             relativeAdapter.differ.submitList(pureUser.take(10))
                         }
                     viewModel.checkInDanger(inDangerCallback)

@@ -59,7 +59,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
     }
 
-    // TODO: Coba periksa apakah pendaftaran berjalan dengan baik
+    // TODO REGIS
     private fun setupActionRegister() {
         with(bind) {
             btnRegisterGo.apply {

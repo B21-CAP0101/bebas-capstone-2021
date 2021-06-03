@@ -1,8 +1,10 @@
 package com.capstone101.bebas.ui.main.relative
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -20,10 +22,17 @@ class RelativeFragmentMain : Fragment(R.layout.fragment_main_relative) {
     private val viewModel: MainViewModel by inject()
     private lateinit var relativeAdapter: RelativeAdapter
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _bind = FragmentMainRelativeBinding.bind(view)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return inflater.inflate(R.layout.fragment_main_relative, container, false)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        _bind = FragmentMainRelativeBinding.bind(view)
+        super.onViewCreated(view, savedInstanceState)
         setupAdapters()
         setupRecyclerView()
         subscribeToViewModel()
@@ -45,7 +54,7 @@ class RelativeFragmentMain : Fragment(R.layout.fragment_main_relative) {
     private fun subscribeToViewModel() {
         viewModel.getRelative { relatives ->
             viewModel.getUserInfoByRelative(relatives)
-                .observe(viewLifecycleOwner) { pureUser ->
+                .observe(requireActivity()) { pureUser ->
                     relativeAdapter.differ.submitList(pureUser)
                     handleEmptyData()
                 }

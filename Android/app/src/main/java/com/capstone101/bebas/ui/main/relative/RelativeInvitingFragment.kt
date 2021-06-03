@@ -1,8 +1,10 @@
 package com.capstone101.bebas.ui.main.relative
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -15,16 +17,22 @@ import com.capstone101.core.utils.Constant
 import org.koin.android.ext.android.inject
 
 class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
-    private var _bind: FragmentInvitationBinding? = null
-    private val bind get() = _bind!!
+    private lateinit var bind: FragmentInvitationBinding
     private lateinit var relativeAdapter: RelativeAdapter
 
     private val viewModel: RelativeViewModel by inject()
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return inflater.inflate(R.layout.fragment_invitation, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        bind = FragmentInvitationBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
-        _bind = FragmentInvitationBinding.bind(view)
 
         subscribeToViewModel()
         setupToolbar()
@@ -32,7 +40,7 @@ class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
     }
 
     private fun setupAdapters(relatives: Relatives) {
-        relativeAdapter = RelativeAdapter(Constant.TYPE_INVITED, { user, condition ->
+        relativeAdapter = RelativeAdapter(Constant.TYPE_INVITATION, { user, condition ->
             viewModel.invite(relatives, user, condition)
         }) { user, condition -> viewModel.confirm(relatives, user, condition) }
     }
@@ -43,13 +51,14 @@ class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
         }
     }
 
-
+    private var relative: Relatives? = null
     private fun subscribeToViewModel() {
         viewModel.getRelative {
+            relative = it
             setupAdapters(it)
             setupRecyclerView()
             viewModel.getUserInfoByRelative(it, Relatives.INVITING)
-                .observe(viewLifecycleOwner) { users ->
+                .observe(requireActivity()) { users ->
                     relativeAdapter.differ.submitList(users)
                     handleEmptyData()
                 }
@@ -66,7 +75,13 @@ class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
 
         with(bind) {
             ibSearch.setOnClickListener {
-                findNavController().navigate(RelativeInvitingFragmentDirections.actionRelativeInvitingFragmentToRelativeAddFragment())
+                if (relative != null) {
+                    val navigate =
+                        RelativeInvitingFragmentDirections.actionRelativeInvitingFragmentToRelativeAddFragment(
+                            relative
+                        )
+                    findNavController().navigate(navigate)
+                }
             }
         }
     }
@@ -80,10 +95,4 @@ class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    override fun onDestroy() {
-        _bind = null
-        super.onDestroy()
-    }
-
 }

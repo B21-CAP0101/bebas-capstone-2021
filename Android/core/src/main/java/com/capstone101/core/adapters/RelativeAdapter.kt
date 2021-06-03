@@ -43,14 +43,10 @@ class RelativeAdapter(
 
                     when (typeRelative) {
                         TYPE_INVITATION -> {
-                            tbAdd.isVisible = true
+                            btnCancel.isVisible = true
 
-                            tbAdd.setOnCheckedChangeListener { _, isChecked ->
-                                if (isChecked) {
-                                    addCancelCallback(this, true)
-                                } else {
-                                    addCancelCallback(this, false)
-                                }
+                            btnCancel.setOnClickListener {
+                                addCancelCallback(this, false)
                             }
                         }
 
@@ -72,7 +68,6 @@ class RelativeAdapter(
                         TYPE_PURE -> {
                             btnConfirm.isVisible = false
                             btnCancel.isVisible = false
-                            tbAdd.isVisible = false
                         }
                     }
                 }

@@ -48,6 +48,9 @@ class PeopleInDangerAdapter :
                             click(this)
                         }
                     }
+                    progressbar.isVisible = false
+                    tvUsername.isVisible = true
+                    svProfile.isVisible = true
                 }
             }
         }

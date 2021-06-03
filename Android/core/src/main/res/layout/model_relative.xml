@@ -61,18 +61,4 @@
         app:layout_constraintEnd_toStartOf="@+id/btnConfirm"
         app:layout_constraintTop_toTopOf="@+id/svProfile" />
 
-    <ToggleButton
-        android:id="@+id/tbAdd"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/relative_toggle"
-        android:clickable="true"
-        android:focusable="true"
-        android:textOff=""
-        android:textOn=""
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/svProfile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/svProfile" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
