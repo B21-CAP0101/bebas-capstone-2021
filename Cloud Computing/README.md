@@ -1,1 +1,2 @@
-# CC pakai branch CC
+# Cloud Computing
+using Google Cloud Platform
