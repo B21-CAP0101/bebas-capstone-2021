@@ -15,17 +15,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
-    <ImageButton
-        android:id="@+id/ibEditProfile"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/ripple_for_image_btn_50dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/ic_edit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <TextView
         android:id="@+id/tvName"
@@ -58,5 +47,5 @@
         android:src="@drawable/ic_clipboard"
         app:layout_constraintBottom_toBottomOf="@+id/tvUsername"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ibEditProfile" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
