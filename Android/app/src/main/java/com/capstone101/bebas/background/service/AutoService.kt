@@ -1,5 +1,6 @@
 package com.capstone101.bebas.background.service
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -14,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleService
 import com.capstone101.bebas.R
+import com.capstone101.bebas.ui.main.MainActivity
 import com.capstone101.bebas.ui.main.MainViewModel
 import com.capstone101.bebas.ui.welcome.WelcomeActivity
 import com.capstone101.core.data.network.firebase.DangerFire
@@ -84,11 +86,7 @@ class AutoService : LifecycleService() {
                                                 )
                                             }
                                     } else if (user.username == it.username)
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "Notification has sent",
-                                            Toast.LENGTH_LONG
-                                        ).show()
+                                        notificationAction()
                                 }
                             }
                         mainViewModel.getUser.removeObservers(this)
@@ -124,7 +122,7 @@ class AutoService : LifecycleService() {
     }
 
     private fun notificationReminder(user: UserFire, danger: DangerFire) {
-        val intent = Intent(this, WelcomeActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
         val soundURI =
             "${ContentResolver.SCHEME_ANDROID_RESOURCE}://${applicationContext.packageName}/${R.raw.danger}".toUri()
@@ -168,6 +166,36 @@ class AutoService : LifecycleService() {
                 manager.createNotificationChannel(channel)
             }
         }.build()
+        val id = (0..10000).random()
+        manager.notify(id, notification)
+    }
+
+    private fun notificationAction() {
+        val intent = Intent(this, MainActivity::class.java).apply { action = "confirmed" }
+        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
+        val notification = NotificationCompat.Builder(this, CHANNEL_REMIND_ID).apply {
+            setSmallIcon(R.mipmap.ic_launcher_round)
+            setContentTitle("Confirmation")
+            setContentText("Are you okay?")
+            setOngoing(true)
+            addAction(R.drawable.ic_confirm, "Yes", pendingIntent)
+            addAction(R.drawable.ic_close, "No", null)
+            setGroup(GROUP_REMINDER)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(
+                    CHANNEL_REMIND_ID,
+                    CHANNEL_REMIND_NAME,
+                    NotificationManager.IMPORTANCE_HIGH
+                ).apply {
+                    enableLights(true)
+                    enableVibration(true)
+                    lightColor = R.color.colorPrimary
+                }
+                setChannelId(CHANNEL_REMIND_ID)
+                manager.createNotificationChannel(channel)
+            }
+        }.build().apply { flags = Notification.FLAG_ONGOING_EVENT }
         val id = (0..10000).random()
         manager.notify(id, notification)
     }
