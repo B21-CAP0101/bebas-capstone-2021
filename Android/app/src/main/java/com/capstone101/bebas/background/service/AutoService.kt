@@ -48,6 +48,7 @@ class AutoService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val fs = Firebase.firestore
         manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.cancelAll()
         fs.collection(UserFire.COLLECTION).whereEqualTo(UserFire.DANGER, true)
             .addSnapshotListener { value, e ->
                 if (e != null) {

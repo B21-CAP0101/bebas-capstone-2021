@@ -51,6 +51,11 @@ class DetailDangerActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    override fun onDestroy() {
+        bind?.audioPlayer?.stop()
+        super.onDestroy()
+    }
+
     override fun onMapReady(googleMap: GoogleMap?) {
         viewModel.getLatestDanger(args.user).observe(this) { danger ->
             setupUI(danger)

@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".MyApp"
@@ -20,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/splashScreenTheme">
         <receiver
-            android:name=".background.broadcast.AutoStarterReceiver"
+            android:name=".background.broadcast.AutoReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -43,7 +44,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.detail.DetailDangerActivity"/>
+        <activity android:name=".ui.main.detail.DetailDangerActivity" />
         <activity
             android:name=".ui.main.MainActivity"
             android:configChanges="orientation"
@@ -63,7 +64,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

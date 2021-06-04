@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Build
 import com.capstone101.bebas.background.service.AutoService
 
-class AutoStarterReceiver : BroadcastReceiver() {
+class AutoReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Intent.ACTION_BOOT_COMPLETED) {

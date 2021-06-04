@@ -162,7 +162,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewModel.getUser.observe(viewLifecycleOwner) { user ->
             if (user != null) {
                 MapVal.user = user.apply { user.inDanger = false }
-                println(user)
                 viewModel.updateUserStatus()
                 setupUI()
                 viewModel.getRelative { relatives ->
