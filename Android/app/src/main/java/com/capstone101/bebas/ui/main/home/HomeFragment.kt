@@ -296,7 +296,7 @@ class HomeFragment : Fragment() {
             requireContext().createToast("sending record", 1000)
             bind.btnPanic.text = resources.getString(R.string.txt_panic_btn)
             startPulse()
-            viewModel.uploadRecord(data, "$fileName.mp3").observe(viewLifecycleOwner) {
+            viewModel.uploadRecord(data, "$fileName.mp4").observe(viewLifecycleOwner) {
                 if (it != null) {
                     danger.record = it
                     viewModel.setCondition.value =
@@ -345,7 +345,7 @@ class HomeFragment : Fragment() {
         val formatter = SimpleDateFormat("dd-MM-yyyy-HH-mm", Locale.getDefault())
         fileName = formatter.format(date)
 
-        data = "$folder/$fileName.mp3"
+        data = "$folder/$fileName.mp4"
 
         danger.id = fileName
         danger.time = Timestamp(date)
