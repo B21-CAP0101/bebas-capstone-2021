@@ -21,7 +21,9 @@ import com.capstone101.core.data.network.firebase.DangerFire
 import com.capstone101.core.data.network.firebase.RelativesFire
 import com.capstone101.core.data.network.firebase.UserFire
 import com.capstone101.core.utils.MapVal
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.koin.android.ext.android.inject
@@ -57,44 +59,58 @@ class AutoService : LifecycleService() {
                         .show()
                     return@addSnapshotListener
                 }
-                mainViewModel.getUser.observe(this) {
-                    if (it != null) {
-                        MapVal.user = it
-                        fs.collection(RelativesFire.COLLECTION).document(it.username).get()
-                            .addOnSuccessListener { relDoc ->
-                                val relatives =
-                                    MapVal.relativesFireToDom(
-                                        relDoc.toObject(RelativesFire::class.java)
-                                            ?: RelativesFire()
-                                    )
-                                val users =
-                                    value!!.map { user -> user.toObject(UserFire::class.java) }
-                                manager.cancelAll()
-                                for (user in users) {
-                                    if (user.username in relatives.pure) {
-                                        fs.collection(DangerFire.COLLECTION)
-                                            .document(user.username!!)
-                                            .collection(DangerFire.SUB_COLLECTION)
-                                            .orderBy(DangerFire.TIME, Query.Direction.DESCENDING)
-                                            .limit(1).get().addOnSuccessListener { dataDang ->
-                                                val danger =
-                                                    dataDang.documents[0].toObject(DangerFire::class.java)
-                                                notificationReminder(
-                                                    user,
-                                                    danger ?: DangerFire(null)
-                                                )
-                                            }
-                                    } else if (user.username == it.username)
-                                        notificationAction()
-                                }
-                            }
-                        mainViewModel.getUser.removeObservers(this)
-                    }
-                }
+                fetchFromValue(value, fs)
             }
         startForeground()
 
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun fetchFromValue(value: QuerySnapshot?, fs: FirebaseFirestore) {
+        mainViewModel.getUser.observe(this) {
+            if (it != null) {
+                MapVal.user = it
+                fs.collection(RelativesFire.COLLECTION).document(it.username).get()
+                    .addOnSuccessListener { relDoc ->
+                        val relatives =
+                            MapVal.relativesFireToDom(
+                                relDoc.toObject(RelativesFire::class.java)
+                                    ?: RelativesFire()
+                            )
+                        val users =
+                            value!!.map { user -> user.toObject(UserFire::class.java) }
+                        manager.cancelAll()
+                        for (user in users) {
+                            if (user.username in relatives.pure) {
+                                val id = (0..10000).random()
+                                fs.collection(DangerFire.COLLECTION)
+                                    .document(user.username!!)
+                                    .collection(DangerFire.SUB_COLLECTION)
+                                    .orderBy(DangerFire.TIME, Query.Direction.DESCENDING)
+                                    .limit(1).addSnapshotListener { dataDang, e ->
+                                        if (e != null) {
+                                            Toast.makeText(
+                                                applicationContext, "Error occurred\n$e",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            return@addSnapshotListener
+                                        }
+                                        if (dataDang != null) {
+                                            val danger =
+                                                dataDang.documents[0].toObject(DangerFire::class.java)
+                                            if (danger?.type != null) {
+                                                notificationReminder(user, danger, id)
+                                                return@addSnapshotListener
+                                            }
+                                        }
+                                    }
+                            } else if (user.username == it.username)
+                                notificationAction()
+                        }
+                    }
+                mainViewModel.getUser.removeObservers(this)
+            }
+        }
     }
 
     private fun startForeground() {
@@ -117,7 +133,7 @@ class AutoService : LifecycleService() {
         startForeground(NOTIFICATION_FORE, notification)
     }
 
-    private fun notificationReminder(user: UserFire, danger: DangerFire) {
+    private fun notificationReminder(user: UserFire, danger: DangerFire, id: Int) {
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
         val soundURI =
@@ -162,12 +178,14 @@ class AutoService : LifecycleService() {
                 manager.createNotificationChannel(channel)
             }
         }.build()
-        val id = (0..10000).random()
         manager.notify(id, notification)
     }
 
     private fun notificationAction() {
-        val intent = Intent(this, MainActivity::class.java).apply { action = "confirmed" }
+        val intent = Intent(this, MainActivity::class.java).apply {
+            action = "confirmed"
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
         val notification = NotificationCompat.Builder(this, CHANNEL_REMIND_ID).apply {
             setSmallIcon(R.mipmap.ic_launcher_round)
