@@ -41,6 +41,6 @@ apply from: "../shared_dependencies.gradle"
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-
+    implementation "com.airbnb.android:lottie:3.6.1"
     implementation project(":core")
 }

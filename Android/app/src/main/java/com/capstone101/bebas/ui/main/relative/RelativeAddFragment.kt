@@ -12,7 +12,6 @@ import androidx.navigation.fragment.navArgs
 import com.capstone101.bebas.databinding.FragmentAddBinding
 import com.capstone101.core.domain.model.Relatives
 import com.capstone101.core.domain.model.User
-import com.capstone101.core.utils.Function.createToast
 import com.capstone101.core.utils.Function.glideGender
 import com.capstone101.core.utils.Function.setOnPressEnter
 import com.capstone101.core.utils.Function.visibility
@@ -57,6 +56,7 @@ class RelativeAddFragment : Fragment() {
                         viewModel.searchUser(username)
                             .observe(owner) { users ->
                                 if (users.isNotEmpty()) {
+                                    listOf(lottieNotFound, tvNotFound).visibility(false)
                                     relatives = args.relative ?: Relatives(
                                         MapVal.user?.username ?: "", listOf(), listOf(), listOf()
                                     )
@@ -70,8 +70,16 @@ class RelativeAddFragment : Fragment() {
                                         toggleAdd.isChecked =
                                             relatives.inviting.contains(user?.username)
                                         setupUI(users[0])
-                                    } else toastEmpty()
-                                } else toastEmpty()
+                                    } else {
+                                        tvNotFound.text =
+                                            StringBuilder("this user already your relative")
+                                        listOf(lottieNotFound, tvNotFound).visibility(true)
+                                    }
+                                } else {
+                                    tvNotFound.text =
+                                        StringBuilder("user not found")
+                                    listOf(lottieNotFound, tvNotFound).visibility(true)
+                                }
                             }
                     }
                 }
@@ -86,9 +94,6 @@ class RelativeAddFragment : Fragment() {
         }
     }
 
-    private fun toastEmpty() {
-        requireContext().createToast("User not found or already in your list", 2000)
-    }
 
     private fun setupToolbar() {
         bind?.apply {
