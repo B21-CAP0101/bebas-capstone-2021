@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/invited"
+            android:layout_marginEnd="20dp"
             android:translationX="-20dp"
             android:textAlignment="center"
             android:textColor="@color/white"

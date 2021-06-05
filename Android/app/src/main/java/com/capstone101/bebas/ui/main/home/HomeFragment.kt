@@ -1,9 +1,8 @@
 package com.capstone101.bebas.ui.main.home
 
 import android.Manifest
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -211,19 +210,26 @@ class HomeFragment : Fragment() {
                 )
             }
 
-            cardUser.btnCopy.setOnClickListener {
+            cardUser.btnShare.setOnClickListener {
                 val username = cardUser.tvUsername.text.toString()
-                copyText(username)
-                requireContext().createToast("copying $username", 1000)
+
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(
+                        Intent.EXTRA_TEXT, """
+                        Hello 👋, let's be relative 
+                        by simply click: bebas.care/add-relative/$username
+                    """.trimIndent()
+                    )
+                    type = "text/plain"
+                }
+
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                startActivity(shareIntent)
             }
         }
     }
 
-    private fun copyText(text: String) {
-        val myClipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val myClip: ClipData = ClipData.newPlainText("username", text)
-        myClipboard.setPrimaryClip(myClip)
-    }
 
     private fun handleLoading() {
         with(bind) {

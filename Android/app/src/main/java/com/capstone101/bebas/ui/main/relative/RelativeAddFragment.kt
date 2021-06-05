@@ -38,8 +38,19 @@ class RelativeAddFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         subscribeToObserver()
+        handleDeepLink()
         setupToolbar()
         setHasOptionsMenu(true)
+    }
+
+    private fun handleDeepLink() {
+        val username = args.username ?: ""
+        if (username.isNotEmpty()) {
+            bind?.apply {
+                etQuery.setText(username)
+                ibSearch.performClick()
+            }
+        }
     }
 
     private var user: User? = null

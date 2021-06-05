@@ -53,15 +53,23 @@
             app:argType="com.capstone101.core.domain.model.User" />
     </activity>
     <fragment
-        tools:layout="@layout/fragment_add"
         android:id="@+id/relativeAddFragment"
         android:name="com.capstone101.bebas.ui.main.relative.RelativeAddFragment"
-        android:label="RelativeAddFragment">
+        android:label="RelativeAddFragment"
+        tools:layout="@layout/fragment_add">
         <argument
             android:name="relative"
             android:defaultValue="@null"
             app:argType="com.capstone101.core.domain.model.Relatives"
             app:nullable="true" />
+        <argument
+            android:name="username"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="bebas.care/add-relative/{username}" />
     </fragment>
 
 
