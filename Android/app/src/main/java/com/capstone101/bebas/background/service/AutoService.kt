@@ -182,10 +182,7 @@ class AutoService : LifecycleService() {
     }
 
     private fun notificationAction() {
-        val intent = Intent(this, MainActivity::class.java).apply {
-            action = "confirmed"
-            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-        }
+        val intent = Intent(this, MainActivity::class.java).apply { action = "confirmed" }
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
         val notification = NotificationCompat.Builder(this, CHANNEL_REMIND_ID).apply {
             setSmallIcon(R.mipmap.ic_launcher_round)
