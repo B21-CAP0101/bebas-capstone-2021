@@ -56,7 +56,6 @@ class RelativeAddFragment : Fragment() {
                         viewModel.searchUser(username)
                             .observe(owner) { users ->
                                 if (users.isNotEmpty()) {
-                                    listOf(lottieNotFound, tvNotFound).visibility(false)
                                     relatives = args.relative ?: Relatives(
                                         MapVal.user?.username ?: "", listOf(), listOf(), listOf()
                                     )
@@ -69,16 +68,18 @@ class RelativeAddFragment : Fragment() {
                                         user = users[0]
                                         toggleAdd.isChecked =
                                             relatives.inviting.contains(user?.username)
+
+                                        handleUserNotFound(false)
                                         setupUI(users[0])
                                     } else {
                                         tvNotFound.text =
                                             StringBuilder("this user already your relative")
-                                        listOf(lottieNotFound, tvNotFound).visibility(true)
+                                        handleUserNotFound(true)
                                     }
                                 } else {
                                     tvNotFound.text =
                                         StringBuilder("user not found")
-                                    listOf(lottieNotFound, tvNotFound).visibility(true)
+                                    handleUserNotFound(true)
                                 }
                             }
                     }
@@ -113,6 +114,14 @@ class RelativeAddFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun handleUserNotFound(visible: Boolean) {
+        bind?.apply {
+            listOf(tvTextIllustration, illustration).visibility(!visible)
+            listOf(tvName, svPhotoProfile, tvUsername, toggleAdd).visibility(!visible)
+
+            listOf(lottieNotFound, tvNotFound).visibility(visible)
+        }
+    }
 
     private fun setupUI(user: User?) {
         bind?.apply {
