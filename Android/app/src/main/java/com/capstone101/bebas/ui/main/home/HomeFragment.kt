@@ -41,7 +41,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment() {
     private lateinit var bind: FragmentHomeBinding
 
     private lateinit var relativeAdapter: RelativeAdapter
@@ -175,10 +175,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         bind.rvRelative.isVisible = true
                         bind.tvSeeAll.text = StringBuilder("more")
                     }
-                    viewModel.getUserInfoByRelative(relatives)
-                        .observe(requireActivity()) { pureUser ->
-                            relativeAdapter.differ.submitList(pureUser.take(10))
-                        }
+                    parentFragment?.viewLifecycleOwner?.let {
+                        viewModel.getUserInfoByRelative(relatives)
+                            .observe(it) { pureUser ->
+                                relativeAdapter.differ.submitList(pureUser.take(10))
+                            }
+                    }
                     viewModel.checkInDanger(inDangerCallback)
                 }
                 viewModel.getUser.removeObservers(viewLifecycleOwner)

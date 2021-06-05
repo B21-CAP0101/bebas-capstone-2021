@@ -9,4 +9,5 @@
     <string name="empty_text_search">add some relative</string>
     <string name="danger_type">Danger type: %s</string>
     <string name="des_btn_copy">copy username</string>
+    <string name="hintSearch">enter username</string>
 </resources>

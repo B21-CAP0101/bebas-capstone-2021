@@ -9,17 +9,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentAddBinding
 import com.capstone101.core.domain.model.Relatives
 import com.capstone101.core.domain.model.User
 import com.capstone101.core.utils.Function.createToast
 import com.capstone101.core.utils.Function.glideGender
+import com.capstone101.core.utils.Function.setOnPressEnter
 import com.capstone101.core.utils.Function.visibility
 import com.capstone101.core.utils.MapVal
 import org.koin.android.ext.android.inject
 
-class RelativeAddFragment : Fragment(R.layout.fragment_add) {
+class RelativeAddFragment : Fragment() {
     private var _bind: FragmentAddBinding? = null
     private val bind get() = _bind
     private val viewModel: RelativeViewModel by inject()
@@ -51,23 +51,28 @@ class RelativeAddFragment : Fragment(R.layout.fragment_add) {
     private fun subscribeToObserver() {
         bind?.apply {
             ibSearch.setOnClickListener {
-                parentFragment?.viewLifecycleOwner?.let { it1 ->
-                    viewModel.searchUser(etQuery.text.toString()).observe(it1) { users ->
-                        if (users.isNotEmpty()) {
-                            relatives = args.relative ?: Relatives(
-                                MapVal.user?.username ?: "", listOf(), listOf(), listOf()
-                            )
-                            if (users[0].username != MapVal.user?.username && (!relatives.pure.contains(
-                                    users[0].username
-                                )) && (!relatives.invited.contains(
-                                    users[0].username
-                                ))
-                            ) {
-                                user = users[0]
-                                toggleAdd.isChecked = relatives.inviting.contains(user?.username)
-                                setupUI(users[0])
-                            } else toastEmpty()
-                        } else toastEmpty()
+                val username = etQuery.text.toString()
+                parentFragment?.viewLifecycleOwner?.let { owner ->
+                    if (username.isNotEmpty()) {
+                        viewModel.searchUser(username)
+                            .observe(owner) { users ->
+                                if (users.isNotEmpty()) {
+                                    relatives = args.relative ?: Relatives(
+                                        MapVal.user?.username ?: "", listOf(), listOf(), listOf()
+                                    )
+                                    if (users[0].username != MapVal.user?.username && (!relatives.pure.contains(
+                                            users[0].username
+                                        )) && (!relatives.invited.contains(
+                                            users[0].username
+                                        ))
+                                    ) {
+                                        user = users[0]
+                                        toggleAdd.isChecked =
+                                            relatives.inviting.contains(user?.username)
+                                        setupUI(users[0])
+                                    } else toastEmpty()
+                                } else toastEmpty()
+                            }
                     }
                 }
             }
@@ -86,6 +91,9 @@ class RelativeAddFragment : Fragment(R.layout.fragment_add) {
     }
 
     private fun setupToolbar() {
+        bind?.apply {
+            setOnPressEnter(etQuery, ibSearch)
+        }
         (activity as AppCompatActivity?)!!.setSupportActionBar(bind?.toolbar)
         (activity as AppCompatActivity?)!!.supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }

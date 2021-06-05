@@ -9,14 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.capstone101.bebas.R
 import com.capstone101.bebas.databinding.FragmentInvitationBinding
 import com.capstone101.core.adapters.RelativeAdapter
 import com.capstone101.core.domain.model.Relatives
 import com.capstone101.core.utils.Constant
 import org.koin.android.ext.android.inject
 
-class RelativeInvitingFragment : Fragment(R.layout.fragment_invitation) {
+class RelativeInvitingFragment : Fragment() {
     private var _bind: FragmentInvitationBinding? = null
     private val bind get() = _bind
     private lateinit var relativeAdapter: RelativeAdapter
