@@ -91,7 +91,6 @@ class HomeFragment : Fragment() {
         manager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         listener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                Log.i("Location", "${location.latitude}\nLongitude: ${location.longitude}")
                 viewModel.setCondition.value =
                     viewModel.setCondition.value?.apply { this[1] = true }
                 danger.place = GeoPoint(location.latitude, location.longitude)
