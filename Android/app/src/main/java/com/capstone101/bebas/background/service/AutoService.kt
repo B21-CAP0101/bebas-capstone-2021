@@ -17,7 +17,6 @@ import androidx.lifecycle.LifecycleService
 import com.capstone101.bebas.R
 import com.capstone101.bebas.ui.main.MainActivity
 import com.capstone101.bebas.ui.main.MainViewModel
-import com.capstone101.bebas.ui.welcome.WelcomeActivity
 import com.capstone101.core.data.network.firebase.DangerFire
 import com.capstone101.core.data.network.firebase.RelativesFire
 import com.capstone101.core.data.network.firebase.UserFire
@@ -100,13 +99,10 @@ class AutoService : LifecycleService() {
 
     private fun startForeground() {
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val intent = Intent(this, WelcomeActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
         val notification = NotificationCompat.Builder(this, CHANNEL_FORE_ID).apply {
             setSmallIcon(R.mipmap.ic_launcher_round)
             setContentTitle("BeBaS Run")
             setContentText("This application run on your background process")
-            setContentIntent(pendingIntent)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel = NotificationChannel(
