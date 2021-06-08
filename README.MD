@@ -1,6 +1,6 @@
 # BeBaS Capstone B21-0101 Theme Bangkit 2021
 [![B21-CAP0101](https://circleci.com/gh/B21-CAP0101/bebas-capstone-2021.svg?style=svg)](https://circleci.com/gh/B21-CAP0101/bebas-capstone-2021)  
-   Bersama Basmi kekeraSan (<i>Together Eradicate Violence</i>) is our application (B21-0101) to finish our Capstone Project. This application will help every user to alert if he/she in danger.
+   Bersama Basmi kekeraSan (<i>Together Eradicate Violence</i>) is our application (B21-0101) to finish our Capstone Project in Bangkit 2021. This application will help every user to alert if his/her relatives/friends in danger.
 
 ## Replicate Our Application
 
