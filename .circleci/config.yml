@@ -9,7 +9,7 @@ orbs:
 jobs:
   build:
     executor: android/android
-    working_directory: ~/androidfd
+    working_directory: ~/project/androidfd
     steps:
       - checkout
       - restore_cache:
