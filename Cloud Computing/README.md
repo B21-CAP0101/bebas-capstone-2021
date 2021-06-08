@@ -1,5 +1,5 @@
 # Cloud Computing Replicate Step
-using Google Cloud Platform
+To replicate our cloud services, just copy command and paste into cli.
 
 # Google Cloud Services
 In this project we use:
