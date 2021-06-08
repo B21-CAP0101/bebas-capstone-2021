@@ -8,6 +8,7 @@ orbs:
 
 jobs:
   build:
+    working_directory: ~/bebas-capstone-2021/androidfd
     executor: android/android
     steps:
       - checkout:
@@ -19,7 +20,7 @@ jobs:
           command: sudo chmod +x ./gradlew
       - run:
           name: Download Dependencies
-          command: ./gradlew dependencies
+          command: ./gradlew androidDependencies
       - save_cache:
           key: 'android-orb-v1-{{ epoch }}'
           paths:
