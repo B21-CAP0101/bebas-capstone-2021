@@ -20,7 +20,7 @@ jobs:
           command: sudo chmod +x ./gradlew
       - run:
           name: Create local.properties
-          command: rename './' local.properties.ci local.properties
+          command: touch local.properties
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
