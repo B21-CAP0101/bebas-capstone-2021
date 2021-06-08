@@ -11,8 +11,7 @@ jobs:
     working_directory: ~/bebas-capstone-2021/androidfd
     executor: android/android
     steps:
-      - checkout:
-          path: ~/bebas-capstone-2021
+      - checkout
       - restore_cache:
           key: android-orb-v1-
       - run:
