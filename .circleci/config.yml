@@ -18,7 +18,7 @@ jobs:
           command: sudo chmod +x ./gradlew
       - run:
           name: Download Dependencies
-          command: ./Android/gradlew androidDependencies
+          command: ./Android/gradle androidDependencies
       - save_cache:
           key: 'android-orb-v1-{{ epoch }}'
           paths:
