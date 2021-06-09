@@ -21,6 +21,10 @@ In this application, we seperated to 2 modules, app and core:
 ##### Optional for Firebase change Project
 If you want to change with your own Firebase, please replace [google-services.json](https://github.com/B21-CAP0101/bebas-capstone-2021/blob/master/Android/core/google-services.json) file in [this directory](https://github.com/B21-CAP0101/bebas-capstone-2021/tree/master/Android/core). Make sure you add application to Firebase to got [your own google-services.json file](https://support.google.com/firebase/answer/7015592?hl=en)  
 
+##### Optional for change Google Maps API key
+if you want to change google maps api key, you can change in this [file](https://github.com/B21-CAP0101/bebas-capstone-2021/blob/master/androidfd/core/src/main/res/values/strings.xml#L34) you will see
+string name google_maps_key you can change on there, but if you don't want to change, it is ok
+
 ### Cloud Computing
 1. To replicate cloud service, just copy command and paste to google cloud command line in this [directory](https://github.com/B21-CAP0101/bebas-capstone-2021/tree/master/Cloud%20Computing).
 2. Don’t forget to change the service name with your own service name.
