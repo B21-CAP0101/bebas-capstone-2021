@@ -1,10 +1,6 @@
-# Android Replicate step
+# Android Replicate Step
 To replicate android application, just clone this repository.  
 Our Android folder is using Clean-Architecture principle.
-
-## Attention
-if you want to change google maps api key, you can change in file /core/src/value/string you will see
-string name google_maps_key you can change on there, but if you won't is it ok
 
 ## Features and Explanation About our Android Application
 In this project we use:  
@@ -18,3 +14,7 @@ In this application, we separated to 2 modules, app and core:
 
 ### Optional for Firebase change Project
 If you want to change with your own Firebase, please replace [google-services.json](https://github.com/B21-CAP0101/bebas-capstone-2021/blob/master/Android/core/google-services.json) file in [this directory](https://github.com/B21-CAP0101/bebas-capstone-2021/tree/master/Android/core). Make sure you add application to Firebase to got [your own google-services.json file](https://support.google.com/firebase/answer/7015592?hl=en)
+
+### Optional for change Google Maps API key
+if you want to change google maps api key, you can change in this [file](https://github.com/B21-CAP0101/bebas-capstone-2021/blob/master/androidfd/core/src/main/res/values/strings.xml#L34) you will see
+string name google_maps_key you can change on there, but if you don't want to change, it is ok
