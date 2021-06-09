@@ -1,0 +1,7 @@
+# Compute Engine
+To create compute engine, simply copy this command to google cloud CLI
+
+ gcloud compute instances create flask-server --machine-type e2-standard-2  \
+ -- zone=asia-southeast1\
+
+more documentation reference = https://cloud.google.com/sdk/gcloud/reference/compute/instances/create
