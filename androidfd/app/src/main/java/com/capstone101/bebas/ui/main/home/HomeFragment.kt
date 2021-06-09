@@ -109,7 +109,6 @@ class HomeFragment : Fragment() {
 
         viewModel.condition.observe(viewLifecycleOwner) {
             // FOR CHECK IF UPLOAD RECORD AND FETCH LOCATION DONE
-            println("$it ANJING")
             if (it[0] && it[1]) {
                 viewModel.insertDanger(danger)
                 viewModel.setCondition.value = mutableListOf(false, false)
