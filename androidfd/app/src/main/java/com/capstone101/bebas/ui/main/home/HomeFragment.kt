@@ -109,6 +109,7 @@ class HomeFragment : Fragment() {
 
         viewModel.condition.observe(viewLifecycleOwner) {
             // FOR CHECK IF UPLOAD RECORD AND FETCH LOCATION DONE
+            println("$it ANJING")
             if (it[0] && it[1]) {
                 viewModel.insertDanger(danger)
                 viewModel.setCondition.value = mutableListOf(false, false)
@@ -314,6 +315,7 @@ class HomeFragment : Fragment() {
             return
         }
         manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 5F, listener)
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 5F, listener)
         Handler(Looper.getMainLooper()).postDelayed({
             manager.removeUpdates(listener)
         }, 60000)
