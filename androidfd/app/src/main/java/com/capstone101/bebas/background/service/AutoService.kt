@@ -83,27 +83,7 @@ class AutoService : LifecycleService() {
                         for (user in users) {
                             if (user.username in relatives.pure) {
                                 val id = (0..10000).random()
-                                fs.collection(DangerFire.COLLECTION)
-                                    .document(user.username!!)
-                                    .collection(DangerFire.SUB_COLLECTION)
-                                    .orderBy(DangerFire.TIME, Query.Direction.DESCENDING)
-                                    .limit(1).addSnapshotListener { dataDang, e ->
-                                        if (e != null) {
-                                            Toast.makeText(
-                                                applicationContext, "Error occurred\n$e",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                            return@addSnapshotListener
-                                        }
-                                        if (dataDang != null) {
-                                            val danger =
-                                                dataDang.documents[0].toObject(DangerFire::class.java)
-                                            if (danger?.type != null) {
-                                                notificationReminder(user, danger, id)
-                                                return@addSnapshotListener
-                                            }
-                                        }
-                                    }
+                                forceGet(fs, user, id)
                             } else if (user.username == it.username)
                                 notificationAction()
                         }
@@ -131,6 +111,44 @@ class AutoService : LifecycleService() {
             }
         }.build()
         startForeground(NOTIFICATION_FORE, notification)
+    }
+
+    private fun forceGet(fs: FirebaseFirestore, user: UserFire, id: Int) {
+        fs.collection(DangerFire.COLLECTION)
+            .document(user.username!!)
+            .collection(DangerFire.SUB_COLLECTION)
+            .orderBy(DangerFire.TIME, Query.Direction.DESCENDING)
+            .limit(1).get().addOnSuccessListener { dataDang ->
+                if (dataDang != null) {
+                    val danger =
+                        dataDang.documents[0].toObject(DangerFire::class.java)
+                    notificationReminder(user, danger ?: DangerFire(), id)
+                }
+            }
+    }
+
+    private fun fetchAwaitedData(fs: FirebaseFirestore, user: UserFire, id: Int) {
+        fs.collection(DangerFire.COLLECTION)
+            .document(user.username!!)
+            .collection(DangerFire.SUB_COLLECTION)
+            .orderBy(DangerFire.TIME, Query.Direction.DESCENDING)
+            .limit(1).addSnapshotListener { dataDang, e ->
+                if (e != null) {
+                    Toast.makeText(
+                        applicationContext, "Error occurred\n$e",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@addSnapshotListener
+                }
+                if (dataDang != null) {
+                    val danger =
+                        dataDang.documents[0].toObject(DangerFire::class.java)
+                    if (danger?.type != null) {
+                        notificationReminder(user, danger, id)
+                        return@addSnapshotListener
+                    }
+                }
+            }
     }
 
     private fun notificationReminder(user: UserFire, danger: DangerFire, id: Int) {

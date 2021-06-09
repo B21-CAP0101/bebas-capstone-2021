@@ -44,12 +44,7 @@
     </style>
 
 
-    <style name="ThemeOverlay.BeBaS.AppWidgetContainer" parent="">
-        <item name="appWidgetBackgroundColor">@color/light_blue_600</item>
-        <item name="appWidgetTextColor">@color/light_blue_50</item>
-    </style>
-
-        <style name="btn">
+    <style name="btn">
         <item name="android:layout_height">55dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:background">@drawable/bg_rounded_white</item>
