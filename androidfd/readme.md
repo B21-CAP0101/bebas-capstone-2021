@@ -1,6 +1,10 @@
 # Android Replicate step
 To replicate android application, just clone this repository.  
-   Our Android folder is using Clean-Architecture principle.
+Our Android folder is using Clean-Architecture principle.
+
+## Attention
+if you want to change google maps api key, you can change in file /core/src/value/string you will see
+string name google_maps_key you can change on there, but if you won't is it ok
 
 ## Features and Explanation About our Android Application
 In this project we use:  

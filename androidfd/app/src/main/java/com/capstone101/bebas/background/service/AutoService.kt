@@ -190,7 +190,7 @@ class AutoService : LifecycleService() {
             setContentText("Are you okay?")
             setOngoing(true)
             addAction(R.drawable.ic_confirm, "Yes", pendingIntent)
-            addAction(R.drawable.ic_close, "No", null)
+            addAction(R.drawable.ic_cancel, "No", null)
             setGroup(GROUP_REMINDER)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
